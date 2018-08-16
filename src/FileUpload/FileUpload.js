@@ -38,7 +38,7 @@ export default class FileUpload extends Component{
 					//set the uploadedFileLocation state to the s3 bucket image location that was just uploaded.
 					this.setState({uploadedFileLocation: data.location});
 					//submit the URL to the predictImage() function, detailed below.
-					predictImage();
+					this.predictImage();
 				})
 				.catch(err => console.error(err))
 		)
@@ -69,20 +69,19 @@ export default class FileUpload extends Component{
 						accept="image/*"
 						onDrop={this.onDrop.bind(this)}
 					>
-						<p>Try dropping some files here, or click to select files to upload.</p>
+						<p className="uploadInstructions"> Drag & drop</p>
+						<p className="uploadUnder">your files here or <span>click</span> to browse.</p>
+						<div className="acceptedFiles">
+							{ this.state.uploadedFileLocation !== null ?
+								<ul>
+									<p className="fileLabel">File(s) Sent to S3:</p>
+									<img className="uploadedImage" src={this.state.uploadedFileLocation}/>
+									{this.state.file.map(f => <li className="fileName" key={f.name}>{f.name} <p className="fileSize">{f.size} bytes</p></li>)}
+								</ul>
+							: null }
+						</div>
 					</Dropzone>
 				</div>
-				<aside>
-					<h2>Accepted files</h2>
-					<ul>
-					{ this.state.uploadedFileLocation !== null ?
-						<img className="uploadedImage" src={this.state.uploadedFileLocation}/>
-					: null }
-						{
-							this.state.file.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
-						}
-					</ul>
-				</aside>
 			</section>
 		)
 	}
