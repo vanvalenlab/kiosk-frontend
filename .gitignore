@@ -1,3 +1,6 @@
 #ignore node_modules, allow user to npm install them upon cloning.
 node_modules
 .DS_Store
+
+#ignore the react .env file
+.env
