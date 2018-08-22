@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 module.exports = env => {
 	// call dotenv and it will return an Object with a parsed key 
 	env = dotenv.config().parsed;
-  // reduce it to a nice object, the same as before
+  	// reduce it to a nice object, the same as before
 	const envKeys = Object.keys(env).reduce((prev, next) => {
 		prev[`process.env.${next}`] = JSON.stringify(env[next]);
 		return prev;
@@ -21,7 +21,7 @@ module.exports = env => {
 					test: /\.(js|jsx)$/,
 					exclude: /(node_modules|bower_components)/,
 					loader: 'babel-loader',
-					options: { presets: ['env'] }
+					options: { presets: ['env, react'] }
 				},
 				{
 					test: /\.css$/,
@@ -41,11 +41,12 @@ module.exports = env => {
 		devServer: {
 			contentBase: path.join(__dirname, "public/"),
 			port: 3000,
-			open: true,
+			open: false,
+			disableHostCheck: true,
 			proxy: {
-				"/api": "http://localhost:8080"
+				"/api": "http://flask-middleman:8080"
 			},
-			host: 'localhost',
+			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
 			hotOnly: true,
 			headers: { 
