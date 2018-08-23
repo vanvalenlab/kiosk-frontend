@@ -5,13 +5,13 @@ import Facade from "../Facade/Facade.js";
 
 class App extends Component{
 
-  render(){
+	render(){
 	return(
-	  <div className="App">
+		<div className="App">
 			<Facade />
-	  </div>
+		</div>
 	);
-  }
+	}
 }
 
 export default hot(module)(App);

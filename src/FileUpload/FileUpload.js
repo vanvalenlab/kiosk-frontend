@@ -6,10 +6,10 @@ import S3Client from 'aws-s3';
 
 //s3 config
 const config = {
-    bucketName: 'deepcell-output',
-    region: 'us-east-1',
-    accessKeyId: 'AKIAJVU4424U3GBF56QQ',
-    secretAccessKey: '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',
+    bucketName: process.env.S3_BUCKETNAME ,
+    region: process.env.S3_REGION ,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
+    secretAccessKey: process.env.S3_ACCESS_KEY
 }
 
 //start component class
