@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode development",
+    "build": "webpack --mode development --config webpack.prod.js",
     "start": "webpack-dev-server --mode development --open --config webpack.dev.js",
-    "prod": "webpack --mode production --config webpack.prod.js"
+    "prod": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-s3": "^1.5.5",
     "axios": "^0.18.0",
+    "express": "^4.16.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-dropzone": "^4.3.0",

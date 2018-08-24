@@ -33,12 +33,11 @@ module.exports = env => {
 		},
 		resolve: { extensions: ['*', '.js', '.jsx'] },
 		output: {
-			path: path.resolve(__dirname, "dist/"),
-			publicPath: "/dist/",
+			path: path.resolve(__dirname, "./"),
 			filename: "bundle.js"
 		},
 		devtool: 'source-map',
-		mode: "production",
+		mode: "development",
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin(),

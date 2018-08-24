@@ -11,6 +11,13 @@ COPY ./webpack.config.js /react_interface
 
 WORKDIR /react_interface
 
+ENV S3_ACCESS_KEY_ID="AKIAJVU4424U3GBF56QQ" \
+    S3_ACCESS_KEY="OhuOdv6YLstff6aShxtIO4gKS78AdfZ63OTpqAY5" \
+    S3_REGION="us-east-1" \
+    FLASK_PORT=8080 \
+    FLASK_HOST=131.215.8.170 \
+    S3_BUCKETNAME="deepcell-output"
+
 RUN npm install
 
 CMD npm start
