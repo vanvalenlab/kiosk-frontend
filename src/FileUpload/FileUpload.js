@@ -2,15 +2,6 @@ import React, { Component} from "react";
 import "./FileUpload.css";
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
-import S3Client from 'aws-s3';
-
-//s3 config
-const config = {
-    bucketName: process.env.S3_BUCKETNAME ,
-    region: process.env.S3_REGION ,
-    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
-    secretAccessKey: process.env.S3_ACCESS_KEY
-}
 
 //start component class
 export default class FileUpload extends Component{
@@ -23,6 +14,14 @@ export default class FileUpload extends Component{
 			uploadedFileLocation: null
 		}
 	}
+	//s3 config
+	const config = {
+	    bucketName: process.env.S3_BUCKETNAME ,
+	    region: process.env.S3_REGION ,
+	    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
+	    secretAccessKey: process.env.S3_ACCESS_KEY
+	}
+
 	/*
 		Example s3 response json:
 		{

@@ -33,14 +33,20 @@ module.exports = env => {
 		},
 		resolve: { extensions: ['*', '.js', '.jsx'] },
 		output: {
-			path: path.resolve(__dirname, "./"),
-			filename: "bundle.js"
+			path: path.resolve(__dirname, "dist/"),
+			filename: "bundle.js",
+			// publicPath: 'dist/'
 		},
 		devtool: 'source-map',
-		mode: "development",
+		mode: "production",
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
-			new HtmlWebpackPlugin(),
+			new HtmlWebpackPlugin({
+				title: 'DeepCell',
+				template: './public/index.html',
+				hash: true,
+				filename: './index.html'
+			}),
 			new webpack.DefinePlugin(envKeys)
 		]		
 	}

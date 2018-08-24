@@ -8,11 +8,10 @@ var DIST_DIR = path.join(__dirname, "dist"),
 //Serving the files on the dist folder
 app.use(express.static(path.join(__dirname, 'dist')));
 
-//Send index.html inside the dist folder when the user access the web
-// app.get("*", function (req, res) {
-// 	console.log("Request was made to Node Server to serve React dist contents!");
-// 	res.sendFile(path.join(DIST_DIR, "index.html"));
-// });
+//Routes requirement
+var route_setter = require('./server/routes.js');
+route_setter(app);
+
 
 //listen on port 3000 as specified above.
 app.listen(PORT);

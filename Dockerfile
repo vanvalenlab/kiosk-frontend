@@ -7,7 +7,7 @@ COPY ./public /react_interface/public
 COPY ./src /react_interface/src
 COPY ./package.json /react_interface
 COPY ./package-lock.json /react_interface
-COPY ./webpack.config.js /react_interface
+COPY ./webpack.docker.js /react_interface
 
 WORKDIR /react_interface
 
@@ -20,4 +20,4 @@ ENV S3_ACCESS_KEY_ID="AKIAJVU4424U3GBF56QQ" \
 
 RUN npm install
 
-CMD npm start
+CMD npm run startdocker

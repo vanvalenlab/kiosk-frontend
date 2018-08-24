@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode development --config webpack.prod.js",
+    "build": "webpack --mode production --config webpack.prod.js",
     "start": "webpack-dev-server --mode development --open --config webpack.dev.js",
+    "startdocker": "webpack-dev-server --mode development --open --config webpack.docker.js",
     "prod": "node server.js"
   },
   "author": "",
@@ -15,6 +16,7 @@
     "aws-s3": "^1.5.5",
     "axios": "^0.18.0",
     "express": "^4.16.3",
+    "html-webpack-plugin": "^3.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-dropzone": "^4.3.0",
@@ -29,7 +31,6 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.11",
     "dotenv": "^6.0.0",
-    "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.21.0",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.8",
