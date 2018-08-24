@@ -3,6 +3,25 @@ import "./FileUpload.css";
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 
+
+//s3 config
+const config = {
+    bucketName: process.env.S3_BUCKETNAME ,
+    region: process.env.S3_REGION ,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
+    secretAccessKey: process.env.S3_ACCESS_KEY
+}
+
+/*
+	Example s3 response json:
+	{
+		"bucket":"deepcell-output",
+		"key":"dna_version2.tif",
+		"location":"https://deepcell-output.s3.amazonaws.com/dna_version2.tif",
+		"result":{}
+	}
+*/
+
 //start component class
 export default class FileUpload extends Component{
 	//Constructor Function that will manage the state of this component
@@ -14,23 +33,7 @@ export default class FileUpload extends Component{
 			uploadedFileLocation: null
 		}
 	}
-	//s3 config
-	const config = {
-	    bucketName: process.env.S3_BUCKETNAME ,
-	    region: process.env.S3_REGION ,
-	    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
-	    secretAccessKey: process.env.S3_ACCESS_KEY
-	}
 
-	/*
-		Example s3 response json:
-		{
-			"bucket":"deepcell-output",
-			"key":"dna_version2.tif",
-			"location":"https://deepcell-output.s3.amazonaws.com/dna_version2.tif",
-			"result":{}
-		}
-	*/
 	//This function will run upon file upload completion.
 	onDrop(droppedfile){
 		console.log("Accepted Files: " + JSON.stringify(droppedfile));
