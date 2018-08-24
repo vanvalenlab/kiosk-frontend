@@ -14,14 +14,13 @@ module.exports = env => {
 
 	return {
 		entry: "./src/index.js",
-		mode: "development",
 		module: {
 			rules: [
 				{
 					test: /\.(js|jsx)$/,
 					exclude: /(node_modules|bower_components)/,
 					loader: 'babel-loader',
-					options: { presets: ['env'] }
+					options: { presets: ['env','react'] }
 				},
 				{
 					test: /\.css$/,
@@ -38,22 +37,8 @@ module.exports = env => {
 			publicPath: "/dist/",
 			filename: "bundle.js"
 		},
-		devServer: {
-			contentBase: path.join(__dirname, "public/"),
-			port: 3000,
-			open: true,
-			proxy: {
-				"/api": "http://localhost:8080"
-			},
-			host: 'localhost',
-			publicPath: "http://localhost:3000/dist/",
-			hotOnly: true,
-			headers: { 
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-			}
-		},
+		devtool: 'source-map',
+		mode: "production",
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin(),
