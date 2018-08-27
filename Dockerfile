@@ -8,6 +8,7 @@ COPY ./src /react_interface/src
 COPY ./package.json /react_interface
 COPY ./package-lock.json /react_interface
 COPY ./webpack.docker.js /react_interface
+COPY ./test_image /react_interface/test_image
 
 WORKDIR /react_interface
 
