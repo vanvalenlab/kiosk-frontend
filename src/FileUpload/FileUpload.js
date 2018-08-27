@@ -2,7 +2,7 @@ import React, { Component} from "react";
 import "./FileUpload.css";
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
-
+import S3Client from 'aws-s3';
 
 //s3 config
 const config = {
