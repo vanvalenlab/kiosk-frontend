@@ -40,11 +40,12 @@ module.exports = env => {
 		devServer: {
 			contentBase: path.join(__dirname, "public/"),
 			port: 3000,
-			open: true,
+            disableHostCheck: true,
+			open: false,
 			proxy: {
-				"/api": "http://localhost:8080"
+				"/api": "http://flask-middleman:8080"
 			},
-			host: 'localhost',
+			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
 			hotOnly: true,
 			headers: { 
