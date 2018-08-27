@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production --config webpack.prod.js",
     "start": "webpack-dev-server --mode development --open --config webpack.dev.js",
-    "startdocker": "webpack-dev-server --mode development --open --config webpack.docker.js",
+    "startdocker": "webpack-dev-server --mode development --config webpack.docker.js",
     "prod": "node server.js"
   },
   "author": "",
