@@ -3,10 +3,10 @@ var S3Client = require('aws-s3');
 
 //s3 config
 const config = {
-    bucketName: process.env.S3_BUCKETNAME ,
-    region: process.env.S3_REGION ,
-    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
-    secretAccessKey: process.env.S3_ACCESS_KEY
+    bucketName: process.env.AWS_S3_BUCKET ,
+    region: process.env.AWS_REGION ,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 }
 
 /*
