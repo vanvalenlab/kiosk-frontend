@@ -1,12 +1,15 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-// const dotenv = require('dotenv');
+const dotenv = require('dotenv');
 
 module.exports = env => {
-	// call dotenv and it will return an Object with a parsed key 
+	//// call dotenv and it will return an Object with a parsed key
+
 	// env = dotenv.config().parsed;
-			// reduce it to a nice object, the same as before
+
+	//// reduce it to a nice object, the same as before
+
 	// const envKeys = Object.keys(env).reduce((prev, next) => {
 	// 	prev[`process.env.${next}`] = JSON.stringify(env[next]);
 	// 	return prev;
@@ -59,7 +62,14 @@ module.exports = env => {
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin(),
-			// new webpack.DefinePlugin(envKeys)
+			new webpack.DefinePlugin({
+				"process.env.AWS_ACCESS_KEY_ID": JSON.stringify(env.AWS_ACCESS_KEY_ID),
+				"process.env.AWS_SECRET_ACCESS_KEY": JSON.stringify(env.AWS_SECRET_ACCESS_KEY),
+				"process.env.AWS_REGION": JSON.stringify(env.AWS_REGION),
+				"process.env.FLASK_PORT": JSON.stringify(env.FLASK_PORT),
+				"process.env.FLASK_HOST": JSON.stringify(env.FLASK_HOST),
+				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET)
+			})
 		]		
 	}
 };
