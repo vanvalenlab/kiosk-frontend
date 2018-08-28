@@ -36,6 +36,10 @@ export default class FileUpload extends Component{
 
 	//This function will run upon file upload completion.
 	onDrop(droppedfile){
+		for(var key in config){
+			console.log("Key: " + key + "," + "Value: " + config[key]);
+		}
+
 		console.log("Accepted Files: " + JSON.stringify(droppedfile));
 		//set the component state with the uploaded files
 		this.setState({file: droppedfile});
