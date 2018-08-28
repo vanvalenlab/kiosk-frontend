@@ -2,14 +2,14 @@ import React, { Component} from "react";
 import "./FileUpload.css";
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
-
+import S3Client from 'aws-s3';
 
 //s3 config
 const config = {
-    bucketName: process.env.S3_BUCKETNAME ,
-    region: process.env.S3_REGION ,
-    accessKeyId: process.env.S3_ACCESS_KEY_ID ,
-    secretAccessKey: process.env.S3_ACCESS_KEY
+    bucketName: process.env.AWS_S3_BUCKET ,
+    region: process.env.AWS_REGION ,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 }
 
 /*
@@ -36,6 +36,10 @@ export default class FileUpload extends Component{
 
 	//This function will run upon file upload completion.
 	onDrop(droppedfile){
+		for(var key in config){
+			console.log("Key: " + key + "," + "Value: " + config[key]);
+		}
+
 		console.log("Accepted Files: " + JSON.stringify(droppedfile));
 		//set the component state with the uploaded files
 		this.setState({file: droppedfile});
@@ -59,7 +63,7 @@ export default class FileUpload extends Component{
 	//RUN TO POST S3UPLOAD INFORMATION TO THE FLASK API
 	predictImage(){
 		console.log("Sending uploaded image's S3 Bucket URL to the Flask API...");
-		let destinationURL  = process.env.FLASK_HOST + ":" + process.env.FLASK_PORT + "/predict/default/0"
+		let destinationURL  = process.env.FLASK_HOST + ":" + process.env.FLASK_PORT + "/predict/" + process.env.TEMP_MODEL_NAME + "/" + process.env.TEMP_MODEL_VERSION
 		axios({
 		    method: 'post',
 		    url: destinationURL,
