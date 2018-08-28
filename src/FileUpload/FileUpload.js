@@ -63,7 +63,7 @@ export default class FileUpload extends Component{
 	//RUN TO POST S3UPLOAD INFORMATION TO THE FLASK API
 	predictImage(){
 		console.log("Sending uploaded image's S3 Bucket URL to the Flask API...");
-		let destinationURL  = process.env.FLASK_HOST + ":" + process.env.FLASK_PORT + "/predict/default/0"
+		let destinationURL  = process.env.FLASK_HOST + ":" + process.env.FLASK_PORT + "/predict/" + process.env.TEMP_MODEL_NAME + "/" + process.env.TEMP_MODEL_VERSION
 		axios({
 		    method: 'post',
 		    url: destinationURL,

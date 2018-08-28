@@ -46,7 +46,7 @@ module.exports = env => {
             disableHostCheck: true,
 			open: false,
 			proxy: {
-				"/api": "http://flask-middleman:8080"
+				"/api": "http://" + process.env.FLASK_HOST + ":" + process.env.FLASK_PORT
 			},
 			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
