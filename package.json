@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production --config webpack.prod.js",
     "start": "webpack-dev-server --mode development --open --config webpack.dev.js",
-    "startdocker": "webpack-dev-server --env.AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --env.AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --env.AWS_REGION=$AWS_REGION --env.AWS_S3_BUCKET=$AWS_S3_BUCKET --env.FLASK_PORT=$FLASK_PORT --env.FLASK_HOST=$FLASK_HOST --mode development --config webpack.docker.js",
+    "startdocker": "webpack-dev-server --env.AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --env.AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --env.AWS_REGION=$AWS_REGION --env.AWS_S3_BUCKET=$AWS_S3_BUCKET --env.EXPRESS_IP=$EXPRESS_IP --env.EXPRESS_PORT=$EXPRESS_PORT --mode development --config webpack.docker.js",
     "prod": "node server.js"
   },
   "author": "",

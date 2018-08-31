@@ -39,7 +39,7 @@ module.exports = env => {
 		},
 		devServer: {
 			contentBase: path.join(__dirname, "public/"),
-			port: 3000,
+			port: 8000,
 			open: true,
 			proxy: {
 				"/api": "http://localhost:8080"

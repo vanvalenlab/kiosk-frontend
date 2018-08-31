@@ -60,24 +60,23 @@ export default class FileUpload extends Component{
 		)
 	}
 
-	//RUN TO POST S3UPLOAD INFORMATION TO THE FLASK API
+	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
 	predictImage(){
-		console.log("Sending uploaded image's S3 Bucket URL to the Flask API...");
-		let destinationURL  = process.env.FLASK_HOST + ":" + process.env.FLASK_PORT + "/predict/" + process.env.TEMP_MODEL_NAME + "/" + process.env.TEMP_MODEL_VERSION
+		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
+		let destinationURL  = "http://" + process.env.EXPRESS_IP + ":" + process.env.EXPRESS_PORT + "/redis"
+		console.log(destinationURL);
+
 		axios({
 		    method: 'post',
 		    url: destinationURL,
 		    timeout: 60 * 4 * 1000, // Let's say you want to wait at least 4 mins
 			data: {
-				"instances": [
-					{
-					"image": this.state.uploadedS3FileName
-					}
-				]
+				"imageName": this.state.uploadedS3FileName,
+				"imageURL": this.state.uploadedFileLocation
 			}
 		})
-		.then(response => console.log("Successfully sent S3 Bucket URL to Flask API : ", response))
-		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Flask API : ", error))
+		.then(response => console.log("Successfully sent S3 Bucket URL to Express Server : ", response))
+		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Express Server : ", error))
 	}
 
 	//REACT RENDER FUNCTION
