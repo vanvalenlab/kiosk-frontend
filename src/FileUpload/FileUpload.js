@@ -63,7 +63,7 @@ export default class FileUpload extends Component{
 	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
 	predictImage(){
 		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
-		let destinationURL  = "http://" + process.env.EXPRESS_IP + ":" + process.env.EXPRESS_PORT + "/redis"
+		let destinationURL  = "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT + "/redis"
 		console.log(destinationURL);
 
 		axios({
