@@ -14,11 +14,11 @@ COPY ./test_image /react_interface
 COPY ./public /react_interface/public
 COPY ./src /react_interface/src
 
-ENV AWS_ACCESS_KEY_ID="AKIAJVU4424U3GBF56QQ" \
-    AWS_SECRET_ACCESS_KEY="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" \
-    AWS_REGION="us-east-1" \
-    EXPRESS_IP="localhost" \
-    EXPRESS_PORT=8080 \
-    AWS_S3_BUCKET="deepcell-output"
+#ENV AWS_ACCESS_KEY_ID="AKIAJVU4424U3GBF56QQ" \
+#    AWS_SECRET_ACCESS_KEY="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" \
+#    AWS_REGION="us-east-1" \
+#    EXPRESS_HOST="localhost" \
+#    EXPRESS_PORT=8080 \
+#    AWS_S3_BUCKET="deepcell-output"
 
 CMD npm run startdocker

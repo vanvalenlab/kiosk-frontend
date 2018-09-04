@@ -46,7 +46,7 @@ module.exports = env => {
             disableHostCheck: true,
 			open: false,
 			proxy: {
-				"/api": "http://" + process.env.FLASK_HOST + ":" + process.env.FLASK_PORT
+				"/redis": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT
 			},
 			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
@@ -66,8 +66,10 @@ module.exports = env => {
 				"process.env.AWS_ACCESS_KEY_ID": JSON.stringify(env.AWS_ACCESS_KEY_ID),
 				"process.env.AWS_SECRET_ACCESS_KEY": JSON.stringify(env.AWS_SECRET_ACCESS_KEY),
 				"process.env.AWS_REGION": JSON.stringify(env.AWS_REGION),
-				"process.env.EXPRESS_IP": JSON.stringify(env.EXPRESS_IP),
+				"process.env.EXPRESS_HOST": JSON.stringify(env.EXPRESS_HOST),
 				"process.env.EXPRESS_PORT": JSON.stringify(env.EXPRESS_PORT),
+				"process.env.MODEL_NAME": JSON.stringify(env.MODEL_NAME),
+				"process.env.MODEL_VERSION": JSON.stringify(env.MODEL_VERSION),
 				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET)
 			})
 		]		
