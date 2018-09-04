@@ -70,7 +70,9 @@ module.exports = env => {
 				"process.env.EXPRESS_PORT": JSON.stringify(env.EXPRESS_PORT),
 				"process.env.MODEL_NAME": JSON.stringify(env.MODEL_NAME),
 				"process.env.MODEL_VERSION": JSON.stringify(env.MODEL_VERSION),
-				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET)
+				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET),
+				"process.env.REDIS_HOST": JSON.stringify(env.REDIS_HOST),
+				"process.env.REDIS_PORT": JSON.stringify(env.REDIS_PORT)
 			})
 		]
 	}
