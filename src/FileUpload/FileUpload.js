@@ -66,20 +66,20 @@ export default class FileUpload extends Component{
 		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
 		let destinationURL  = "/redis"
 		console.log(destinationURL);
-        console.log( this.state.uploadedS3FileName );
-        console.log( this.state.uploadedFileLocation );
-        console.log( process.env.MODEL_NAME );
-        console.log( process.env.MODEL_VERSION );
+    console.log( this.state.uploadedS3FileName );
+    console.log( this.state.uploadedFileLocation );
+    console.log( process.env.MODEL_NAME );
+    console.log( process.env.MODEL_VERSION );
 
 		axios({
-		    method: 'post',
-		    url: destinationURL,
-		    timeout: 60 * 4 * 1000, // Let's say you want to wait at least 4 mins
+	    method: 'post',
+	    url: destinationURL,
+	    timeout: 60 * 4 * 1000, // Let's say you want to wait at least 4 mins
 			data: {
 				"imageName": this.state.uploadedS3FileName,
 				"imageURL": this.state.uploadedFileLocation,
-                "model_name": process.env.MODEL_NAME,
-                "model_version": process.env.MODEL_VERSION
+        "model_name": process.env.MODEL_NAME,
+        "model_version": process.env.MODEL_VERSION
 			}
 		})
 		.then(response => console.log("Successfully sent S3 Bucket URL to Express Server : ", response))
