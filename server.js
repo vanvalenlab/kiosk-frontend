@@ -1,9 +1,18 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
 
-var DIST_DIR = path.join(__dirname, "dist"),
-	PORT = 8000,
-	app = express();
+const app = express();
+
+//Support JSON-encoded bodies
+app.use(bodyParser.json());
+//Support URL-encoded bodies
+app.use(bodyParser.urlencoded({extended: true}));
+
+//Enable cors usage
+app.use(cors())
 
 //Serving the files on the dist folder
 app.use(express.static(path.join(__dirname, 'dist')));
@@ -12,10 +21,11 @@ app.use(express.static(path.join(__dirname, 'dist')));
 var route_setter = require('./server/routes.js');
 route_setter(app);
 
-
-//listen on port 3000 as specified above.
-app.listen(PORT);
-console.log("Node server running on port: " + PORT);
+// start the server
+const port = process.env.EXPRESS_PORT || 8000;
+app.listen(port, () => {
+	console.log(`Node server running on port: ${port}`);
+});
 
 /*
 PRODUCTION MODE
