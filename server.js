@@ -1,5 +1,5 @@
-let path = require("path");
-let express = require("express");
+const path = require('path');
+const express = require('express');
 
 var DIST_DIR = path.join(__dirname, "dist"),
 	PORT = 8000,

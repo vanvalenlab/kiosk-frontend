@@ -1,12 +1,12 @@
-var redis = require('redis');
-var controller = require('./controller.js');
+const redis = require('redis');
+const controller = require('./controller.js');
 
-var options = {
+const options = {
 	host: process.env.REDIS_HOST || 'redis-master',
 	port: process.env.REDIS_PORT || 6379
 }
 
-var client = redis.createClient(options);
+const client = redis.createClient(options);
 
 module.exports = function(app) {
 	app.post('/s3upload', function(request, response){

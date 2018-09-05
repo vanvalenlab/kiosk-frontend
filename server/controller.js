@@ -1,5 +1,5 @@
-var axios = require('axios');
-var S3Client = require('aws-s3');
+const axios = require('axios');
+const S3Client = require('aws-s3');
 
 //s3 config
 const config = {
