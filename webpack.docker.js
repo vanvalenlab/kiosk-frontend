@@ -43,7 +43,7 @@ module.exports = env => {
 		devServer: {
 			contentBase: path.join(__dirname, "public/"),
 			port: 3000,
-        disableHostCheck: true,
+      disableHostCheck: true,
 			open: false,
 			// proxy: {
 			// 	"/redis": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT
