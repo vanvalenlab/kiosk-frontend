@@ -36,10 +36,6 @@ export default class FileUpload extends Component{
 
 	//This function will run upon file upload completion.
 	onDrop(droppedfile){
-		for(var key in config){
-			console.log("Key: " + key + "," + "Value: " + config[key]);
-		}
-
 		console.log("Accepted Files: " + JSON.stringify(droppedfile));
 		//set the component state with the uploaded files
 		this.setState({file: droppedfile});
@@ -62,13 +58,15 @@ export default class FileUpload extends Component{
 
 	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
 	predictImage(){
-		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
-		console.log(destinationURL);
-    console.log( this.state.uploadedS3FileName );
-    console.log( this.state.uploadedFileLocation );
-    console.log( process.env.MODEL_NAME );
-    console.log( process.env.MODEL_VERSION );
+		console.log("Sending uploaded image's S3 Bucket URL to the REDIS...");
 		let destinationURL  = `http://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
+    let payload = {
+      "imageName": this.state.uploadedS3FileName,
+      "imageURL": this.state.uploadedFileLocation,
+      "model_name": process.env.MODEL_NAME,
+      "model_version": process.env.MODEL_VERSION
+    };
+    console.log(`Sending payload ${JSON.stringify(payload)} to ${destinationURL}`);
 
 		axios({
 	    method: 'post',
@@ -81,8 +79,8 @@ export default class FileUpload extends Component{
         "model_version": process.env.MODEL_VERSION
 			}
 		})
-		.then(response => console.log("Successfully sent S3 Bucket URL to Express Server : ", response))
-		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Express Server : ", error))
+		.then(response => console.log("Successfully sent S3 Bucket URL to Redis: ", response))
+		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Redis: ", error))
 	}
 
 	//REACT RENDER FUNCTION
