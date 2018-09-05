@@ -46,7 +46,8 @@ module.exports = env => {
       disableHostCheck: true,
 			open: false,
 			// proxy: {
-			// 	"/redis": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT
+				// "/redis": `${env.REDIS_HOST}:${env.REDIS_PORT}`,
+				// "/api": `${env.EXPRESS_HOST}:${env.EXPRESS_PORT}`
 			// },
 			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
