@@ -11,7 +11,6 @@ var params = {
  Bucket: 'deepcell-output',
  Delimiter: '/',
  Prefix: 'models/',
- ContinuationToken: '',
 }
 
 // ***********  s3 config ****************
@@ -110,7 +109,7 @@ module.exports = {
 			}
 
 			s3.listObjectsV2(params, function(err, data){
-				console.log("S3 keys retrieved: " + data);
+				console.log("S3 keys retrieved: " + JSON.stringify(data));
 				// allKeys = allKeys.concat(data.Contents);
 				if(err){
 					console.log("Error was reached while attempting to list all s3 keys: " + err);
@@ -122,10 +121,8 @@ module.exports = {
 					console.log("Data is truncated! ");
 					listAllKeys(data.NextContinuationToken, console.log("Warning, Check controller.getModel code. Continuation token was used: " + data));
 			    }
-			    else{
-			    	console.log("allKeys success: " + allKeys);
-					res.send(JSON.stringify(allKeys));
-			    }
+			    console.log("allKeys success: " + allKeys);
+				response.send(JSON.stringify(allKeys));
 			});
 		}
 	}
