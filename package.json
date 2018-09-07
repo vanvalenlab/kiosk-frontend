@@ -14,14 +14,19 @@
   "license": "ISC",
   "dependencies": {
     "aws-s3": "^1.5.5",
+    "aws-sdk": "^2.310.0",
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "html-webpack-plugin": "^3.2.0",
+    "morgan": "^1.9.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-dropzone": "^4.3.0",
     "react-hot-loader": "^4.3.3",
-    "react-tabs": "^2.2.2"
+    "react-tabs": "^2.2.2",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

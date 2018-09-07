@@ -1,21 +1,56 @@
-let path = require("path");
-let express = require("express");
+/* *****************Server Dependencies********************* */
+const express = require("express");
+const cors = require("cors");
+const app = express();
+//require accessing the fs system
+var fs = require('fs')
+//Never touch the placement of express and app.
+const port = process.env.PORT || 8080;
+const path = require('path');
+//logger for http middleware
+const logger = require('morgan');
+//body-parser for parsing http-bodies.
+var bodyParser = require('body-parser');
 
-var DIST_DIR = path.join(__dirname, "dist"),
-	PORT = 8000,
-	app = express();
+/* *****************Server config********************* */
+// create a Logging write stream (in append mode)
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'})
+// Log requests to the console.
+console.log("Setting up server logging.")
+// setup the logger
+app.use(logger('combined', {stream: accessLogStream}))
+
+//Enable cors usage
+app.use(cors())
+
+//enabling body-parser
+// to support JSON-encoded bodies
+app.use( bodyParser.json() );
+// to support URL-encoded bodies
+app.use(bodyParser.urlencoded({
+  extended: true
+})); 
 
 //Serving the files on the dist folder
+var DIST_DIR = path.join(__dirname, "dist");
 app.use(express.static(path.join(__dirname, 'dist')));
 
-//Routes requirement
+// Setup a default catch-all route that sends back a welcome message in JSON format.
+// app.get('*', (req, res) => res.status(200).send({
+// 	message: 'Welcome to the beginning of nothingness.',
+// }));
+
+//Routing: telling the server where to derive the logic for routing the application
+console.log("Server: setting routes..");
 var route_setter = require('./server/routes.js');
 route_setter(app);
 
+/* *****************Server Start********************* */
+//Listen on
+var server = app.listen(port, function(){
+	console.log("Server: listening on port: " ,port);
+});
 
-//listen on port 3000 as specified above.
-app.listen(PORT);
-console.log("Node server running on port: " + PORT);
 
 /*
 PRODUCTION MODE

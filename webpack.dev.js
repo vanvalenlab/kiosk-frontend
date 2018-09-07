@@ -42,7 +42,8 @@ module.exports = env => {
 			port: 8000,
 			open: true,
 			proxy: {
-				"/api": "http://localhost:8080"
+				"/redis": "http://" + env.EXPRESS_HOST + ":" + env.EXPRESS_PORT,
+				"/getModel": "http://" + env.EXPRESS_HOST + ":" + env.EXPRESS_PORT
 			},
 			host: 'localhost',
 			publicPath: "http://localhost:3000/dist/",
@@ -53,6 +54,14 @@ module.exports = env => {
 				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
 			}
 		},
+		node: {
+			fs: 'empty'
+		},
+		externals: [
+			{
+				'./cptable': 'var cptable'
+			}
+		],
 		devtool: 'inline-source-map',
 		mode: "development",
 		plugins: [

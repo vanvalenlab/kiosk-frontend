@@ -4,7 +4,7 @@ import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import S3Client from 'aws-s3';
 
-//s3 config
+//aws-s3 config
 const config = {
     bucketName: process.env.AWS_S3_BUCKET ,
     region: process.env.AWS_REGION ,
@@ -32,6 +32,27 @@ export default class FileUpload extends Component{
 			uploadedS3FileName: null,
 			uploadedFileLocation: null
 		}
+	}
+
+	//React Lifecycle Method, called when component is already mount.
+	//Used to make AJAX calls to retrieve data for application into components.
+	componentDidMount () {
+		console.log('...Component did mount!')
+		this.retrieveModelsVersions();
+	}
+
+	retrieveModelsVersions(){
+		axios.get('/getModel')
+			.then(function (response) {
+				// handle success
+				console.log("Successfully called /getModel")
+				console.log("getModel response success: "+response);
+			})
+			.catch(function (error) {
+				// handle error
+				console.log("Failed calling /getModel")
+				console.log(error);
+			})
 	}
 
 	//This function will run upon file upload completion.
