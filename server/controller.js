@@ -5,12 +5,15 @@ const redis = require('redis');
 var AWS = require('aws-sdk');
 AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, region: process.env.AWS_REGION});
 var s3 = new AWS.S3();
+var Promise = require("bluebird");
 
 // ***********  aws-sdk params ***********
 var params = { 
  Bucket: 'deepcell-output',
  Delimiter: '/',
  Prefix: 'models/',
+ MaxKeys: 2147483647, // Maximum allowed by S3 API
+ StartAfter: 'models/'
 }
 
 // ***********  s3 config ****************
@@ -57,7 +60,7 @@ var options = {
 
 const client = redis.createClient(options);
 
-
+//Controller functions
 module.exports = {
 	s3upload: function(request, response) {
 		console.log("request received from react.");
@@ -98,33 +101,87 @@ module.exports = {
 	getModel: function(request, response){
 		console.log("getModel controller function was called.");
 
-		var allKeys = [];
+		//empty container array for returning with response.send to the front-end.
+		var allModels = [];
+		var allVersions = [];
+		//response object
+		var responseObject = {};
 
-		listAllKeys();
-
-		function listAllKeys(token, cb){
+		//these following functions are called promisified below.
+		var listAllModels = function(token, cb){
 			if(token){
 				console.log("Token: "+token);
 				params.ContinuationToken = token;
 			}
 
+			//aws-sdk s3 object, invoking built-in function listObjectsV2().
 			s3.listObjectsV2(params, function(err, data){
-				console.log("S3 keys retrieved: " + JSON.stringify(data));
-				// allKeys = allKeys.concat(data.Contents);
+				//!!!!!!!!!!!Concat Models Data !!!!!!!!!!!
+				console.log("S3 models retrieved: " + JSON.stringify(data));
+				allModels = allModels.concat(data.CommonPrefixes);
+
 				if(err){
-					console.log("Error was reached while attempting to list all s3 keys: " + err);
+					console.log("Error was reached while attempting to list all s3 models: " + err);
 				}
+				//if the data object returns a key-value pair called "isTruncated", it will also return a NextContinuationToken automatically
+				//in order for us to be able to make subsequent calls. We probably wont need to use this tho...at least until we do.
 				if(data.IsTruncated){
 					//if the data is truncated, the continuation token will be used to refer where the listing of the keys stopped, so they can
 					//then continue parsing the s3 bucket for more keys. i dont believe this is necessary for our project though.
 					//we should be consistently hit the else statement when in real usage.
 					console.log("Data is truncated! ");
-					listAllKeys(data.NextContinuationToken, console.log("Warning, Check controller.getModel code. Continuation token was used: " + data));
-			    }
-			    console.log("allKeys success: " + allKeys);
-				response.send(JSON.stringify(allKeys));
+					listAllModels(data.NextContinuationToken, console.log("Warning, Check controller.getModel code. Continuation token was used: " + data));
+				}
 			});
 		}
+
+		var listAllVersions = function(){
+			//After retrieving the models, lets use it to retrieve the versions.
+			if(allModels.length > 0){
+				//set a new parameter object to submit to s3.
+				var versionParams = { 
+					Bucket: 'deepcell-output',
+					Delimiter: '/',
+					Prefix: '', //notice the prefix is empty!
+					MaxKeys: 2147483647 // Maximum allowed by S3 API
+				}
+				//for each Model in the allModels array, make the Prefix key-value pair equal to one of the models.
+				for(let i = 0; i <= allModels.length; i++){
+					//setting the model as the prefix.
+					versionParams.Prefix = allModels.Prefix;
+					//then make the s3 call to list the versions inside that single model, one at a time :)
+					s3.listObjectsV2(versionParams, function(err, data){
+						// !!!!!  concat the versions data.  !!!!!!!
+						console.log("Versions retrieved: " + JSON.stringify(data.CommonPrefixes));
+						allVersions = allVersions.concat(data.CommonPrefixes);
+						console.log("Printing the versions container object: " + allVersions);
+
+						if(err){
+							console.log("Error was reached while attempting to list all s3 versions: " + err);
+						}
+					})
+				}
+			}
+		}
+
+		var joinResults = function(){
+			//after completing the s3 listing, return a response to the frontend.
+			console.log("allModels success: " + JSON.stringify(allModels));
+			console.log("allVersions success: " + JSON.stringify(allVersions));
+			responseObject.models = allModels;
+			responseObject.versions = allVersions;
+			console.log("Sending response object with versions and models: " + JSON.stringify(responseObject));
+			response.send(responseObject);
+		}
+
+
+		//calling the function defined above.
+		listAllModels()
+		.then(listAllVersions())
+		.then(joinResults())
+		.catch(function(error){
+			console.log('There was an error while attempting to retrieve models and versions for React:' + error);
+		})
 	}
 
 }
