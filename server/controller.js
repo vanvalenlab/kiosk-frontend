@@ -101,8 +101,6 @@ module.exports = {
 	getModel: function(request, response){
 		console.log("getModel controller function was called.");
 
-		//empty container array for returning with response.send to the front-end.
-		var allModels = [];
 		var allVersions = [];
 		//response object
 		var responseObject = {};
@@ -113,26 +111,31 @@ module.exports = {
 				console.log("Token: "+token);
 				params.ContinuationToken = token;
 			}
+			return new Promise(function(resolve, reject) {
+				//empty container array for returning with response.send to the front-end.
+				var allModels = [];
+				//aws-sdk s3 object, invoking built-in function listObjectsV2().
+				s3.listObjectsV2(params, function(err, data){
+					//!!!!!!!!!!!Concat Models Data !!!!!!!!!!!
+					console.log("S3 models retrieved: " + JSON.stringify(data));
+					allModels = allModels.concat(data.CommonPrefixes);
+					// ** RESOLVING THE PROMISE HERE!
+					resolve(allModels);
 
-			//aws-sdk s3 object, invoking built-in function listObjectsV2().
-			s3.listObjectsV2(params, function(err, data){
-				//!!!!!!!!!!!Concat Models Data !!!!!!!!!!!
-				console.log("S3 models retrieved: " + JSON.stringify(data));
-				allModels = allModels.concat(data.CommonPrefixes);
-
-				if(err){
-					console.log("Error was reached while attempting to list all s3 models: " + err);
-				}
-				//if the data object returns a key-value pair called "isTruncated", it will also return a NextContinuationToken automatically
-				//in order for us to be able to make subsequent calls. We probably wont need to use this tho...at least until we do.
-				if(data.IsTruncated){
-					//if the data is truncated, the continuation token will be used to refer where the listing of the keys stopped, so they can
-					//then continue parsing the s3 bucket for more keys. i dont believe this is necessary for our project though.
-					//we should be consistently hit the else statement when in real usage.
-					console.log("Data is truncated! ");
-					listAllModels(data.NextContinuationToken, console.log("Warning, Check controller.getModel code. Continuation token was used: " + data));
-				}
-			});
+					if(err){
+						console.log("Error was reached while attempting to list all s3 models: " + err);
+					}
+					//if the data object returns a key-value pair called "isTruncated", it will also return a NextContinuationToken automatically
+					//in order for us to be able to make subsequent calls. We probably wont need to use this tho...at least until we do.
+					if(data.IsTruncated){
+						//if the data is truncated, the continuation token will be used to refer where the listing of the keys stopped, so they can
+						//then continue parsing the s3 bucket for more keys. i dont believe this is necessary for our project though.
+						//we should be consistently hit the else statement when in real usage.
+						console.log("Data is truncated! ");
+						listAllModels(data.NextContinuationToken, console.log("Warning, Check controller.getModel code. Continuation token was used: " + data));
+					}
+				})
+			})
 		}
 
 		var listAllVersions = function(){
