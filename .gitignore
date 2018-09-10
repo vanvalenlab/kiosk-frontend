@@ -4,3 +4,5 @@ node_modules
 
 #ignore the react .env file
 .env
+
+*.log
