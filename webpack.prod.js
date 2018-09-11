@@ -44,6 +44,7 @@ module.exports = env => {
 			new HtmlWebpackPlugin({
 				title: 'DeepCell',
 				template: './public/index.html',
+				favicon: './public/favicon.ico',
 				hash: true,
 				filename: './index.html'
 			}),
