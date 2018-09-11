@@ -1,65 +1,54 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const dotenv = require('dotenv');
 
 module.exports = env => {
-	//// call dotenv and it will return an Object with a parsed key
-
-	// env = dotenv.config().parsed;
-
-	//// reduce it to a nice object, the same as before
-
-	// const envKeys = Object.keys(env).reduce((prev, next) => {
-	// 	prev[`process.env.${next}`] = JSON.stringify(env[next]);
-	// 	return prev;
-	// }, {});
-
 	return {
-		entry: "./src/index.js",
+		entry: './src/index.js',
 		module: {
 			rules: [
 				{
 					test: /\.(js|jsx)$/,
 					exclude: /(node_modules|bower_components)/,
 					loader: 'babel-loader',
-					options: { presets: ['env','react'] }
+					options: { presets: ['env', 'react'] }
 				},
 				{
 					test: /\.css$/,
 					use: [
 						'style-loader',
-						"css-loader"
+						'css-loader'
 					]
 				}
 			]
 		},
 		resolve: { extensions: ['*', '.js', '.jsx'] },
 		output: {
-			path: path.resolve(__dirname, "dist/"),
-			publicPath: "dist/",
-			filename: "bundle.js"
+			path: path.resolve(__dirname, 'dist/client/'),
+			publicPath: 'dist/client/',
+			filename: 'bundle.js'
 		},
 		devServer: {
-			contentBase: path.join(__dirname, "public/"),
+			contentBase: path.join(__dirname, 'public/'),
 			port: 3000,
-            disableHostCheck: true,
+      disableHostCheck: true,
 			open: false,
 			proxy: {
-				"/redis": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT,
-				"/getModels": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT
+				'/redis': `http://${process.env.EXPRESS_HOST}:${process.env.EXPRESS_PORT}`,
+				'/getModels': `http://${process.env.EXPRESS_HOST}:${process.env.EXPRESS_PORT}`
 			},
 			host: '0.0.0.0',
-			publicPath: "http://localhost:3000/dist/",
+			publicPath: 'http://localhost:3000/dist/client/',
 			hotOnly: true,
-			headers: { 
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+				'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
 			}
 		},
 		devtool: 'inline-source-map',
-		mode: "development",
+		mode: 'development',
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin(),
