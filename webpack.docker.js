@@ -43,15 +43,16 @@ module.exports = env => {
 		devServer: {
 			contentBase: path.join(__dirname, "public/"),
 			port: 3000,
-            disableHostCheck: true,
+      disableHostCheck: true,
 			open: false,
-			proxy: {
-				"/redis": "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT
-			},
+			// proxy: {
+				// "/redis": `${env.REDIS_HOST}:${env.REDIS_PORT}`,
+				// "/api": `${env.EXPRESS_HOST}:${env.EXPRESS_PORT}`
+			// },
 			host: '0.0.0.0',
 			publicPath: "http://localhost:3000/dist/",
 			hotOnly: true,
-			headers: { 
+			headers: {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
 				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
@@ -70,8 +71,10 @@ module.exports = env => {
 				"process.env.EXPRESS_PORT": JSON.stringify(env.EXPRESS_PORT),
 				"process.env.MODEL_NAME": JSON.stringify(env.MODEL_NAME),
 				"process.env.MODEL_VERSION": JSON.stringify(env.MODEL_VERSION),
-				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET)
+				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET),
+				"process.env.REDIS_HOST": JSON.stringify(env.REDIS_HOST),
+				"process.env.REDIS_PORT": JSON.stringify(env.REDIS_PORT)
 			})
-		]		
+		]
 	}
 };

@@ -6,10 +6,10 @@ import S3Client from 'aws-s3';
 
 //s3 config
 const config = {
-    bucketName: process.env.AWS_S3_BUCKET ,
-    region: process.env.AWS_REGION ,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  bucketName: process.env.AWS_S3_BUCKET ,
+  region: process.env.AWS_REGION ,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 }
 
 /*
@@ -36,10 +36,6 @@ export default class FileUpload extends Component{
 
 	//This function will run upon file upload completion.
 	onDrop(droppedfile){
-		for(var key in config){
-			console.log("Key: " + key + "," + "Value: " + config[key]);
-		}
-
 		console.log("Accepted Files: " + JSON.stringify(droppedfile));
 		//set the component state with the uploaded files
 		this.setState({file: droppedfile});
@@ -61,29 +57,30 @@ export default class FileUpload extends Component{
 	}
 
 	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
-		//let destinationURL  = "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT + "/redis"
 	predictImage(){
-		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
-		let destinationURL  = "/redis"
-		console.log(destinationURL);
-        console.log( this.state.uploadedS3FileName );
-        console.log( this.state.uploadedFileLocation );
-        console.log( process.env.MODEL_NAME );
-        console.log( process.env.MODEL_VERSION );
+		console.log("Sending uploaded image's S3 Bucket URL to the REDIS...");
+		let destinationURL  = `http://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`;
+    let payload = {
+      "imageName": this.state.uploadedS3FileName,
+      "imageURL": this.state.uploadedFileLocation,
+      "model_name": process.env.MODEL_NAME,
+      "model_version": process.env.MODEL_VERSION
+    };
+    console.log(`Sending payload ${JSON.stringify(payload)} to ${destinationURL}`);
 
 		axios({
-		    method: 'post',
-		    url: destinationURL,
-		    timeout: 60 * 4 * 1000, // Let's say you want to wait at least 4 mins
+	    method: 'post',
+	    url: destinationURL,
+	    timeout: 60 * 4 * 1000, // Let's say you want to wait at least 4 mins
 			data: {
 				"imageName": this.state.uploadedS3FileName,
 				"imageURL": this.state.uploadedFileLocation,
-                "model_name": process.env.MODEL_NAME,
-                "model_version": process.env.MODEL_VERSION
+        "model_name": process.env.MODEL_NAME,
+        "model_version": process.env.MODEL_VERSION
 			}
 		})
-		.then(response => console.log("Successfully sent S3 Bucket URL to Express Server : ", response))
-		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Express Server : ", error))
+		.then(response => console.log("Successfully sent S3 Bucket URL to Redis: ", response))
+		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Redis: ", error))
 	}
 
 	//REACT RENDER FUNCTION
