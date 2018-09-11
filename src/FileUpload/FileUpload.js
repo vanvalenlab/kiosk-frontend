@@ -63,15 +63,15 @@ export default class FileUpload extends Component{
 	}
 
 	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
-		//let destinationURL  = "http://" + process.env.EXPRESS_HOST + ":" + process.env.EXPRESS_PORT + "/redis"
+		//let destinationURL  = 'http://' + process.env.EXPRESS_HOST + ':' + process.env.EXPRESS_PORT + '/redis'
 	predictImage(){
-		console.log("Sending uploaded image's S3 Bucket URL to the EXPRESS SERVER...");
+		console.log('Sending uploaded images S3 Bucket URL to the EXPRESS SERVER...');
 		let destinationURL = '/api/redis';
     let payload = {
-      "imageName": this.state.uploadedS3FileName,
-      "imageURL": this.state.uploadedFileLocation,
-      "model_name": process.env.MODEL_NAME,
-      "model_version": process.env.MODEL_VERSION
+      'imageName': this.state.uploadedS3FileName,
+      'imageURL': this.state.uploadedFileLocation,
+      'model_name': process.env.MODEL_NAME,
+      'model_version': process.env.MODEL_VERSION
     };
 		console.log(destinationURL);
     console.log(JSON.stringify(payload));
@@ -82,8 +82,8 @@ export default class FileUpload extends Component{
 	    timeout: 60 * 4 * 1000, // 4 minutes
 			data: payload
 		})
-		.then(response => console.log("Successfully sent S3 Bucket URL to Express Server : ", response))
-		.catch(error => console.log("Error occurred while sending S3 Bucket URL to Express Server : ", error));
+		.then(response => console.log('Successfully sent S3 Bucket URL to Express Server : ', response))
+		.catch(error => console.log('Error occurred while sending S3 Bucket URL to Express Server : ', error));
 	}
 
 	//REACT RENDER FUNCTION
@@ -91,19 +91,19 @@ export default class FileUpload extends Component{
 		//JSX that will be returned to the User's View
 		return (
 			<section>
-				<div className="dropzone">
+				<div className='dropzone'>
 					<Dropzone
-						accept="image/*"
+						accept='image/*'
 						onDrop={this.onDrop.bind(this)}
 					>
-						<p className="uploadInstructions"> Drag & drop</p>
-						<p className="uploadUnder">your files here or <span>click</span> to browse.</p>
-						<div className="acceptedFiles">
+						<p className='uploadInstructions'> Drag & drop</p>
+						<p className='uploadUnder'>your files here or <span>click</span> to browse.</p>
+						<div className='acceptedFiles'>
 							{ this.state.uploadedFileLocation !== null ?
 								<ul>
-									<p className="fileLabel">File(s) Sent to S3:</p>
-									<img className="uploadedImage" src={this.state.uploadedFileLocation}/>
-									{this.state.file.map(f => <li className="fileName" key={f.name}>{f.name} <p className="fileSize">{f.size} bytes</p></li>)}
+									<p className='fileLabel'>File(s) Sent to S3:</p>
+									<img className='uploadedImage' src={this.state.uploadedFileLocation}/>
+									{this.state.file.map(f => <li className='fileName' key={f.name}>{f.name} <p className='fileSize'>{f.size} bytes</p></li>)}
 								</ul>
 							: null }
 						</div>
