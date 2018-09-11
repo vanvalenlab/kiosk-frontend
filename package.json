@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode production --config webpack.prod.js",
+    "clean": "rm -rf ./dist",
+    "build:client": "webpack --mode production --config webpack.prod.js",
+    "build:server": "babel -d ./dist/server ./server -s",
+    "build": "npm run clean && npm run build:server && npm run build:client",
     "start": "webpack-dev-server --mode development --open --config webpack.dev.js",
-    "startdocker": "DEBUG='express:*' webpack-dev-server --env.AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --env.AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --env.AWS_REGION=$AWS_REGION --env.AWS_S3_BUCKET=$AWS_S3_BUCKET --env.EXPRESS_HOST=$EXPRESS_HOST --env.EXPRESS_PORT=$EXPRESS_PORT --env.MODEL_NAME=$MODEL_NAME --env.MODEL_VERSION=$MODEL_VERSION --mode development --config webpack.docker.js",
-    "prod": "node server.js"
+    "start:docker": "DEBUG='express:*' webpack-dev-server --env.AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --env.AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --env.AWS_REGION=$AWS_REGION --env.AWS_S3_BUCKET=$AWS_S3_BUCKET --env.EXPRESS_HOST=$EXPRESS_HOST --env.EXPRESS_PORT=$EXPRESS_PORT --env.MODEL_NAME=$MODEL_NAME --env.MODEL_VERSION=$MODEL_VERSION --mode development --config webpack.docker.js",
+    "start:prod": "NODE_ENV='production' npm run build && node ./dist/server/index.js"
   },
   "author": "",
   "license": "ISC",
