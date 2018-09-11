@@ -6,10 +6,10 @@ import S3Client from 'aws-s3';
 
 //aws-s3 config
 const config = {
-  bucketName: process.env.AWS_S3_BUCKET ,
-  region: process.env.AWS_REGION ,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+	bucketName: process.env.AWS_S3_BUCKET ,
+	region: process.env.AWS_REGION ,
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 }
 
 //start component class
@@ -20,7 +20,8 @@ export default class FileUpload extends Component{
 		this.state = {
 			file: [],
 			uploadedS3FileName: null,
-			uploadedFileLocation: null
+			uploadedFileLocation: null,
+			redisResponse: null
 		}
 	}
 
@@ -32,12 +33,12 @@ export default class FileUpload extends Component{
 
 	retrieveModelsVersions() {
 		axios.get('/api/getModels')
-    	.then(function (response) {
-    		console.log(`getModels response: ${JSON.stringify(response)}`);
-    	})
-    	.catch((error) => {
-    		console.log(`Failed calling /api/getModels: ${error}`);
-    	});
+		.then(function (response) {
+			console.log(`getModels response: ${JSON.stringify(response)}`);
+		})
+		.catch((error) => {
+			console.log(`Failed calling /api/getModels: ${error}`);
+		});
 	}
 
 	//This function will run upon file upload completion.
@@ -67,23 +68,28 @@ export default class FileUpload extends Component{
 	predictImage(){
 		console.log('Sending uploaded images S3 Bucket URL to the EXPRESS SERVER...');
 		let destinationURL = '/api/redis';
-    let payload = {
-      'imageName': this.state.uploadedS3FileName,
-      'imageURL': this.state.uploadedFileLocation,
-      'model_name': process.env.MODEL_NAME,
-      'model_version': process.env.MODEL_VERSION
-    };
+		let payload = {
+			'imageName': this.state.uploadedS3FileName,
+			'imageURL': this.state.uploadedFileLocation,
+			'model_name': process.env.MODEL_NAME,
+			'model_version': process.env.MODEL_VERSION
+		};
 		console.log(destinationURL);
-    console.log(JSON.stringify(payload));
+		console.log(JSON.stringify(payload));
 
 		axios({
-	    method: 'post',
-	    url: destinationURL,
-	    timeout: 60 * 4 * 1000, // 4 minutes
+			method: 'post',
+			url: destinationURL,
+			timeout: 60 * 4 * 1000, // 4 minutes
 			data: payload
 		})
-		.then(response => console.log('Successfully sent S3 Bucket URL to Express Server : ', response))
-		.catch(error => console.log('Error occurred while sending S3 Bucket URL to Express Server : ', error));
+		.then(response => {
+			console.log("Successfully sent S3 Bucket URL to Express Server, here is the response: ", response);
+			this.setState({redisResponse: response});
+		})
+		.catch(error => {
+			console.log("Error occurred while sending S3 Bucket URL to Express Server : ", error)
+		})
 	}
 
 	//REACT RENDER FUNCTION
@@ -109,6 +115,27 @@ export default class FileUpload extends Component{
 						</div>
 					</Dropzone>
 				</div>
+				{ this.state.redisResponse !== null ?
+					<div className="resultsBox">
+						<div className="resultsAnimation">
+							<ul class='loading-frame'>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+							</ul>
+						</div>
+						<div className="downloadResults">
+							<a href={this.state.redisResponse} className="buttonDownload">Download</a>
+						</div>
+					</div>
+				: null }
 			</section>
 		)
 	}

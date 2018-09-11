@@ -46,3 +46,164 @@
   margin-top: 0;
   font-size: 9px;
 }
+/* *****display inline-block rules**************************** */
+
+.resultsBox, .dropzone{
+  display: inline-block;
+}
+/* **************** DOWNLOAD BUTTON  **********************************************************************  */
+
+.resultsBox {
+  margin-left: 4em;
+  vertical-align: top;
+  margin-top: 5em;
+}
+
+.downloadResults {
+  margin-left: 8em;
+  margin-top: 2em;
+}
+
+.buttonDownload {
+  display: inline-block;
+  position: relative;
+  padding: 10px 25px;
+  border-radius: 15px;
+  background-color: #4CC713;
+  color: white;
+  
+  font-family: sans-serif;
+  text-decoration: none;
+  font-size: 0.9em;
+  text-align: center;
+  text-indent: 15px;
+}
+
+.buttonDownload:hover {
+  background-color: #333;
+  color: white;
+}
+
+.buttonDownload:before, .buttonDownload:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 15px;
+  top: 52%;
+}
+
+/* Download box shape  */
+.buttonDownload:before {
+  width: 10px;
+  height: 2px;
+  border-style: solid;
+  border-width: 0 2px 2px;
+}
+
+/* Download arrow shape */
+.buttonDownload:after {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  margin-top: -7px;
+  
+  border-style: solid;
+  border-width: 4px 4px 0 4px;
+  border-color: transparent;
+  border-top-color: inherit;
+  
+  animation: downloadArrow 2s linear infinite;
+  animation-play-state: paused;
+}
+
+.buttonDownload:hover:before {
+  border-color: #4CC713;
+}
+
+.buttonDownload:hover:after {
+  border-top-color: #4CC713;
+  animation-play-state: running;
+}
+
+/* keyframes for the download icon anim */
+@keyframes downloadArrow {
+  /* 0% and 0.001% keyframes used as a hackish way of having the button frozen on a nice looking frame by default */
+  0% {
+    margin-top: -7px;
+    opacity: 1;
+  }
+  
+  0.001% {
+    margin-top: -15px;
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 1;
+  }
+  
+  100% {
+    margin-top: 0;
+    opacity: 0;
+  }
+}
+
+
+/* *****  RESULTS ARROW ANIMATION  ********************************************/
+
+.circle {
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  border-radius: 15px;
+  background-color: #3FC380;
+  animation: animate linear 2s infinite;
+}
+.circle:nth-child(1) {
+  animation-delay: 0.9s;
+}
+.circle:nth-child(2) {
+  animation-delay: 1.1s;
+  transform: translate(18px, 13px);
+}
+.circle:nth-child(3) {
+  animation-delay: 1.3s;
+  transform: translate(35px, 25px);
+}
+.circle:nth-child(4) {
+  animation-delay: 1.1s;
+  transform: translate(18px, 38px);
+}
+.circle:nth-child(5) {
+  animation-delay: 0.9s;
+  transform: translate(0px, 50px);
+}
+.circle:nth-child(6) {
+  animation-delay: 0.9s;
+  transform: translate(0, 25px);
+}
+.circle:nth-child(7) {
+  animation-delay: 0.7s;
+  transform: translate(-20px, 25px);
+}
+.circle:nth-child(8) {
+  animation-delay: 0.5s;
+  transform: translate(-40px, 25px);
+}
+.circle:nth-child(9) {
+  animation-delay: 0.3s;
+  transform: translate(-60px, 25px);
+}
+.circle:nth-child(10) {
+  animation-delay: 0.1s;
+  transform: translate(-80px, 25px);
+}
+@keyframes animate {
+  0%,
+  100% {
+    background-color: #3FC380;
+  }
+  50% {
+    background-color: #fff;
+  }
+}
