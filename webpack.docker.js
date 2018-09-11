@@ -64,15 +64,19 @@ module.exports = env => {
 			new webpack.HotModuleReplacementPlugin(),
 			new HtmlWebpackPlugin(),
 			new webpack.DefinePlugin({
-				"process.env.AWS_ACCESS_KEY_ID": JSON.stringify(env.AWS_ACCESS_KEY_ID),
-				"process.env.AWS_SECRET_ACCESS_KEY": JSON.stringify(env.AWS_SECRET_ACCESS_KEY),
-				"process.env.AWS_REGION": JSON.stringify(env.AWS_REGION),
-				"process.env.EXPRESS_HOST": JSON.stringify(env.EXPRESS_HOST),
-				"process.env.EXPRESS_PORT": JSON.stringify(env.EXPRESS_PORT),
-				"process.env.MODEL_NAME": JSON.stringify(env.MODEL_NAME),
-				"process.env.MODEL_VERSION": JSON.stringify(env.MODEL_VERSION),
-				"process.env.AWS_S3_BUCKET": JSON.stringify(env.AWS_S3_BUCKET)
+				'process.env': {
+					'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+					'AWS_ACCESS_KEY_ID': JSON.stringify(process.env.AWS_ACCESS_KEY_ID),
+					'AWS_SECRET_ACCESS_KEY': JSON.stringify(process.env.AWS_SECRET_ACCESS_KEY),
+					'AWS_REGION': JSON.stringify(process.env.AWS_REGION),
+					'AWS_S3_BUCKET': JSON.stringify(process.env.AWS_S3_BUCKET),
+					'EXPRESS_HOST': JSON.stringify(process.env.EXPRESS_HOST),
+					'EXPRESS_PORT': JSON.stringify(process.env.EXPRESS_PORT),
+					'MODEL_NAME': JSON.stringify(process.env.MODEL_NAME),
+					'MODEL_VERSION': JSON.stringify(process.env.MODEL_VERSION),
+					'MODEL_PREFIX': JSON.stringify(process.env.MODEL_PREFIX),
+				}
 			})
-		]		
+		]
 	}
 };
