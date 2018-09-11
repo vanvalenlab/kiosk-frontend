@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import './FileUpload.css';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';

@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import FileUpload from '../FileUpload/FileUpload';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Logo from '../Logo/Logo';
