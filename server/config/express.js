@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import expressWinston from 'express-winston';
-import favicon from 'serve-favicon';
 import fs from 'fs';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
@@ -39,9 +38,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // view engine setup
 app.set('view engine', 'html');
 
+// static files served differenlty in PROD or DEV modes
+let DIST_DIR = path.join(__dirname, '..', '..', 'public');
+console.log(config.env);
+if (config.env == 'production') {
+  DIST_DIR = path.join(__dirname, '..', '..', '..', 'dist', 'client');
+}
 //Serving the files on the dist folder
-app.use(express.static(path.join(__dirname, '..', '..', '..', 'dist', 'client')));
-app.use(favicon(path.join(__dirname, '..', '..', '..', 'dist', 'client', 'favicon.ico')));
+app.use(express.static(DIST_DIR));
 
 app.use(cookieParser());
 app.use(compress());
@@ -51,7 +55,7 @@ app.use(cors());   // enable CORS - Cross Origin Resource Sharing
 // mount all routes
 app.use('/api', routes);
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', '..', 'dist', 'client', 'index.html'));
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
 // log error in winston transports except when executing test suite
