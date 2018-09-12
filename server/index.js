@@ -9,7 +9,7 @@ import app from './config/express';
 if (!module.parent) {
   // listen on port config.port
   app.listen(config.port, () => {
-    // tslint:disable-next-line:no-console
+    // eslint-disable-next-line no-console
     console.info(`server started on port ${config.port} (${config.env})`);
   });
 }

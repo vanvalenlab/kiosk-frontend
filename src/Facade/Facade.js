@@ -5,41 +5,41 @@ import Logo from '../Logo/Logo';
 import './Facade.css';
 
 export default class Facade extends Component{
-	render(){
-		return(
-		<div>
-			<Logo />
-			<Tabs>
-				<TabList>
-					<Tab>Prediction</Tab>
-					<Tab>Training</Tab>
-					<Tab>Options</Tab>
-					<a className='navLink' href='http://131.215.8.170:8888'>Jupyter</a>
-					<a className='navLink' href='https://github.com/vanvalenlab'>Github</a>
-				</TabList>
+  render() {
+    return(
+      <div>
+        <Logo />
+        <Tabs>
+          <TabList>
+            <Tab>Prediction</Tab>
+            <Tab>Training</Tab>
+            <Tab>Options</Tab>
+            <a className='navLink' href='http://131.215.8.170:8888'>Jupyter</a>
+            <a className='navLink' href='https://github.com/vanvalenlab'>Github</a>
+          </TabList>
 
-				<TabPanel>
-					{/* Upload an Image */}
-					<div className="predictionTab">
-						<FileUpload />
-					</div>
-				</TabPanel>
+          <TabPanel>
+            {/* Upload an Image */}
+            <div className="predictionTab">
+              <FileUpload />
+            </div>
+          </TabPanel>
 
-				<TabPanel>
-					{/* Training Panel */}
-					<div className='training'>
+          <TabPanel>
+            {/* Training Panel */}
+            <div className='training'>
 						This is the Training Panel
-					</div>
-				</TabPanel>
+            </div>
+          </TabPanel>
 
-				<TabPanel>
-					{/* Options */}
-					<div className='Options'>
+          <TabPanel>
+            {/* Options */}
+            <div className='Options'>
 						This is the options panel
-					</div>
-				</TabPanel>
-			</Tabs>
-		</div>
-		);
-	}
+            </div>
+          </TabPanel>
+        </Tabs>
+      </div>
+    );
+  }
 }

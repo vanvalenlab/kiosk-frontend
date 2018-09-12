@@ -61,7 +61,7 @@ async function getModels(req, res) {
       Delimiter: '/',
       Prefix: config.model.prefix,
       MaxKeys: 2147483647, // Maximum allowed by S3 API
-    }
+    };
     let models = [];
     await getKeys(params, models);
     // array of params for each listObjectsV2 call
@@ -71,12 +71,11 @@ async function getModels(req, res) {
         Prefix: `${prefix}`,
         Delimiter: '/',
         MaxKeys: 2147483647, // Maximum allowed by S3 API
-      }
+      };
     });
 
     let allModels = [];
     await Promise.all(arrayOfParams.map(param => getKeys(param, allModels)));
-
     console.log(allModels);
     res.status(httpStatus.OK).send({ models: allModels });
   } catch (error) {

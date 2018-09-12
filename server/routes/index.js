@@ -18,11 +18,11 @@ const s3 = new AWS.S3();
 
 const upload = multer({
   storage: multerS3({
-      s3: s3,
-      bucket: config.aws.bucketName,
-      key: function (req, file, cb) {
-        cb(null, file.originalname);
-      }
+    s3: s3,
+    bucket: config.aws.bucketName,
+    key: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
   })
 });
 
