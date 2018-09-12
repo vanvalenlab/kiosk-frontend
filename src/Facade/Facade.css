@@ -13,19 +13,19 @@ a.navLink {
 }
 
 .react-tabs {
-  padding: 1.5rem 0 0 8rem;
+  padding: 0rem 0 0 0rem;
   display: inline-block;
 }
 
 @media only screen and (max-width: 1052px) and (min-width: 692px){
   .react-tabs {
-    padding: 1.5rem 0 0 7rem;
+    padding: 0rem 0 0 0rem;
   }
 }
 
 @media only screen and (max-width: 691px) {
   .react-tabs {
-    padding: 1.5rem 0 0 5rem;
+    padding: 0rem 0 0 0rem;
   }
 
 /*  .react-tabs__tab:first-child {
@@ -34,11 +34,14 @@ a.navLink {
     margin-top: 1rem;
   }*/
 }
+#Logo , .react-tabs {
+  display: block;
+}
 
 .react-tabs__tab-list {
     /*the black line border that outlines the tabs*/
     /*border-bottom: 1px solid #aaa;*/
-    margin: 0 0 10px;
+    margin: 0 0 30px;
     padding: 0;
   }
   

@@ -1,53 +1,49 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
-const dotenv = require('dotenv');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
-module.exports = env => {
-	// call dotenv and it will return an Object with a parsed key 
-	env = dotenv.config().parsed;
-			// reduce it to a nice object, the same as before
-	const envKeys = Object.keys(env).reduce((prev, next) => {
-		prev[`process.env.${next}`] = JSON.stringify(env[next]);
-		return prev;
-	}, {});
-
-	return {
-		entry: "./src/index.js",
-		module: {
-			rules: [
-				{
-					test: /\.(js|jsx)$/,
-					exclude: /(node_modules|bower_components)/,
-					loader: 'babel-loader',
-					options: { presets: ['env','react'] }
-				},
-				{
-					test: /\.css$/,
-					use: [
-						'style-loader',
-						"css-loader"
-					]
+module.exports = {
+	entry: './src/index.js',
+	module: {
+		rules: [
+			{
+				test: /\.(js|jsx)$/,
+				exclude: /(node_modules|bower_components)/,
+				loader: 'babel-loader',
+				options: {
+					presets: ['env', 'react']
 				}
-			]
-		},
-		resolve: { extensions: ['*', '.js', '.jsx'] },
-		output: {
-			path: path.resolve(__dirname, "dist/"),
-			filename: "bundle.js",
-			// publicPath: 'dist/'
-		},
-		devtool: 'source-map',
-		mode: "production",
-		plugins: [
-			new webpack.HotModuleReplacementPlugin(),
-			new HtmlWebpackPlugin({
-				title: 'DeepCell',
-				template: './public/index.html',
-				hash: true,
-				filename: './index.html'
-			}),
-			new webpack.DefinePlugin(envKeys)
-		]		
-	}
+			},
+			{
+				test: /\.css$/,
+				use: [
+					'style-loader',
+					'css-loader'
+				]
+			}
+		]
+	},
+	resolve: { extensions: ['*', '.js', '.jsx'] },
+	output: {
+		path: path.resolve(__dirname, 'dist', 'client'),
+		filename: 'bundle.js',
+	},
+	devtool: 'source-map',
+	mode: 'production',
+	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
+		new HtmlWebpackPlugin({
+			title: 'DeepCell',
+			template: './public/index.html',
+			favicon: './public/favicon.ico',
+			hash: true
+		}),
+		new webpack.DefinePlugin({
+			'process.env': {
+				'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+				'MODEL_NAME': JSON.stringify(process.env.MODEL_NAME),
+				'MODEL_VERSION': JSON.stringify(process.env.MODEL_VERSION),
+			}
+		})
+	]
 };
