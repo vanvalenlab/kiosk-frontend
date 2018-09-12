@@ -40,8 +40,7 @@ app.set('view engine', 'html');
 
 // static files served differenlty in PROD or DEV modes
 let DIST_DIR = path.join(__dirname, '..', '..', 'public');
-console.log(config.env);
-if (config.env == 'production') {
+if (config.env === 'production') {
   DIST_DIR = path.join(__dirname, '..', '..', '..', 'dist', 'client');
 }
 //Serving the files on the dist folder
