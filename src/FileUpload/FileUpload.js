@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import './FileUpload.css';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
-import S3Client from 'aws-s3';
-
-//aws-s3 config
-const config = {
-	bucketName: process.env.AWS_S3_BUCKET ,
-	region: process.env.AWS_REGION ,
-	accessKeyId: process.env.AWS_ACCESS_KEY_ID ,
-	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-}
 
 //start component class
 export default class FileUpload extends Component{
@@ -19,6 +10,7 @@ export default class FileUpload extends Component{
 		super();
 		this.state = {
 			file: [],
+			models: [],
 			uploadedS3FileName: null,
 			uploadedFileLocation: null,
 			redisResponse: null
@@ -33,8 +25,9 @@ export default class FileUpload extends Component{
 
 	retrieveModelsVersions() {
 		axios.get('/api/getModels')
-		.then(function (response) {
-			console.log(`getModels response: ${JSON.stringify(response)}`);
+		.then((response) => {
+			this.models = response.data.models;
+			console.log(`Got Models: ${response.data.models}`);
 		})
 		.catch((error) => {
 			console.log(`Failed calling /api/getModels: ${error}`);
@@ -42,49 +35,48 @@ export default class FileUpload extends Component{
 	}
 
 	//This function will run upon file upload completion.
-	onDrop(droppedfile){
-		console.log(`Accepted Files: ${JSON.stringify(droppedfile)}`);
-		//set the component state with the uploaded files
-		this.setState({file: droppedfile});
-		//for each image that was selected by the file upload,
-		this.state.file.map(f =>
-			//Upload files to AWS S3 bucket
-			S3Client
-				.uploadFile(f, config)
-				.then(data => {
-					console.log(`Upload to s3 bucket was successful: ${JSON.stringify(data)}`);
-					//set the uploadedFileLocation state to the s3 bucket image location that was just uploaded.
-					this.setState({uploadedS3FileName: f.name})
-					this.setState({uploadedFileLocation: data.location});
-					//submit the URL to the predictImage() function, detailed below.
-					this.predictImage();
-				})
-				.catch(err => console.error(err))
-		)
+	onDrop(droppedFiles) {
+		console.log(`Accepted Files: ${JSON.stringify(droppedFiles)}`);
+		droppedFiles.map((f) => {
+			let formData = new FormData();
+			formData.append('file', f);
+			axios.post('/api/s3upload', formData, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			})
+			.then((response) => {
+				console.log(`Uploaded Image to: ${response.data.imageURL}`);
+				this.state.uploadedFileLocation = response.data.imageURL;
+				this.state.uploadedS3FileName = f.name;
+				// Show uploaded filename / image preview?
+
+				// Call predictImage()
+				// Should be moved to a button, to pass model name/version
+				// How to handle list of images?
+				this.predictImage();
+			})
+			.catch((error) => console.log(error));
+		});
 	}
 
 	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
-		//let destinationURL  = 'http://' + process.env.EXPRESS_HOST + ':' + process.env.EXPRESS_PORT + '/redis'
-	predictImage(){
+	predictImage() {
 		console.log('Sending uploaded images S3 Bucket URL to the EXPRESS SERVER...');
-		let destinationURL = '/api/redis';
 		let payload = {
 			'imageName': this.state.uploadedS3FileName,
 			'imageURL': this.state.uploadedFileLocation,
 			'model_name': process.env.MODEL_NAME,
 			'model_version': process.env.MODEL_VERSION
 		};
-		console.log(destinationURL);
 		console.log(JSON.stringify(payload));
 
 		axios({
 			method: 'post',
-			url: destinationURL,
+			url: '/api/redis',
 			timeout: 60 * 4 * 1000, // 4 minutes
 			data: payload
 		})
 		.then(response => {
-			console.log("Successfully sent S3 Bucket URL to Express Server, here is the response: ", response);
+			console.log("Successfully sent S3 Bucket URL to Express Server: ", response);
 			this.setState({redisResponse: response});
 		})
 		.catch(error => {

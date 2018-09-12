@@ -42,11 +42,6 @@ async function redisConnect(req, res) {
   res.sendStatus(httpStatus.OK);
 }
 
-function s3upload(req, res) {
-  console.log(`request received from react: ${req}`);
-  res.sendStatus(httpStatus.OK);
-}
-
 // Get Model Info From S3
 
 async function getKeys(params, keys) {
@@ -92,6 +87,5 @@ async function getModels(req, res) {
 
 export default {
   redisConnect,
-  getModels,
-  s3upload
+  getModels
 };
