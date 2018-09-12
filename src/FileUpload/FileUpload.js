@@ -3,7 +3,6 @@ import './FileUpload.css';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 
-//start component class
 export default class FileUpload extends Component{
 	//Constructor Function that will manage the state of this component
 	constructor() {
@@ -58,9 +57,8 @@ export default class FileUpload extends Component{
 		});
 	}
 
-	//RUN TO POST S3UPLOAD INFORMATION TO THE EXPRESS SERVER
+	//SEND UPLOADED IMAGE NAME TO REDIS FOR PREDICTION
 	predictImage() {
-		console.log('Sending uploaded images S3 Bucket URL to the EXPRESS SERVER...');
 		let payload = {
 			'imageName': this.state.uploadedS3FileName,
 			'imageURL': this.state.uploadedFileLocation,
@@ -110,17 +108,17 @@ export default class FileUpload extends Component{
 				{ this.state.redisResponse !== null ?
 					<div className="resultsBox">
 						<div className="resultsAnimation">
-							<ul class='loading-frame'>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
-								<div class='circle'></div>
+							<ul className='loading-frame'>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
+								<div className='circle'></div>
 							</ul>
 						</div>
 						<div className="downloadResults">
