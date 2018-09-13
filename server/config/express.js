@@ -25,11 +25,10 @@ if (config.env === 'development') {
     stream: process.stdout
   }));
 
-  app.use(morgan('combined', {
-    // stream: fs.createWriteStream(path.join(__dirname, '..', '..', 'access.log'), {flags: 'a'})
-    stream: { 'stream': winstonInstance.stream }
+} else if (config.env === 'production') {
+  app.use(morgan(':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
+    stream: winstonInstance.stream
   }));
-
 }
 
 // parse body params and attache them to req.body
