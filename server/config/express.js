@@ -24,7 +24,6 @@ if (config.env === 'development') {
     skip: (req, res) => res.statusCode >= 400,
     stream: process.stdout
   }));
-
 } else if (config.env === 'production') {
   // capture request logs from morgan
   // removed repeated timestamp from 'combined'
@@ -33,7 +32,7 @@ if (config.env === 'development') {
   }));
 }
 
-// parse body params and attache them to req.body
+// parse body params and attach them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -45,7 +44,7 @@ let DIST_DIR = path.join(__dirname, '..', '..', 'public');
 if (config.env === 'production') {
   DIST_DIR = path.join(__dirname, '..', '..', '..', 'dist', 'client');
 }
-//Serving the files on the dist folder
+// serving the files on the dist folder
 app.use(express.static(DIST_DIR));
 
 app.use(cookieParser());
