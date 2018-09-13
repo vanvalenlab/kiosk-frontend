@@ -77,7 +77,7 @@ async function getModels(req, res) {
 
     let allModels = [];
     await Promise.all(arrayOfParams.map(param => getKeys(param, allModels)));
-    logger.info(JSON.stringify(allModels, null, 4));
+    logger.info(`Found Models: ${JSON.stringify(allModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: allModels });
   } catch (error) {
     logger.error(`Error while retrieving models and versions from S3: ${error}`);
