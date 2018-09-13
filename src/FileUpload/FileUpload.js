@@ -9,7 +9,7 @@ export default class FileUpload extends Component{
     super();
     this.state = {
       file: [],
-      models: [],
+      models: null,
       uploadedS3FileName: null,
       uploadedFileLocation: null,
       redisResponse: null
@@ -26,7 +26,7 @@ export default class FileUpload extends Component{
     axios.get('/api/getModels')
       .then((response) => {
         this.models = response.data.models;
-        console.log(`Got Models: ${response.data.models}`);
+        console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
         console.log(`Failed calling /api/getModels: ${error}`);

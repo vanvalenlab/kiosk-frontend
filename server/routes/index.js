@@ -40,6 +40,6 @@ router.route('/redis')
   .post(controllers.redisConnect);
 
 router.route('/getModels')
-  .get(controllers.getModels);
+  .get(controllers.modelController.getModels);
 
 export default router;
