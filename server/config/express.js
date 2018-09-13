@@ -26,6 +26,8 @@ if (config.env === 'development') {
   }));
 
 } else if (config.env === 'production') {
+  // capture request logs from morgan
+  // removed repeated timestamp from 'combined'
   app.use(morgan(':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
     stream: winstonInstance.stream
   }));
