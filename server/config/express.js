@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import expressWinston from 'express-winston';
-import fs from 'fs';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
 import path from 'path';
@@ -25,13 +24,15 @@ if (config.env === 'development') {
     skip: (req, res) => res.statusCode >= 400,
     stream: process.stdout
   }));
-
-  app.use(morgan('combined', {
-    stream: fs.createWriteStream(path.join(__dirname, '..', '..', 'access.log'), {flags: 'a'})
+} else if (config.env === 'production') {
+  // capture request logs from morgan
+  // removed repeated timestamp from 'combined'
+  app.use(morgan(':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
+    stream: winstonInstance.stream
   }));
 }
 
-// parse body params and attache them to req.body
+// parse body params and attach them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -43,7 +44,7 @@ let DIST_DIR = path.join(__dirname, '..', '..', 'public');
 if (config.env === 'production') {
   DIST_DIR = path.join(__dirname, '..', '..', '..', 'dist', 'client');
 }
-//Serving the files on the dist folder
+// serving the files on the dist folder
 app.use(express.static(DIST_DIR));
 
 app.use(cookieParser());

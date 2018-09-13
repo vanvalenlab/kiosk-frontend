@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import redis from 'redis';
 import AWS from 'aws-sdk';
 import config from '../config/config';
+import logger from '../config/winston';
 
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
@@ -15,28 +16,28 @@ const redisClient = redis.createClient(config.redis);
 
 async function redisConnect(req, res) {
   //testing the API endpoint
-  console.log(`HTTP POST request received from React: ${JSON.stringify(req.body)}`);
+  logger.info(`HTTP POST request received from React: ${JSON.stringify(req.body)}`);
 
   //if there are any errors whilst connecting to Redis.
   redisClient.on('error', (err) => {
-    console.log(`Error while communicating with Redis: ${err}`);
+    logger.error(`Error while communicating with Redis: ${err}`);
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   });
 
-  console.log('Setting the AWS S3 URL to Redis...');
+  logger.info('Setting the AWS S3 URL to Redis...');
   redisClient.hset(req.body.imageName, 'url', req.body.imageURL, redis.print);
   redisClient.hset(req.body.imageName, 'model_name', req.body.model_name, redis.print);
   redisClient.hset(req.body.imageName, 'model_version', req.body.model_version, redis.print);
   // redisClient.set(request.body.imageName, request.body.imageURL, redis.print);
   // redisClient.get(request.body.imageURL, (err, value) => {
   // 	if (err) throw(err);
-  // 	console.log("Saved. Retrieved value successfully from Redis: ");
-  // 	console.log(value);
+  // 	logger.info("Saved. Retrieved value successfully from Redis: ");
+  // 	logger.info(value);
   // });
   redisClient.hkeys(req.body.imageName, (err, replies) => {
-    console.log(`${replies.length} replies:`);
+    logger.info(`${replies.length} replies:`);
     replies.forEach((reply, i) => {
-      console.log(`${i} - ${reply}`);
+      logger.info(`${i} - ${reply}`);
     });
   });
   res.sendStatus(httpStatus.OK);
@@ -76,10 +77,10 @@ async function getModels(req, res) {
 
     let allModels = [];
     await Promise.all(arrayOfParams.map(param => getKeys(param, allModels)));
-    console.log(allModels);
+    logger.info(`Found Models: ${JSON.stringify(allModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: allModels });
   } catch (error) {
-    console.log(`Error while retrieving models and versions from S3: ${error}`);
+    logger.error(`Error while retrieving models and versions from S3: ${error}`);
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
