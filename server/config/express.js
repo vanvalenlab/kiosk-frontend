@@ -4,7 +4,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import expressWinston from 'express-winston';
-import fs from 'fs';
 import helmet from 'helmet';
 import httpStatus from 'http-status';
 import path from 'path';
@@ -27,8 +26,10 @@ if (config.env === 'development') {
   }));
 
   app.use(morgan('combined', {
-    stream: fs.createWriteStream(path.join(__dirname, '..', '..', 'access.log'), {flags: 'a'})
+    // stream: fs.createWriteStream(path.join(__dirname, '..', '..', 'access.log'), {flags: 'a'})
+    stream: { 'stream': winstonInstance.stream }
   }));
+
 }
 
 // parse body params and attache them to req.body
