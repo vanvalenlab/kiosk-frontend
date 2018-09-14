@@ -20,7 +20,7 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: config.aws.bucketName,
-    key: function (req, file, cb) {
+    key: (req, file, cb) => {
       cb(null, file.originalname);
     }
   })
@@ -32,9 +32,7 @@ router.route('/health-check')
   });
 
 router.route('/s3upload')
-  .post(upload.single('file'), (req, res) => {
-    res.status(httpStatus.OK).send({ imageURL: req.file.location });
-  });
+  .post(upload.single('file'), controllers.uploadController.upload);
 
 router.route('/predict')
   .post(controllers.predictController.predict);
