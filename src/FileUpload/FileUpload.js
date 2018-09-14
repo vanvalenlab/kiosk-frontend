@@ -12,7 +12,7 @@ export default class FileUpload extends Component{
       models: null,
       uploadedS3FileName: null,
       uploadedFileLocation: null,
-      redisResponse: null
+      downloadURL: null
     };
   }
 
@@ -69,13 +69,13 @@ export default class FileUpload extends Component{
 
     axios({
       method: 'post',
-      url: '/api/redis',
+      url: '/api/predict',
       timeout: 60 * 4 * 1000, // 4 minutes
       data: payload
     })
-      .then(response => {
+      .then((response) => {
         console.log('Successfully sent S3 Bucket URL to Express Server: ', response);
-        this.setState({redisResponse: response});
+        this.setState({ downloadURL: response.data.outputURL });
       })
       .catch(error => {
         console.log('Error occurred while sending S3 Bucket URL to Express Server : ', error);
@@ -105,7 +105,7 @@ export default class FileUpload extends Component{
             </div>
           </Dropzone>
         </div>
-        { this.state.redisResponse !== null ?
+        { this.state.downloadURL !== null ?
           <div className="resultsBox">
             <div className="resultsAnimation">
               <ul className='loading-frame'>
@@ -122,7 +122,7 @@ export default class FileUpload extends Component{
               </ul>
             </div>
             <div className="downloadResults">
-              <a href={this.state.redisResponse} className="buttonDownload">Download</a>
+              <a href={this.state.downloadURL} className="buttonDownload">Download</a>
             </div>
           </div>
           : null }

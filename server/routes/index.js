@@ -36,8 +36,8 @@ router.route('/s3upload')
     res.status(httpStatus.OK).send({ imageURL: req.file.location });
   });
 
-router.route('/redis')
-  .post(controllers.redisConnect);
+router.route('/predict')
+  .post(controllers.predictController.predict);
 
 router.route('/getModels')
   .get(controllers.modelController.getModels);
