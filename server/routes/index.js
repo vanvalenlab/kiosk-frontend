@@ -37,6 +37,9 @@ router.route('/s3upload')
 router.route('/predict')
   .post(controllers.predictController.predict);
 
+router.route('/predict')
+  .post(controllers.trainController.predict);
+
 router.route('/getModels')
   .get(controllers.modelController.getModels);
 
