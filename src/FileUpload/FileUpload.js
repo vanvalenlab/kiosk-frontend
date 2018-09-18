@@ -9,10 +9,13 @@ export default class FileUpload extends Component{
     super();
     this.state = {
       file: [],
-      models: null,
+      models: [],
+      modelAndVersionData: null,
       uploadedS3FileName: null,
       uploadedFileLocation: null,
-      downloadURL: null
+      downloadURL: null,
+      isMounted: null,
+      selectedModel: null
     };
   }
 
@@ -22,11 +25,22 @@ export default class FileUpload extends Component{
     this.retrieveModelsVersions();
   }
 
+  //This function makes an AJAX call to retrieve the Models and Version from
+  //the express server which parses the s3 bucket.
   retrieveModelsVersions() {
+    console.log("Retrieving Models and Versions now...");
     axios.get('/api/getModels')
       .then((response) => {
-        this.models = response.data.models;
-        console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
+        //create temporary modelsList container, fill it with the model names, then set it as state.models
+        var modelsList = [];
+        for(var key in response.data.models){
+          modelsList.push(key);
+        }
+        this.setState({ models: modelsList });
+        console.log(`State of Models: ${this.state.models}`);
+        this.setState({ modelAndVersionData: response.data.models });
+        console.log("State of modelsAndVersionData:" +  JSON.stringify(this.state.modelAndVersionData));
+        // console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
         console.log(`Failed calling /api/getModels: ${error}`);
@@ -82,14 +96,50 @@ export default class FileUpload extends Component{
       });
   }
 
+  //for each value inside the array "this.state.models", iteratively create a <option> tag and then push it
+  //into another array for rendering into the virtual dom.
+  renderModelOptions() {
+    var optionsArray = [];
+    this.state.models.map(model => optionsArray.push(<option value={model} key={model}>{model}</option>));
+    return optionsArray;
+  }
+
+  /*render the corresponding versions after the Model has been selected. */
+  handleSelectChange(event){
+    this.setState({
+      selectedModel: event.target.value
+    });
+  }
+
+  renderVersions() {
+    var versionsArray = [];
+    for(var key in this.state.modelAndVersionData){
+      if(this.state.selectedModel === key){
+        this.state.modelAndVersionData[key].map(version => versionsArray.push(<option value={version} key={version}>{version}</option>))
+        return versionsArray;
+      }
+    }
+  }
+
   //REACT RENDER FUNCTION
   render() {
     //JSX that will be returned to the User's View
     return (
       <section>
         <div className='dropzone'>
+          {/*render models*/}
+          { this.state.models !== null ?
+          <select onClick={this.handleSelectChange}>
+            {this.renderModelOptions()}
+          </select>
+          : null }
+          {/*render versions*/}
+          <select>
+            {this.renderVersions()}
+          </select>
+          {/*Dropzone*/}
           <Dropzone
-            accept='image/*'
+            acceptedFiles='image/*,application/zip'
             onDrop={this.onDrop.bind(this)}
           >
             <p className='uploadInstructions'> Drag & drop</p>
@@ -101,9 +151,11 @@ export default class FileUpload extends Component{
                   <img className='uploadedImage' src={this.state.uploadedFileLocation}/>
                   {this.state.file.map(f => <li className='fileName' key={f.name}>{f.name} <p className='fileSize'>{f.size} bytes</p></li>)}
                 </ul>
-                : null }
+              : null }
             </div>
           </Dropzone>
+
+
         </div>
         { this.state.downloadURL !== null ?
           <div className="resultsBox">
