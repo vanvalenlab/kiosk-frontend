@@ -39,10 +39,16 @@ class Predict extends React.Component {
     this.retrieveModelsVersions();
   }
 
+  componentWillUnmount() {
+    this.isCancelled = true;
+  }
+
   retrieveModelsVersions() {
     axios.get('/api/getModels')
       .then((response) => {
-        this.setState({ models: response.data.models});
+        !this.isCancelled && this.setState({
+          models: response.data.models
+        });
         console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
@@ -67,7 +73,9 @@ class Predict extends React.Component {
       data: payload
     })
       .then((response) => {
-        this.setState({ downloadURL: response.data.outputURL });
+        !this.isCancelled && this.setState({
+          downloadURL: response.data.outputURL
+        });
       })
       .catch(error => {
         console.log(`Error occurred while sending S3 Bucket URL to Express Server: ${error}`);
@@ -75,7 +83,9 @@ class Predict extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    !this.isCancelled && this.setState({
+      [event.target.name]: event.target.value
+    });
   }
 
   render() {
