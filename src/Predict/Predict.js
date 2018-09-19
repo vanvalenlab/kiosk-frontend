@@ -10,6 +10,7 @@ import FileUpload from '../FileUpload/FileUpload';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
   root: {
@@ -109,6 +110,7 @@ class Predict extends React.Component {
               <Grid item xs={6}>
                 { this.state.models !== null ?
                   <FormControl className={classes.formControl}>
+                  <FormLabel>Select A Model</FormLabel>
                     <Select
                       value={this.state.model}
                       input={<Input name='model' id='model-placeholder' placeholder='' />}
@@ -125,6 +127,7 @@ class Predict extends React.Component {
                 : null }
                 { this.state.model.length > 0 ?
                   <FormControl className={classes.formControl}>
+                  <FormLabel>Select A Version</FormLabel>
                     <Select
                       value={this.state.version}
                       input={<Input name='version' id='version-placeholder' placeholder='' />}
