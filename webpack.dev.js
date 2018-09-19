@@ -46,6 +46,7 @@ module.exports = {
     open: true,
     host: 'localhost',
     publicPath: 'http://localhost:3000/',
+    historyApiFallback: true,
     hotOnly: true,
     proxy: {
       '/api/**': `http://localhost:${env.PORT}/`
