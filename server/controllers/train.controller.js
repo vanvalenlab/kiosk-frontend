@@ -4,20 +4,20 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 async function train(req, res) {
-  const client = redis.createClient(config.redis);
+  let client = redis.createClient(config.redis);
   const redisKey = req.body.imageName;
   // handle any errors whilst connecting to Redis.
   client.on('error', (err) => {
     logger.error(`Error while communicating with Redis: ${err}`);
-    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
   });
 
   // set the initial keys/values for redis
   client.hmset([
     redisKey,
     'url', req.body.imageURL,
-    'model_name', req.body.model_name,
-    'model_version', req.body.model_version,
+    'optimizer', req.body.optimizer,
+    'field_size', req.body.field_size,
     'output_url', 'none',
     'processed', 'no'
   ], (err, redisRes) => {

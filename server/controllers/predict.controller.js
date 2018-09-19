@@ -9,7 +9,7 @@ async function predict(req, res) {
   // handle any errors whilst connecting to Redis.
   client.on('error', (err) => {
     logger.error(`Error while communicating with Redis: ${err}`);
-    res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
   });
 
   // set the initial keys/values for redis
