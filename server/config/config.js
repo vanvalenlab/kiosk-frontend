@@ -20,15 +20,23 @@ const envVarsSchema = Joi.object({
     .default('models/'),
   AWS_REGION: Joi.string()
     .default('us-east-1'),
-  AWS_ACCESS_KEY_ID: Joi.string().required(),
-  AWS_SECRET_ACCESS_KEY: Joi.string().required(),
-  AWS_S3_BUCKET: Joi.string().required()
+  AWS_ACCESS_KEY_ID: Joi.string().default("invalid_value"),
+  AWS_SECRET_ACCESS_KEY: Joi.string().default("invalid_value"),
+  AWS_S3_BUCKET: Joi.string().
     .description('S3 Bucket where data is uploaded and models are saved.')
+    .default('deepcell-output'),
+  GOOGLE_REGION: Joi.string()
+    .default('us-east-1'),
+  GOOGLE_KEY: Joi.string().default("invalid_value"),
+  GOOGLE_SECRET_KEY: Joi.string().default("invalid_value"),
+  GOOGLE_BUCKET: Joi.string().
+    .description('Google Cloud bucket where data is uploaded and models are saved.')
     .default('deepcell-output'),
   REDIS_HOST: Joi.string().required()
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
     .default(6379),
+  CLOUD: Joi.string.required()
 }).unknown().required();
 
 const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);
@@ -44,6 +52,12 @@ const config = {
     secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
     bucketName: envVars.AWS_S3_BUCKET,
     region: envVars.AWS_REGION
+  },
+  gke: {
+    accessKeyId: envVars.GOOGLE_KEY,
+    secretAccessKey: envVars.GOOGLE_SECRET_KEY,
+    bucketName: envVars.GOOGLE_BUCKET,
+    region: envVars.GOOGLE_REGION
   },
   redis: {
     host: envVars.REDIS_HOST,
