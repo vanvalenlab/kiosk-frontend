@@ -70,14 +70,12 @@ class Train extends React.Component {
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
-    console.log(event.target);
   }
 
   handleSliderChange(event, value) {
     !this.isCancelled && this.setState({
       field: value
     });
-    console.log(value);
   }
 
   render() {
