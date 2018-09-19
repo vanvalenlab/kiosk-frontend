@@ -92,7 +92,7 @@ class Predict extends React.Component {
     const { classes } = this.props;
 
     return (
-      <form className={classes.root} autoComplete="off">
+      <form className={classes.root} autoComplete='off'>
         { this.state.models !== null ?
           <FormControl className={classes.formControl}>
             <Select
