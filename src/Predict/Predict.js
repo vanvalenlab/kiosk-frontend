@@ -7,11 +7,19 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    flexGrow: 1,
+    maxWidth: 600,
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -92,39 +100,53 @@ class Predict extends React.Component {
     const { classes } = this.props;
 
     return (
-      <form className={classes.root} autoComplete='off'>
-        { this.state.models !== null ?
-          <FormControl className={classes.formControl}>
-            <Select
-              value={this.state.model}
-              input={<Input name='model' id='model-placeholder' placeholder='' />}
-              onChange={this.handleChange}
-              displayEmpty
-              className={classes.selectEmpty}>
-              <MenuItem value=''>
-                <em>None</em>
-              </MenuItem>
-              { Object.keys(this.state.models).map(m =>
-                <MenuItem value={m} key={m}>{m}</MenuItem>) }
-            </Select>
-          </FormControl>
-          : null }
-        { this.state.model.length > 0 ?
-          <FormControl className={classes.formControl}>
-            <Select
-              value={this.state.version}
-              input={<Input name='version' id='version-placeholder' placeholder='' />}
-              onChange={this.handleChange}>
-              { this.state.models[this.state.model].map(v =>
-                <MenuItem value={v} key={v}>{v}</MenuItem>) }
-            </Select>
-          </FormControl>
-          : null }
-        <div>
-          <FileUpload onDroppedFile={(fileName, s3Url) =>
-            this.predictImage(fileName, s3Url)} />
-        </div>
-      </form>
+      <Paper className={classes.root}>
+        <Grid container spacing={24}>
+        <Grid item xs={3}>
+        </Grid>
+          <form autoComplete='off'>
+            <Grid container spacing={24}>
+              <Grid item xs={6}>
+                { this.state.models !== null ?
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      value={this.state.model}
+                      input={<Input name='model' id='model-placeholder' placeholder='' />}
+                      onChange={this.handleChange}
+                      displayEmpty
+                      className={classes.selectEmpty}>
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      { Object.keys(this.state.models).map(m =>
+                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
+                    </Select>
+                  </FormControl>
+                : null }
+                { this.state.model.length > 0 ?
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      value={this.state.version}
+                      input={<Input name='version' id='version-placeholder' placeholder='' />}
+                      onChange={this.handleChange}>
+                      { this.state.models[this.state.model].map(v =>
+                        <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                    </Select>
+                  </FormControl>
+                : null }
+              </Grid>
+              <Grid item xs={6}>
+                <div>
+                  <FileUpload onDroppedFile={(fileName, s3Url) =>
+                    this.predictImage(fileName, s3Url)} />
+                </div>
+              </Grid>
+            </Grid>
+          </form>
+          <Grid item xs={3}>
+          </Grid>
+        </Grid>
+      </Paper>
     );
   }
 }

@@ -53,8 +53,3 @@
   margin-top: 0;
   font-size: 9px;
 }
-/* *****display inline-block rules**************************** */
-
-.resultsBox, .dropzone{
-  display: inline-block;
-}
