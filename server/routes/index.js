@@ -31,8 +31,8 @@ router.route('/health-check')
     res.sendStatus(httpStatus.OK);
   });
 
-router.route('/s3upload')
-  .post(upload.single('file'), controllers.uploadController.upload);
+router.route('/upload')
+  .post(multer.single('file'), controllers.uploadController.upload);
 
 router.route('/predict')
   .post(controllers.predictController.predict);
