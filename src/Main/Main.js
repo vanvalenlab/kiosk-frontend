@@ -13,7 +13,7 @@ export default class Main extends React.Component {
         <Switch>
           <Route exact path='/' component={Logo}/>
           <Route path='/predict' component={Predict}/>
-          <Route path='/train' component={Logo}/>
+          <Route path='/train' component={Train}/>
           <Route component={NotFound} />
         </Switch>
       </main>
