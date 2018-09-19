@@ -52,10 +52,18 @@ const config = {
     bucketName: envVars.AWS_S3_BUCKET,
     region: envVars.AWS_REGION
   },
+<<<<<<< 446dd87ed2b2db54c951610f7332d094ebabfd85
   gcp: {
     keyFile: envVars.GCLOUD_KEY_FILE,
     bucketName: envVars.GCLOUD_STORAGE_BUCKET,
     projectId: envVars.GCLOUD_PROJECT_ID
+=======
+  gke: {
+    accessKeyId: envVars.GOOGLE_KEY,
+    secretAccessKey: envVars.GOOGLE_SECRET_KEY,
+    bucketName: envVars.GOOGLE_BUCKET,
+    region: envVars.GOOGLE_REGION
+>>>>>>> expanded to include gke variables
   },
   redis: {
     host: envVars.REDIS_HOST,
