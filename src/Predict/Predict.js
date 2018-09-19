@@ -101,55 +101,57 @@ class Predict extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Paper className={classes.root}>
-        <Grid container spacing={24}>
-        <Grid item xs={3}>
-        </Grid>
-          <form autoComplete='off'>
-            <Grid container spacing={24}>
-              <Grid item xs={6}>
-                { this.state.models !== null ?
-                  <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Model</FormLabel>
-                    <Select
-                      value={this.state.model}
-                      input={<Input name='model' id='model-placeholder' placeholder='' />}
-                      onChange={this.handleChange}
-                      displayEmpty
-                      className={classes.selectEmpty}>
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      { Object.keys(this.state.models).map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                : null }
-                { this.state.model.length > 0 ?
-                  <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Version</FormLabel>
-                    <Select
-                      value={this.state.version}
-                      input={<Input name='version' id='version-placeholder' placeholder='' />}
-                      onChange={this.handleChange}>
-                      { this.state.models[this.state.model].map(v =>
-                        <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                : null }
+      <Grid container spacing={24} style={{marginTop: 24}}>
+        <Grid item xs={3}></Grid>
+        <Paper className={classes.root}>
+          <Grid container spacing={24}>
+            <Grid item xs={3}></Grid>
+            <form autoComplete='off'>
+              <Grid container spacing={24}>
+                <Grid item xs={6}>
+                  { this.state.models !== null ?
+                    <FormControl className={classes.formControl}>
+                    <FormLabel>Select A Model</FormLabel>
+                      <Select
+                        value={this.state.model}
+                        input={<Input name='model' id='model-placeholder' placeholder='' />}
+                        onChange={this.handleChange}
+                        displayEmpty
+                        className={classes.selectEmpty}>
+                        <MenuItem value=''>
+                          <em>None</em>
+                        </MenuItem>
+                        { Object.keys(this.state.models).map(m =>
+                          <MenuItem value={m} key={m}>{m}</MenuItem>) }
+                      </Select>
+                    </FormControl>
+                  : null }
+                  { this.state.model.length > 0 ?
+                    <FormControl className={classes.formControl}>
+                    <FormLabel>Select A Version</FormLabel>
+                      <Select
+                        value={this.state.version}
+                        input={<Input name='version' id='version-placeholder' placeholder='' />}
+                        onChange={this.handleChange}>
+                        { this.state.models[this.state.model].map(v =>
+                          <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                      </Select>
+                    </FormControl>
+                  : null }
+                </Grid>
+                <Grid item xs={6}>
+                  <div>
+                    <FileUpload onDroppedFile={(fileName, s3Url) =>
+                      this.predictImage(fileName, s3Url)} />
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <div>
-                  <FileUpload onDroppedFile={(fileName, s3Url) =>
-                    this.predictImage(fileName, s3Url)} />
-                </div>
-              </Grid>
-            </Grid>
-          </form>
-          <Grid item xs={3}>
+            </form>
+            <Grid item xs={3}></Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+        <Grid item xs={3}></Grid>
+      </Grid>
     );
   }
 }
