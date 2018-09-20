@@ -14,13 +14,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
     padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
     flexGrow: 1,
-    maxWidth: 600,
     margin: theme.spacing.unit * 4
   },
   form: {
@@ -107,53 +102,55 @@ class Predict extends React.Component {
 
     return (
         <div className={classes.root}>
-          <Grid container spacing={40} justify='space-evenly'>
-            <form autoComplete='off'>
+          <Paper>
+            <Grid container spacing={40} justify='space-evenly'>
+              <form autoComplete='off'>
 
-                <Grid item xs>
-                  { this.state.models !== null ?
-                    <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Model</FormLabel>
-                      <Select
-                        value={this.state.model}
-                        input={<Input name='model' id='model-placeholder' placeholder='' />}
-                        onChange={this.handleChange}
-                        displayEmpty
-                        className={classes.selectEmpty}>
-                        <MenuItem value=''>
-                          <em>None</em>
-                        </MenuItem>
-                        { Object.keys(this.state.models).map(m =>
-                          <MenuItem value={m} key={m}>{m}</MenuItem>) }
-                      </Select>
-                    </FormControl>
-                  : null }
-                </Grid>
+                  <Grid item xs>
+                    { this.state.models !== null ?
+                      <FormControl className={classes.formControl}>
+                      <FormLabel>Select A Model</FormLabel>
+                        <Select
+                          value={this.state.model}
+                          input={<Input name='model' id='model-placeholder' placeholder='' />}
+                          onChange={this.handleChange}
+                          displayEmpty
+                          className={classes.selectEmpty}>
+                          <MenuItem value=''>
+                            <em>None</em>
+                          </MenuItem>
+                          { Object.keys(this.state.models).map(m =>
+                            <MenuItem value={m} key={m}>{m}</MenuItem>) }
+                        </Select>
+                      </FormControl>
+                    : null }
+                  </Grid>
 
-                <Grid item xs>
-                  { this.state.model.length > 0 ?
-                    <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Version</FormLabel>
-                      <Select
-                        value={this.state.version}
-                        input={<Input name='version' id='version-placeholder' placeholder='' />}
-                        onChange={this.handleChange}>
-                        { this.state.models[this.state.model].map(v =>
-                          <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                      </Select>
-                    </FormControl>
-                  : null }
-                </Grid>
+                  <Grid item xs>
+                    { this.state.model.length > 0 ?
+                      <FormControl className={classes.formControl}>
+                      <FormLabel>Select A Version</FormLabel>
+                        <Select
+                          value={this.state.version}
+                          input={<Input name='version' id='version-placeholder' placeholder='' />}
+                          onChange={this.handleChange}>
+                          { this.state.models[this.state.model].map(v =>
+                            <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                        </Select>
+                      </FormControl>
+                    : null }
+                  </Grid>
 
-                <Grid item xs>
-                  <div>
-                    <FileUpload onDroppedFile={(fileName, s3Url) =>
-                      this.predictImage(fileName, s3Url)} />
-                  </div>
-                </Grid>
+                  <Grid item xs>
+                    <div>
+                      <FileUpload onDroppedFile={(fileName, s3Url) =>
+                        this.predictImage(fileName, s3Url)} />
+                    </div>
+                  </Grid>
 
-            </form>
-          </Grid>
+              </form>
+            </Grid>
+          </Paper>
         </div>
     );
   }
