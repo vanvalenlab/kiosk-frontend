@@ -21,6 +21,11 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     flexGrow: 1,
     maxWidth: 600,
+    margin: theme.spacing.unit * 4
+  },
+  form: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -101,14 +106,11 @@ class Predict extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={24} style={{marginTop: 24}}>
-        <Grid item xs={3}></Grid>
-        <Paper className={classes.root}>
-          <Grid container spacing={24}>
-            <Grid item xs={3}></Grid>
+        <div className={classes.root}>
+          <Grid container spacing={40} justify='space-evenly'>
             <form autoComplete='off'>
-              <Grid container spacing={24}>
-                <Grid item xs={6}>
+
+                <Grid item xs>
                   { this.state.models !== null ?
                     <FormControl className={classes.formControl}>
                     <FormLabel>Select A Model</FormLabel>
@@ -126,6 +128,9 @@ class Predict extends React.Component {
                       </Select>
                     </FormControl>
                   : null }
+                </Grid>
+
+                <Grid item xs>
                   { this.state.model.length > 0 ?
                     <FormControl className={classes.formControl}>
                     <FormLabel>Select A Version</FormLabel>
@@ -139,19 +144,17 @@ class Predict extends React.Component {
                     </FormControl>
                   : null }
                 </Grid>
-                <Grid item xs={6}>
+
+                <Grid item xs>
                   <div>
                     <FileUpload onDroppedFile={(fileName, s3Url) =>
                       this.predictImage(fileName, s3Url)} />
                   </div>
                 </Grid>
-              </Grid>
+
             </form>
-            <Grid item xs={3}></Grid>
           </Grid>
-        </Paper>
-        <Grid item xs={3}></Grid>
-      </Grid>
+        </div>
     );
   }
 }
