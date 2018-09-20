@@ -1,12 +1,11 @@
 import httpStatus from 'http-status';
-import logger from '../config/winston';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
 
 const storage = new Storage({
-  // projectId: config.gcp.projectId,
-  // keyFilename: config.gcp.keyFile
+  projectId: config.gcp.projectId,
+  keyFilename: config.gcp.keyFile
 });
 
 function gcpUpload(req, res, next) {
