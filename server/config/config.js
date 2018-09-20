@@ -11,24 +11,30 @@ const envVarsSchema = Joi.object({
     .default('development'),
   PORT: Joi.number()
     .default(8080),
-  MODEL_NAME: Joi.string().required()
-    .description('Model name to send data'),
-  MODEL_VERSION: Joi.number().required()
-    .description('Version of MODEL_NAME to send data'),
+  CLOUD: Joi.string()
+    .description('The cloud platform to interact with.')
+    .allow(['gcp', 'aws'])
+    .default('gcp')
+    .required(),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
     .default('models/'),
   AWS_REGION: Joi.string()
     .default('us-east-1'),
-  AWS_ACCESS_KEY_ID: Joi.string().required(),
-  AWS_SECRET_ACCESS_KEY: Joi.string().required(),
-  AWS_S3_BUCKET: Joi.string().required()
+  AWS_ACCESS_KEY_ID: Joi.string().default('invalid_value'),
+  AWS_SECRET_ACCESS_KEY: Joi.string().default('invalid_value'),
+  AWS_S3_BUCKET: Joi.string()
     .description('S3 Bucket where data is uploaded and models are saved.')
+    .default('deepcell-output'),
+  GCLOUD_KEY_FILE: Joi.string().default('invalid_value'),
+  GCLOUD_PROJECT_ID: Joi.string().default('invalid_value'),
+  GCLOUD_STORAGE_BUCKET: Joi.string()
+    .description('Google Cloud bucket where data is uploaded and models are saved.')
     .default('deepcell-output'),
   REDIS_HOST: Joi.string().required()
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
-    .default(6379),
+    .default(6379)
 }).unknown().required();
 
 const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);
@@ -38,6 +44,7 @@ if (error) {
 
 const config = {
   env: envVars.NODE_ENV,
+  cloud: envVars.CLOUD,
   port: envVars.PORT,
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,
@@ -45,13 +52,16 @@ const config = {
     bucketName: envVars.AWS_S3_BUCKET,
     region: envVars.AWS_REGION
   },
+  gcp: {
+    keyFile: envVars.GCLOUD_KEY_FILE,
+    bucketName: envVars.GCLOUD_STORAGE_BUCKET,
+    projectId: envVars.GCLOUD_PROJECT_ID
+  },
   redis: {
     host: envVars.REDIS_HOST,
     port: envVars.REDIS_PORT
   },
   model: {
-    name: envVars.MODEL_NAME,
-    version: envVars.MODEL_VERSION,
     prefix: envVars.MODEL_PREFIX
   }
 };
