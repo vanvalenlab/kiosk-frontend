@@ -3,6 +3,19 @@
   src: url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 }
 
+.dropzoneCSS {
+  width: 500px;
+  height: 300px;
+  border-width: 2px;
+  border-color: #666;
+  border-style: dashed;
+  border-radius: 5px;
+}
+
+.dropzoneCSS:hover {
+  border-color: #00ff00;
+}
+
 .uploadedImage {
   width: 100px;
   height: 100px;
