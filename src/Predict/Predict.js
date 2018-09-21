@@ -11,17 +11,13 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FormLabel from '@material-ui/core/FormLabel';
+import './Predict.css';
 
 const styles = theme => ({
   root: {
     padding: theme.spacing.unit * 2,
     flexGrow: 1,
     margin: theme.spacing.unit * 4
-  },
-  paper: {
-    flexGrow: 1,
-    maxWidth: 600,
-    padding: theme.spacing.unit * 4,
   },
   form: {
     display: 'flex',
@@ -110,6 +106,7 @@ class Predict extends React.Component {
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
+            <Paper className="selection">
               <Grid item xs>
                 { this.state.models !== null ?
                   <FormControl className={classes.formControl}>
@@ -144,8 +141,9 @@ class Predict extends React.Component {
                   </FormControl>
                 : null }
               </Grid>
+            </Paper>
 
-              <Grid item xs>
+              <Grid item xs className="uploader">
                 <div>
                   <FileUpload onDroppedFile={(fileName, s3Url) =>
                     this.predictImage(fileName, s3Url)} />
