@@ -91,7 +91,7 @@ class Train extends React.Component {
 
             <Paper className="selection">
               <Grid item xs>
-              <FormLabel>Optimizer Type</FormLabel>
+                <FormLabel>Optimizer Type</FormLabel>
                 <FormControl className={classes.formControl}>
                   <Select
                     value={this.state.optimizer}
@@ -113,7 +113,7 @@ class Train extends React.Component {
               </Grid>
 
               <Grid item xs>
-              <FormLabel>Receptive Field Size:</FormLabel>
+                <FormLabel>Receptive Field Size:</FormLabel>
                 <Typography id='slider-label'>{this.state.field}</Typography>
                 <Slider
                   value={this.state.field}

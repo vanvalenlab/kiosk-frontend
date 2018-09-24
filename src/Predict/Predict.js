@@ -9,7 +9,6 @@ import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import FormLabel from '@material-ui/core/FormLabel';
 import './Predict.css';
 
@@ -110,7 +109,7 @@ class Predict extends React.Component {
               <Grid item xs>
                 { this.state.models !== null ?
                   <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Model</FormLabel>
+                    <FormLabel>Select A Model</FormLabel>
                     <Select
                       value={this.state.model}
                       input={<Input name='model' id='model-placeholder' placeholder='' />}
@@ -124,13 +123,13 @@ class Predict extends React.Component {
                         <MenuItem value={m} key={m}>{m}</MenuItem>) }
                     </Select>
                   </FormControl>
-                : null }
+                  : null }
               </Grid>
 
               <Grid item xs>
                 { this.state.model.length > 0 ?
                   <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Version</FormLabel>
+                    <FormLabel>Select A Version</FormLabel>
                     <Select
                       value={this.state.version}
                       input={<Input name='version' id='version-placeholder' placeholder='' />}
@@ -139,16 +138,16 @@ class Predict extends React.Component {
                         <MenuItem value={v} key={v}>{v}</MenuItem>) }
                     </Select>
                   </FormControl>
-                : null }
+                  : null }
               </Grid>
             </Paper>
 
-              <Grid item xs className="uploader">
-                <div>
-                  <FileUpload onDroppedFile={(fileName, s3Url) =>
-                    this.predictImage(fileName, s3Url)} />
-                </div>
-              </Grid>
+            <Grid item xs className="uploader">
+              <div>
+                <FileUpload onDroppedFile={(fileName, s3Url) =>
+                  this.predictImage(fileName, s3Url)} />
+              </div>
+            </Grid>
 
           </form>
         </Grid>
