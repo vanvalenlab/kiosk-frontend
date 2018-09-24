@@ -11,6 +11,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Slider from '@material-ui/lab/Slider';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
+import FormLabel from '@material-ui/core/FormLabel';
+import './Train.css';
 
 const styles = theme => ({
   root: {
@@ -86,37 +88,42 @@ class Train extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off' className={classes.form}>
-            <Grid item xs>
-              <FormControl className={classes.formControl}>
-                <Select
-                  value={this.state.optimizer}
-                  input={<Input name='optimizer' id='optimizer-placeholder' placeholder='' />}
-                  onChange={this.handleChange}
-                  displayEmpty
-                  className={classes.selectEmpty}>
-                  <MenuItem value=''>
-                    <em>Optimizer</em>
-                  </MenuItem>
-                  <MenuItem value='sgd'>
-                    SGD
-                  </MenuItem>
-                  <MenuItem value='adam'>
-                    Adam
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
 
-            <Grid item xs>
-              <Typography id='slider-label'>Receptive Field Size: {this.state.field}</Typography>
-              <Slider
-                value={this.state.field}
-                aria-labelledby='slider-label'
-                min={1}
-                max={101}
-                step={1}
-                onChange={this.handleSliderChange} />
-            </Grid>
+            <Paper className="selection">
+              <Grid item xs>
+              <FormLabel>Optimizer Type</FormLabel>
+                <FormControl className={classes.formControl}>
+                  <Select
+                    value={this.state.optimizer}
+                    input={<Input name='optimizer' id='optimizer-placeholder' placeholder='' />}
+                    onChange={this.handleChange}
+                    displayEmpty
+                    className={classes.selectEmpty}>
+                    <MenuItem value=''>
+                      <em>Optimizer</em>
+                    </MenuItem>
+                    <MenuItem value='sgd'>
+                      SGD
+                    </MenuItem>
+                    <MenuItem value='adam'>
+                      Adam
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs>
+              <FormLabel>Receptive Field Size:</FormLabel>
+                <Typography id='slider-label'>{this.state.field}</Typography>
+                <Slider
+                  value={this.state.field}
+                  aria-labelledby='slider-label'
+                  min={1}
+                  max={101}
+                  step={1}
+                  onChange={this.handleSliderChange} />
+              </Grid>
+            </Paper>
 
             <Grid item xs>
               <FileUpload onDroppedFile={(fileName, s3Url) =>

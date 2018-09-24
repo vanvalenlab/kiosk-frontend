@@ -30,6 +30,10 @@
   font-weight: bold;
 }
 
+.predictionDescriptor {
+  text-align: center;
+}
+
 .uploadUnder {
   font-family: 'Roboto', sans-serif;
   font-size: 9px;
