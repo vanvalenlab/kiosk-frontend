@@ -21,7 +21,7 @@ class FileUpload extends Component {
     droppedFiles.map((f) => {
       let formData = new FormData();
       formData.append('file', f);
-      axios.post('/api/s3upload', formData, {
+      axios.post('/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
         .then((response) => {
