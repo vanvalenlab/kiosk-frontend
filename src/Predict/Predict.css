@@ -1,0 +1,7 @@
+.selection, .uploader {
+	display: inline-block;
+}
+
+.uploader {
+	vertical-align: top;
+}

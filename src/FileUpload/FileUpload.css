@@ -3,6 +3,19 @@
   src: url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 }
 
+.dropzoneCSS {
+  width: 500px;
+  height: 300px;
+  border-width: 2px;
+  border-color: #B8B8B8;
+  border-style: dashed;
+  border-radius: 5px;
+}
+
+.dropzoneCSS:hover {
+  border-color: #00ff00;
+}
+
 .uploadedImage {
   width: 100px;
   height: 100px;
@@ -15,6 +28,10 @@
   text-align: center;
   opacity: 0.3;
   font-weight: bold;
+}
+
+.predictionDescriptor {
+  text-align: center;
 }
 
 .uploadUnder {
@@ -52,9 +69,4 @@
 .fileSize {
   margin-top: 0;
   font-size: 9px;
-}
-/* *****display inline-block rules**************************** */
-
-.resultsBox, .dropzone{
-  display: inline-block;
 }
