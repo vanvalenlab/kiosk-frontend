@@ -11,10 +11,10 @@ const envVarsSchema = Joi.object({
     .default('development'),
   PORT: Joi.number()
     .default(8080),
-  CLOUD: Joi.string()
+  CLOUD_PROVIDER: Joi.string()
     .description('The cloud platform to interact with.')
-    .allow(['gcp', 'aws'])
-    .default('gcp')
+    .allow(['gke', 'aws'])
+    .default('aws')
     .required(),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
@@ -44,7 +44,7 @@ if (error) {
 
 const config = {
   env: envVars.NODE_ENV,
-  cloud: envVars.CLOUD,
+  cloud: envVars.CLOUD_PROVIDER,
   port: envVars.PORT,
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,
