@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Logo from '../Logo/Logo';
 import Predict from '../Predict/Predict';
 import Train from '../Train/Train';
+import Data from '../Data/Data';
 import NotFound from '../NotFound/NotFound';
 
 const styles = {
@@ -22,6 +23,7 @@ class Main extends React.Component {
           <Route exact path='/' component={Logo}/>
           <Route path='/predict' component={Predict}/>
           <Route path='/train' component={Train}/>
+          <Route path='/data' component={Data}/>
           <Route component={NotFound} />
         </Switch>
       </main>
