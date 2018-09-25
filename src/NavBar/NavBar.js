@@ -49,6 +49,9 @@ class NavBar extends React.Component {
             <Button color='inherit' href='/train'>
               Train
             </Button>
+            <Button color='inherit' href='/data'>
+              Data
+            </Button>
             <Button color='inherit' href='/'>
               Jupyter
             </Button>
