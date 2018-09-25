@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import Logo from '../Logo/Logo';
+import Landing from '../Landing/Landing';
 import Predict from '../Predict/Predict';
 import Train from '../Train/Train';
 import Data from '../Data/Data';
@@ -20,7 +20,7 @@ class Main extends React.Component {
     return(
       <main className={classes.root}>
         <Switch>
-          <Route exact path='/' component={Logo}/>
+          <Route exact path='/' component={Landing}/>
           <Route path='/predict' component={Predict}/>
           <Route path='/train' component={Train}/>
           <Route path='/data' component={Data}/>
