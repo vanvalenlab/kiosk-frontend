@@ -34,7 +34,7 @@ class Landing extends React.Component {
             DeepCell
           </Typography>
           <Typography variant="title" align="center" color="textSecondary" paragraph>
-            Use an existing model to segment images, or train a new model.
+            Use an existing model to segment images or train a new model.
           </Typography>
         </div>
         <div className={classes.buttonHolder}>
