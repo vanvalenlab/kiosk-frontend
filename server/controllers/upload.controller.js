@@ -4,8 +4,7 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 const storage = new Storage({
-  projectId: config.gcp.projectId,
-  keyFilename: config.gcp.keyFile
+  projectId: config.gcp.projectId
 });
 
 function gcpUpload(req, res, next) {
