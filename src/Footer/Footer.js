@@ -18,7 +18,7 @@ class Footer extends React.Component {
     return (
       <footer className={classes.footer}>
         <Typography variant="subheading" align="center" color="textSecondary" component="p">
-          © 2016-2018 David Van Valen at California Institute of Technology
+          © 2016-2018 The Van Valen Lab at the California Institute of Technology
           (Caltech). All rights reserved.
         </Typography>
       </footer>
