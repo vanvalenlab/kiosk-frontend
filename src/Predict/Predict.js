@@ -109,7 +109,7 @@ class Predict extends React.Component {
           align="center"
           color="textSecondary"
           paragraph
-          style={{'padding-bottom': '1em'}}>
+          style={{'paddingBottom': '1em'}}>
           Select a model and version | Upload your image | Download the results.
         </Typography>
         <Grid container spacing={40} justify='space-evenly'>
