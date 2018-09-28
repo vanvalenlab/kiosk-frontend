@@ -33,8 +33,8 @@ if (config.env === 'development') {
 }
 
 // parse body params and attach them to req.body
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '1gb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '1gb' }));
 
 // view engine setup
 app.set('view engine', 'html');
