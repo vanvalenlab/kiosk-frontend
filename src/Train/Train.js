@@ -89,7 +89,7 @@ class Train extends React.Component {
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off' className={classes.form}>
 
-            <Paper className="selection">
+            <Paper className="trainingSelection">
               <Grid item xs>
                 <FormLabel>Optimizer Type</FormLabel>
                 <FormControl className={classes.formControl}>
