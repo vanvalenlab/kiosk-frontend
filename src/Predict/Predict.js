@@ -9,6 +9,7 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
 import './Predict.css';
@@ -103,6 +104,14 @@ class Predict extends React.Component {
 
     return (
       <div className={classes.root}>
+        <Typography
+          variant="title"
+          align="center"
+          color="textSecondary"
+          paragraph
+          style={{'paddingBottom': '1em'}}>
+          Select a model and version | Upload your image | Download the results.
+        </Typography>
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
