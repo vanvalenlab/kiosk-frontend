@@ -45,11 +45,7 @@ const styles = theme => ({
   },
   cardContent: {
     flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6,
-  },
+  }
 });
 
 const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples';
@@ -89,7 +85,7 @@ class Data extends React.Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40}>
             {cards.map(card => (
-              <Grid item key={card} sm={6} md={4} lg={3}>
+              <Grid item key={cards.indexOf(card)} xs={12} sm={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}

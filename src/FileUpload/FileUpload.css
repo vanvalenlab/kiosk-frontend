@@ -5,12 +5,36 @@
 
 .dropzoneCSS {
   width: 500px;
-  height: 300px;
+  height: auto;
   border-width: 2px;
   border-color: #B8B8B8;
   border-style: dashed;
   border-radius: 5px;
+  padding: 0.5em;
 }
+
+/*754 px dom width*/
+@media only screen and (max-width: 754px) {
+    .dropzoneCSS {
+        width: 400px;
+    }
+}
+@media only screen and (max-width: 654px) {
+    .dropzoneCSS {
+        width: 300px;
+    }
+}
+@media only screen and (max-width: 554px) {
+    .dropzoneCSS {
+        width: 200px;
+    }
+}
+@media only screen and (max-width: 454px) {
+    .dropzoneCSS {
+        width: 195px;
+    }
+}
+/* END media queries on width*/
 
 .dropzoneCSS:hover {
   border-color: #00ff00;
@@ -24,7 +48,7 @@
 
 .uploadInstructions {
   font-family: 'Roboto', sans-serif;
-  font-size: 17px;
+  font-size: 1em;
   text-align: center;
   opacity: 0.3;
   font-weight: bold;
@@ -36,7 +60,7 @@
 
 .uploadUnder {
   font-family: 'Roboto', sans-serif;
-  font-size: 9px;
+  font-size: 0.7em;
   margin-left: 0.5em;
   text-align: center;
   margin-top: 0;

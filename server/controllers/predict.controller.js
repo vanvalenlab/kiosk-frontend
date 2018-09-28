@@ -30,7 +30,7 @@ async function predict(req, res) {
     });
     client.on('monitor', (time, args, raw_reply) => {
       logger.debug(`redis monitor: ${raw_reply}`);
-      if (args[1] === redisKey && args[2] === 'output_url') {
+      if (args[1] === redisKey && args[2] === 'output_url' && args[3] !== 'none') {
         logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
         client.quit();
         return res.status(httpStatus.OK).send({ outputURL: args[3] });
