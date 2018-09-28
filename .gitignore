@@ -7,6 +7,3 @@ node_modules
 
 dist/
 *.log
-
-#ignore the GCLOUD_KEY_FILE if it so happens to be sitting on the root directory.
-deepcell-209717-1636426ba4c3.json
