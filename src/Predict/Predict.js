@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import FormLabel from '@material-ui/core/FormLabel';
 import './Predict.css';
 
 const styles = theme => ({
@@ -28,7 +30,7 @@ const styles = theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
-  },
+  }
 });
 
 class Predict extends React.Component {
@@ -102,6 +104,14 @@ class Predict extends React.Component {
 
     return (
       <div className={classes.root}>
+        <Typography
+          variant="title"
+          align="center"
+          color="textSecondary"
+          paragraph
+          style={{'padding-bottom': '1em'}}>
+          Select a model and version | Upload your image | Download the results.
+        </Typography>
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
@@ -149,6 +159,18 @@ class Predict extends React.Component {
               </div>
             </Grid>
 
+            { this.state.downloadURL !== null ?
+              <Grid item lg style={{'padding-top': '2em'}}>
+                <Button
+                  href={this.state.downloadURL}
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  color="primary">
+                  Download Results
+                </Button>
+              </Grid>
+              : null }
           </form>
         </Grid>
       </div>

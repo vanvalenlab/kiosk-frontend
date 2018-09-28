@@ -24,7 +24,7 @@ const awsMulter = Multer({
 const gcpMulter = Multer({
   storage: Multer.memoryStorage(),
   limits: {
-    fileSize: 50 * 1024 * 1024 // no larger than 50mb
+    fileSize: 5 * 1024 * 1024 * 1024 * 1024 // no larger than 5TB, GCE max
   }
 });
 
