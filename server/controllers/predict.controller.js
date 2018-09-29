@@ -40,7 +40,7 @@ async function predict(req, res) {
               logger.error(`'No error, but failed to deletel hash ${redisKey}`);
             }
             return res.sendStatus(httpStatus.CONFLICT);
-          } else if (args[3].toLower().startsWith('fail')) {
+          } else if (args[3].toLowerCase().startsWith('fail')) {
             logger.error(`Failed to get output_url due to failure: ${args[3]}`);
             return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
           }
