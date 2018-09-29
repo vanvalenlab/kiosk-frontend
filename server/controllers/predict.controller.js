@@ -37,14 +37,15 @@ async function predict(req, res) {
             if (err) {
               logger.error(`Failed to delete redis key: ${err}`);
             } else {
-              logger.error(`'No error, but failed to deletel hash ${redisKey}`);
+              logger.error(`'No error, but failed to delete hash ${redisKey} with response ${response}`);
             }
             return res.sendStatus(httpStatus.CONFLICT);
           } else if (args[3].toLowerCase().startsWith('fail')) {
             logger.error(`Failed to get output_url due to failure: ${args[3]}`);
             return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
+          } else {
+            return res.status(httpStatus.OK).send({ outputURL: args[3] });
           }
-          return res.status(httpStatus.OK).send({ outputURL: args[3] });
         });
       }
     });
