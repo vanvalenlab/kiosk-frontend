@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
@@ -30,7 +31,10 @@ const styles = theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
-  }
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
 });
 
 class Predict extends React.Component {
@@ -40,10 +44,15 @@ class Predict extends React.Component {
       models: '',
       model: '',
       version: '',
-      downloadURL: null
+      fileName: '',
+      imageURL: '',
+      downloadURL: null,
+      submitted: false
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.canBeSubmitted = this.canBeSubmitted.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -63,28 +72,24 @@ class Predict extends React.Component {
         console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
+        this.state({ errorText: error.toString() });
         console.log(`Error calling /api/getModels: ${error}`);
       });
   }
 
-  //SEND UPLOADED IMAGE NAME TO REDIS FOR PREDICTION
-  predictImage(fileName, s3Url) {
-    let payload = {
-      'imageName': fileName,
-      'imageURL': s3Url,
-      'model_name': this.state.model,
-      'model_version': this.state.version
-    };
-    console.log(JSON.stringify(payload, null, 4));
-
+  predict() {
     axios({
       method: 'post',
       url: '/api/predict',
       timeout: 60 * 4 * 1000, // 4 minutes
-      data: payload
+      data: {
+        'imageName': this.state.fileName,
+        'imageURL': this.state.imageURL,
+        'model_name': this.state.model,
+        'model_version': this.state.version
+      }
     })
       .then((response) => {
-        console.log(JSON.stringify(response.data, null, 4));
         this.setState({
           downloadURL: response.data.outputURL
         });
@@ -92,6 +97,24 @@ class Predict extends React.Component {
       .catch(error => {
         console.log(`Error occurred while sending S3 Bucket URL to Express Server: ${error}`);
       });
+  }
+
+  canBeSubmitted() {
+    return (
+      this.state.fileName.length > 0 &&
+      this.state.imageURL.length > 0 && 
+      this.state.model.length > 0 &&
+      this.state.version.length > 0
+    );
+  }
+
+  handleSubmit(event) {
+    if (!this.canBeSubmitted()) {
+      event.preventDefault();
+      return;
+    }
+    this.setState({ submitted: true });
+    this.predict();
   }
 
   handleChange(event) {
@@ -106,9 +129,9 @@ class Predict extends React.Component {
     return (
       <div className={classes.root}>
         <Typography
-          variant="title"
-          align="center"
-          color="textSecondary"
+          variant='title'
+          align='center'
+          color='textSecondary'
           paragraph
           style={{'paddingBottom': '1em'}}>
           Select a model and version | Upload your image | Download the results.
@@ -116,7 +139,7 @@ class Predict extends React.Component {
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
-            <Paper className="selection">
+            <Paper className='selection'>
               <Grid item xs>
                 { this.state.models !== null ?
                   <FormControl className={classes.formControl}>
@@ -153,25 +176,57 @@ class Predict extends React.Component {
               </Grid>
             </Paper>
 
-            <Grid item xs className="uploader">
-              <div>
-                <FileUpload onDroppedFile={(fileName, s3Url) =>
-                  this.predictImage(fileName, s3Url)} />
-              </div>
+            <Grid item xs className='uploader'>
+              <FileUpload onDroppedFile={(fileName, url) =>
+                this.setState({ fileName: fileName, imageURL: url }) } />
             </Grid>
 
-            { this.state.downloadURL !== null ?
-              <Grid item lg style={{'padding-top': '2em'}}>
+            { !this.state.submitted ?
+              <Grid item lg style={{'paddingTop': '2em'}}>
                 <Button
-                  href={this.state.downloadURL}
-                  variant="contained"
-                  size="large"
+                  variant='contained'
+                  onClick={this.handleSubmit}
+                  size='large'
                   fullWidth
-                  color="primary">
-                  Download Results
+                  disabled={!this.canBeSubmitted()}
+                  color='primary'>
+                  Submit
                 </Button>
               </Grid>
               : null }
+
+            { this.state.submitted && this.state.downloadURL === null  ?
+              <Grid item lg style={{'paddingTop': '2em'}}>
+                <LinearProgress className={classes.progress} />
+              </Grid>
+              : null }
+
+            { this.state.downloadURL !== null ?
+              <div>
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href={this.state.downloadURL}
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='secondary'>
+                    Download Results
+                  </Button>
+                </Grid>
+
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href='/predict'
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='primary'>
+                    Submit New Image
+                  </Button>
+                </Grid>
+              </div>
+              : null }
+
           </form>
         </Grid>
       </div>

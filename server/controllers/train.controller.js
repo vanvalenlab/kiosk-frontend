@@ -17,7 +17,7 @@ async function train(req, res) {
     redisKey,
     'url', req.body.imageURL,
     'optimizer', req.body.optimizer,
-    'field_size', req.body.field_size,
+    'field', req.body.fieldSize,
     'output_url', 'none',
     'processed', 'no'
   ], (err, redisRes) => {
@@ -32,7 +32,6 @@ async function train(req, res) {
       logger.debug(`redis monitor: ${raw_reply}`);
       if (args[1] === redisKey && args[2] === 'output_url') {
         logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
-        client.quit();
         return res.status(httpStatus.OK).send({ outputURL: args[3] });
       }
     });

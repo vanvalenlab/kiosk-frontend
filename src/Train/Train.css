@@ -1,7 +1,11 @@
 .trainingSelection {
-	padding: 1em 1em 1em 1em;
+	padding: 1em;
 	margin-right: 1em;
 	width: auto;
+}
+
+.trainingSelection, .uploader {
+  display: inline-block
 }
 
 .trainingSelection * {

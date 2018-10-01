@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import Slider from '@material-ui/lab/Slider';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -30,6 +32,12 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
+  selection: {
+    padding: theme.spacing.unit * 2,
+  },
 });
 
 class Train extends React.Component {
@@ -37,11 +45,17 @@ class Train extends React.Component {
     super(props);
     this.state = {
       optimizer: '',
-      field: 61
+      fieldSize: 61,
+      fileName: '',
+      dataUrl: '',
+      submitted: false,
+      downloadURL: null,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSliderChange = this.handleSliderChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.canBeSubmitted = this.canBeSubmitted.bind(this);
   }
 
   componentWillUnmount() {
@@ -50,13 +64,16 @@ class Train extends React.Component {
 
   //SEND UPLOADED IMAGE NAME TO REDIS FOR PREDICTION
   train() {
-    let payload = this.state;
-
     axios({
       method: 'post',
       url: '/api/train',
       timeout: 60 * 4 * 1000, // 4 minutes
-      data: payload
+      data: {
+        optimizer: this.state.optimizer,
+        fieldSize: this.state.fieldSize,
+        imageURL: this.state.dataUrl,
+        imageName: this.state.fileName
+      }
     })
       .then((response) => {
         console.log(response.data);
@@ -69,10 +86,28 @@ class Train extends React.Component {
       });
   }
 
+  handleSubmit(event) {
+    if (!this.canBeSubmitted()) {
+      event.preventDefault();
+      return;
+    }
+    this.setState({ submitted: true });
+    this.train();
+  }
+
   handleChange(event) {
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
+  }
+
+  canBeSubmitted() {
+    return (
+      this.state.fieldSize > 0 &&
+      this.state.optimizer.length > 0 &&
+      this.state.fileName.length > 0 &&
+      this.state.dataUrl.length > 0
+    );
   }
 
   handleSliderChange(event, value) {
@@ -87,9 +122,9 @@ class Train extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={40} justify='space-evenly'>
-          <form autoComplete='off' className={classes.form}>
+          <form autoComplete='off'>
 
-            <Paper className="trainingSelection">
+            <Paper className='trainingSelection'>
               <Grid item xs>
                 <FormLabel>Optimizer Type</FormLabel>
                 <FormControl className={classes.formControl}>
@@ -114,21 +149,41 @@ class Train extends React.Component {
 
               <Grid item xs>
                 <FormLabel>Receptive Field Size:</FormLabel>
-                <Typography id='slider-label'>{this.state.field}</Typography>
+                <Typography id='slider-label'>{this.state.fieldSize}</Typography>
                 <Slider
-                  value={this.state.field}
+                  value={this.state.fieldSize}
                   aria-labelledby='slider-label'
-                  min={1}
-                  max={101}
-                  step={1}
+                  min={21}
+                  max={121}
+                  step={5}
                   onChange={this.handleSliderChange} />
               </Grid>
             </Paper>
 
-            <Grid item xs>
-              <FileUpload onDroppedFile={(fileName, s3Url) =>
-                this.train(fileName, s3Url)} />
+            <Grid item xs className='uploader'>
+              <FileUpload onDroppedFile={(fileName, url) =>
+                this.setState({ fileName: fileName, dataUrl: url })} />
             </Grid>
+
+            { !this.state.submitted ?
+              <Grid item lg style={{'paddingTop': '2em'}}>
+                <Button
+                  variant='contained'
+                  onClick={this.handleSubmit}
+                  size='large'
+                  fullWidth
+                  disabled={!this.canBeSubmitted()}
+                  color='primary'>
+                  Submit
+                </Button>
+              </Grid>
+              : null }
+
+            { this.state.submitted && this.state.downloadURL === null  ?
+              <Grid item lg style={{'paddingTop': '2em'}}>
+                <LinearProgress className={classes.progress} />
+              </Grid>
+              : null }
 
           </form>
         </Grid>
