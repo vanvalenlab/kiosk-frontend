@@ -11,23 +11,19 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-const awsMulter = Multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: config.aws.bucketName,
-    key: (req, file, cb) => {
-      cb(null, file.originalname);
-    }
-  })
-});
-
-const gcpMulter = Multer({
-  storage: Multer.memoryStorage(),
+const multer = Multer({
+  storage: config.cloud === 'aws' ?
+    multerS3({
+      s3: s3,
+      bucket: config.aws.bucketName,
+      key: (req, file, cb) => {
+        cb(null, file.originalname);
+      }
+    })
+    : Multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024 * 1024 * 1024 // no larger than 5TB, GCE max
+    fileSize: 5 * 1024 * 1024 * 1024 * 1024 // 5 TB
   }
 });
-
-const multer = config.cloud === 'aws' ? awsMulter : gcpMulter;
 
 export default multer;

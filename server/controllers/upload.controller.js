@@ -4,8 +4,7 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 const storage = new Storage({
-  projectId: config.gcp.projectId,
-  keyFilename: config.gcp.keyFile
+  projectId: config.gcp.projectId
 });
 
 function gcpUpload(req, res, next) {
@@ -26,8 +25,11 @@ function gcpUpload(req, res, next) {
 
   blobStream.on('finish', () => {
     // The public URL can be used to directly access the file via HTTP.
+    // Make the file public
     const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-    res.status(httpStatus.OK).send({ imageURL: publicUrl });
+    blob.makePublic().then(() => {
+      res.status(httpStatus.OK).send({ imageURL: publicUrl });
+    });
   });
 
   blobStream.end(req.file.buffer);

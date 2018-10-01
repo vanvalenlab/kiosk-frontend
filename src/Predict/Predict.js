@@ -84,7 +84,8 @@ class Predict extends React.Component {
       data: payload
     })
       .then((response) => {
-        !this.isCancelled && this.setState({
+        console.log(JSON.stringify(response.data, null, 4));
+        this.setState({
           downloadURL: response.data.outputURL
         });
       })
