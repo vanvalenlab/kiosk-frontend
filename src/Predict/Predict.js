@@ -78,7 +78,6 @@ class Predict extends React.Component {
   }
 
   predict() {
-    this.setState({ submitted: true });
     axios({
       method: 'post',
       url: '/api/predict',
@@ -114,6 +113,7 @@ class Predict extends React.Component {
       event.preventDefault();
       return;
     }
+    this.setState({ submitted: true });
     this.predict();
   }
 
@@ -177,10 +177,8 @@ class Predict extends React.Component {
             </Paper>
 
             <Grid item xs className='uploader'>
-              <div>
-                <FileUpload onDroppedFile={(fileName, url) =>
-                  this.setState({ fileName: fileName, imageURL: url }) } />
-              </div>
+              <FileUpload onDroppedFile={(fileName, url) =>
+                this.setState({ fileName: fileName, imageURL: url }) } />
             </Grid>
 
             { !this.state.submitted ?
