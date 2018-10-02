@@ -72,7 +72,6 @@ class Predict extends React.Component {
         console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
-        this.state({ errorText: error.toString() });
         console.log(`Error calling /api/getModels: ${error}`);
       });
   }
