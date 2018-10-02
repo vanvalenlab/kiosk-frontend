@@ -47,7 +47,9 @@ class Predict extends React.Component {
       fileName: '',
       imageURL: '',
       downloadURL: null,
-      submitted: false
+      submitted: false,
+      showError: false,
+      errorText: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -72,6 +74,10 @@ class Predict extends React.Component {
         console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
+        this.setState({
+          showError: true,
+          errorText: 'Could not fetch models from the cloud bucket.'
+        });
         console.log(`Error calling /api/getModels: ${error}`);
       });
   }
@@ -94,6 +100,10 @@ class Predict extends React.Component {
         });
       })
       .catch(error => {
+        this.setState({
+          showError: true,
+          errorText: 'Could not get results from tensorflow-serving.'
+        });
         console.log(`Error occurred while sending S3 Bucket URL to Express Server: ${error}`);
       });
   }
@@ -101,7 +111,7 @@ class Predict extends React.Component {
   canBeSubmitted() {
     return (
       this.state.fileName.length > 0 &&
-      this.state.imageURL.length > 0 && 
+      this.state.imageURL.length > 0 &&
       this.state.model.length > 0 &&
       this.state.version.length > 0
     );
@@ -135,6 +145,7 @@ class Predict extends React.Component {
           style={{'paddingBottom': '1em'}}>
           Select a model and version | Upload your image | Download the results.
         </Typography>
+
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
@@ -180,8 +191,19 @@ class Predict extends React.Component {
                 this.setState({ fileName: fileName, imageURL: url }) } />
             </Grid>
 
+            { this.state.showError ?
+              <Typography
+                variant='subheading'
+                align='center'
+                color='error'
+                paragraph
+                style={{'paddingTop': '1em'}}>
+                {this.state.errorText}
+              </Typography>
+              : null }
+
             { !this.state.submitted ?
-              <Grid item lg style={{'paddingTop': '2em'}}>
+              <Grid item lg style={{'paddingTop': '1em'}}>
                 <Button
                   variant='contained'
                   onClick={this.handleSubmit}
@@ -194,7 +216,7 @@ class Predict extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && this.state.downloadURL === null  ?
+            { this.state.submitted && !this.state.showError && this.state.downloadURL === null  ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>
