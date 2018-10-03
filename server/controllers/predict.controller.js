@@ -17,25 +17,18 @@ async function predict(req, res) {
     if (err) throw err;
     logger.info(`redis.hmset response: ${redisRes}`);
 
-    client.on('monitor', (time, args, raw_reply) => {
-      logger.debug(`redis monitor: ${raw_reply}`);
-      if (args[1] === redisKey && args[2] === 'output_url' && args[3] !== 'none') {
-        logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
-        client.del(redisKey, (err, response) => {
-          if (args[3].toLowerCase().startsWith('fail')) {
-            logger.error(`Failed to get output_url due to failure: ${args[3]}`);
-            return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
-          } else if (err || response !== 1) {
-            if (err) {
-              logger.error(`Failed to delete redis key: ${err}`);
-            } else {
-              logger.error(`'No error, but failed to delete hash ${redisKey} with response ${response}`);
+    client.on('monitor', (time, args) => {
+      if (args[1] == redisKey) {
+        for (let i = 2; i < args.length; i = i + 2) {
+          if (args[i] == 'output_url' && args[i  +1] != 'none') {
+            logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
+            if (args[3].toLowerCase().startsWith('fail')) {
+              logger.error(`Failed to get output_url due to failure: ${args[3]}`);
+              return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
             }
-            return res.status(httpStatus.CONFLICT).send({ outputURL: args[3] });
-          } else {
             return res.status(httpStatus.OK).send({ outputURL: args[3] });
           }
-        });
+        }
       }
     });
   });
