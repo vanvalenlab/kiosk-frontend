@@ -45,7 +45,7 @@ class Train extends React.Component {
     super(props);
     this.state = {
       optimizer: '',
-      fieldSize: 61,
+      fieldSize: 60,
       fileName: '',
       dataUrl: '',
       submitted: false,
@@ -70,7 +70,7 @@ class Train extends React.Component {
       timeout: 60 * 4 * 1000, // 4 minutes
       data: {
         optimizer: this.state.optimizer,
-        fieldSize: this.state.fieldSize,
+        fieldSize: this.state.fieldSize + 1,
         imageURL: this.state.dataUrl,
         imageName: this.state.fileName
       }
@@ -112,7 +112,7 @@ class Train extends React.Component {
 
   handleSliderChange(event, value) {
     !this.isCancelled && this.setState({
-      field: value
+      fieldSize: value
     });
   }
 
@@ -149,12 +149,12 @@ class Train extends React.Component {
 
               <Grid item xs>
                 <FormLabel>Receptive Field Size:</FormLabel>
-                <Typography id='slider-label'>{this.state.fieldSize}</Typography>
+                <Typography id='slider-label'>{this.state.fieldSize + 1}</Typography>
                 <Slider
-                  value={this.state.fieldSize}
+                  value={this.state.fieldSize + 1}
                   aria-labelledby='slider-label'
-                  min={21}
-                  max={121}
+                  min={10}
+                  max={120}
                   step={5}
                   onChange={this.handleSliderChange} />
               </Grid>
