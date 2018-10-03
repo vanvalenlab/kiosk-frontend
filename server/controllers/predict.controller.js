@@ -25,8 +25,9 @@ async function predict(req, res) {
             if (args[i + 1].toLowerCase().startsWith('fail')) {
               logger.error(`Failed to get output_url due to failure: ${args[i + 1]}`);
               return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
+            } else {
+              return res.status(httpStatus.OK).send({ outputURL: args[i + 1] });
             }
-            return res.status(httpStatus.OK).send({ outputURL: args[i + 1] });
           }
         }
       }
