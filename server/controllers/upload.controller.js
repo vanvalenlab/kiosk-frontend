@@ -40,12 +40,8 @@ function gcpUpload(req, res, next) {
 }
 
 function awsUpload(req, res) {
-  let prefix = config.uploadDirectory;
-  if (prefix[prefix.length - 1] === '/') {
-    prefix = prefix.slice(0, prefix.length - 1);
-  }
   try {
-    res.status(httpStatus.OK).send({ imageURL: `${prefix}/${req.file.location}` });
+    res.status(httpStatus.OK).send({ imageURL: `${req.file.location}` });
   } catch (error) {
     logger.error(`Error uploading file: ${error}`);
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
