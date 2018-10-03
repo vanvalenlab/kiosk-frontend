@@ -13,9 +13,13 @@ function gcpUpload(req, res, next) {
   if (!req.file) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
+  let prefix = config.uploadDirectory;
+  if (prefix[prefix.length - 1] === '/') {
+    prefix = prefix.slice(0, prefix.length - 1);
+  }
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.file.originalname);
+  const blob = bucket.file(`${config.uploadDirectory}/${req.file.originalname}`);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
@@ -36,8 +40,12 @@ function gcpUpload(req, res, next) {
 }
 
 function awsUpload(req, res) {
+  let prefix = config.uploadDirectory;
+  if (prefix[prefix.length - 1] === '/') {
+    prefix = prefix.slice(0, prefix.length - 1);
+  }
   try {
-    res.status(httpStatus.OK).send({ imageURL: req.file.location });
+    res.status(httpStatus.OK).send({ imageURL: `${prefix}/${req.file.location}` });
   } catch (error) {
     logger.error(`Error uploading file: ${error}`);
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
