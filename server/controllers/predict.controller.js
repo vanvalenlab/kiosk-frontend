@@ -1,16 +1,21 @@
 import httpStatus from 'http-status';
 import client from '../config/redis';
+import config from '../config/config';
 import logger from '../config/winston';
 
 async function predict(req, res) {
   const redisKey = `${req.body.imageName}_${Date.now()}`;
+  let prefix = config.uploadDirectory;
+  if (prefix[prefix.length - 1] === '/') {
+    prefix = prefix.slice(0, prefix.length - 1);
+  }
   try {
     client.hmset([
       redisKey,
       'url', req.body.imageURL,
       'model_name', req.body.model_name,
       'model_version', req.body.model_version,
-      'file_name', req.body.imageName,
+      'file_name', `${prefix}/${req.body.imageName}`,
       'output_url', 'none',
       'processed', 'no'
     ], (err, redisRes) => {
