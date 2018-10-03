@@ -155,7 +155,7 @@ class Train extends React.Component {
                   aria-labelledby='slider-label'
                   min={10}
                   max={120}
-                  step={5}
+                  step={2}
                   onChange={this.handleSliderChange} />
               </Grid>
             </Paper>
