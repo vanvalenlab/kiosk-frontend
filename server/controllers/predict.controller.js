@@ -20,13 +20,13 @@ async function predict(req, res) {
     client.on('monitor', (time, args) => {
       if (args[1] == redisKey) {
         for (let i = 2; i < args.length; i = i + 2) {
-          if (args[i] == 'output_url' && args[i  +1] != 'none') {
-            logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
+          if (args[i] == 'output_url' && args[i + 1] != 'none') {
+            logger.info(`redis key ${args[1]}: ${args[i]} set to: ${args[i + 1]}`);
             if (args[3].toLowerCase().startsWith('fail')) {
-              logger.error(`Failed to get output_url due to failure: ${args[3]}`);
+              logger.error(`Failed to get output_url due to failure: ${args[i + 1]}`);
               return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
             }
-            return res.status(httpStatus.OK).send({ outputURL: args[3] });
+            return res.status(httpStatus.OK).send({ outputURL: args[i + 1] });
           }
         }
       }
