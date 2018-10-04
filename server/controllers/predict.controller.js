@@ -16,6 +16,7 @@ async function predict(req, res) {
       'model_name', req.body.model_name,
       'model_version', req.body.model_version,
       'file_name', `${prefix}/${req.body.imageName}`,
+      'cuts', req.body.cuts,
       'output_url', 'none',
       'processed', 'no'
     ], (err, redisRes) => {

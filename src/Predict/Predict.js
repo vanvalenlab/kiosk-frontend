@@ -83,6 +83,8 @@ class Predict extends React.Component {
   }
 
   predict() {
+    // temporary workaround to allow slicing of images
+    let cuts = this.state.model === 'mousebrain' ? 8 : 0;
     axios({
       method: 'post',
       url: '/api/predict',
@@ -91,7 +93,8 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'imageURL': this.state.imageURL,
         'model_name': this.state.model,
-        'model_version': this.state.version
+        'model_version': this.state.version,
+        'cuts': cuts
       }
     })
       .then((response) => {
@@ -213,6 +216,7 @@ class Predict extends React.Component {
                   </FormControl>
                   : null }
               </Grid>
+
             </Paper>
 
             <Grid item xs className='uploader'>
