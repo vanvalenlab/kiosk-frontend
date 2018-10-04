@@ -1,4 +1,4 @@
-# react_interface
+# kiosk-frontend
 DeepCell graphical user interface built using React, Babel, Webpack. Run with `npm start` after git-cloning and npm-installing to run the app in development mode. Look into package.json for additional command-line accessible scripts. There is no script that is currently written to run the app in production mode. We can modify that later on.
 
 # Access the FileUpload Component Logic
