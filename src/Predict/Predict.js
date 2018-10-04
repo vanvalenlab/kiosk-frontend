@@ -107,10 +107,16 @@ class Predict extends React.Component {
           })
             .then((response) => {
               if (response.data.value.slice(0, 8) === 'https://') {
+                clearInterval(this.statusCheck);
                 this.setState({
                   downloadURL: response.data.value
                 });
+              } else if (response.data.value.slice(0, 5) === 'fail') {
                 clearInterval(this.statusCheck);
+                this.setState({
+                  showError: true,
+                  errorText: `Got a failure code = "${response.data.value}".`
+                });
               }
             })
             .catch(error => {
