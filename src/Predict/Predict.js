@@ -95,16 +95,39 @@ class Predict extends React.Component {
       }
     })
       .then((response) => {
-        this.setState({
-          downloadURL: response.data.outputURL
-        });
+        let redisHash = response.data.hash;
+        this.statusCheck = setInterval(() => {
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'output_url'
+            }
+          })
+            .then((response) => {
+              if (response.data.value.slice(0, 8) === 'https://') {
+                this.setState({
+                  downloadURL: response.data.value
+                });
+                clearInterval(this.statusCheck);
+              }
+            })
+            .catch(error => {
+              this.setState({
+                showError: true,
+                errorText: 'Trouble communicating with redis.'
+              });
+              console.log(`Error occurred while getting redis status: ${error}`);
+            });
+        }, 3000);
       })
       .catch(error => {
         this.setState({
           showError: true,
           errorText: 'Could not get results from tensorflow-serving.'
         });
-        console.log(`Error occurred while sending S3 Bucket URL to Express Server: ${error}`);
+        console.log(`Error occurred while submitting prediction job: ${error}`);
       });
   }
 

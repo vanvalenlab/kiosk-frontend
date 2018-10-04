@@ -21,28 +21,11 @@ async function predict(req, res) {
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
-
-      client.on('monitor', (time, args) => {
-        if (args[1] == redisKey) {
-          for (let i = 2; i < args.length; i = i + 2) {
-            if (args[i] === 'output_url' && args[i + 1] !== 'none') {
-              logger.info(`redis key ${args[1]}: ${args[i]} set to: ${args[i + 1]}`);
-
-              let outputURL = args[i + 1];
-              if (outputURL.toString().toLowerCase().startsWith('fail')) {
-                logger.error(`Failed to get output_url due to failure: ${outputURL}`);
-                return res.status(httpStatus.SERVICE_UNAVAILABLE).send({ err: outputURL });
-              } else {
-                return res.status(httpStatus.OK).send({ outputURL: outputURL });
-              }
-            }
-          }
-        }
-      });
+      return res.status(httpStatus.OK).send({ hash: redisKey });
     });
   } catch (err) {
     logger.error(`Encountered Error in /predict: ${err}`);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ err: err });
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 
