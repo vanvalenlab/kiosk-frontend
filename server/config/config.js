@@ -18,10 +18,10 @@ const envVarsSchema = Joi.object({
     .required(),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
-    .default('models/'),
+    .default('models'),
   UPLOAD_PREFIX: Joi.string()
     .description('S3 Folder in which uploaded files are saved')
-    .default('uploads/'),
+    .default('uploads'),
   AWS_REGION: Joi.string()
     .default('us-east-1'),
   AWS_ACCESS_KEY_ID: Joi.string().default('invalid_value'),
