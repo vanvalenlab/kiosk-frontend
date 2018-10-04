@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import { format } from 'util';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
@@ -35,7 +36,8 @@ function gcpUpload(req, res, next) {
   blobStream.on('finish', () => {
     // The public URL can be used to directly access the file via HTTP.
     // Make the file public
-    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+
     blob.makePublic().then(() => {
       res.status(httpStatus.OK).send({ imageURL: publicUrl });
     });
