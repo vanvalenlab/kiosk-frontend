@@ -17,9 +17,14 @@ function gcpUpload(req, res, next) {
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
   }
+  if (prefix[0] === '/') {
+    prefix = prefix.slice(1);
+  }
+
+  const filename = `${prefix}/${req.file.originalname}`;
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(`${config.uploadDirectory}/${req.file.originalname}`);
+  const blob = bucket.file(filename);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {

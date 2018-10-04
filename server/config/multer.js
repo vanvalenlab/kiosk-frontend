@@ -15,6 +15,9 @@ let prefix = config.uploadDirectory;
 if (prefix[prefix.length - 1] === '/') {
   prefix = prefix.slice(0, prefix.length - 1);
 }
+if (prefix[0] === '/') {
+  prefix = prefix.slice(1);
+}
 
 const multer = Multer({
   storage: config.cloud === 'aws' ?
