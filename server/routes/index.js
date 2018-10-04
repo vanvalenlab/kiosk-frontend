@@ -19,7 +19,7 @@ router.route('/predict')
 router.route('/train')
   .post(controllers.trainController.train);
 
-router.route('/getModels')
+router.route('/models')
   .get(controllers.modelController.getModels);
 
 export default router;

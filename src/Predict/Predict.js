@@ -66,7 +66,7 @@ class Predict extends React.Component {
   }
 
   retrieveModelsVersions() {
-    axios.get('/api/getModels')
+    axios.get('/api/models')
       .then((response) => {
         !this.isCancelled && this.setState({
           models: response.data.models
