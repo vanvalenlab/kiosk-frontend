@@ -84,7 +84,7 @@ class Predict extends React.Component {
 
   predict() {
     // temporary workaround to allow slicing of images
-    let cuts = this.state.model === 'mousebrain' ? 8 : 0;
+    let cuts = this.state.model === 'mousebrain' ? 4 : 0;
     axios({
       method: 'post',
       url: '/api/predict',
