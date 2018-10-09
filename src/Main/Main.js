@@ -10,7 +10,6 @@ import NotFound from '../NotFound/NotFound';
 
 const styles = {
   root: {
-    minHeight: '80vh'
   }
 };
 
