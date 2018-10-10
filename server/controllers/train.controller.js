@@ -11,6 +11,10 @@ async function train(req, res) {
     'url', req.body.imageURL,
     'optimizer', req.body.optimizer,
     'field', req.body.fieldSize,
+    'skips', req.body.skips,
+    'epochs', req.body.epochs,
+    'transform', req.body.transform,
+    'normalization', req.body.normalization,
     'output_url', 'none',
     'processed', 'no'
   ], (err, redisRes) => {
