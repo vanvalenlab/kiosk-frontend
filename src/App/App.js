@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Footer from '../Footer/Footer';
-import NavBar from '../NavBar/NavBar';
-import Main from '../Main/Main';
+import Container from '../Container/Container';
 
 //If the mode is NOT production, then notify that we are in dev mode.
 if (process.env.NODE_ENV !== 'production') {
@@ -13,12 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
 class App extends Component {
   render() {
     return(
-      <React.Fragment>
-        <CssBaseline />
-        <NavBar />
-        <Main />
-        <Footer />
-      </React.Fragment>
+      <Container />
     );
   }
 }
