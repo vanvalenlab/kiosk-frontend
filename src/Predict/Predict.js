@@ -175,7 +175,7 @@ class Predict extends React.Component {
             </Paper>
 
             <Grid item xs className='uploader'>
-              <FileUpload onDroppedFile={(fileName, url) =>
+              <FileUpload infoText="Image Prediction." onDroppedFile={(fileName, url) =>
                 this.setState({ fileName: fileName, imageURL: url }) } />
             </Grid>
 
