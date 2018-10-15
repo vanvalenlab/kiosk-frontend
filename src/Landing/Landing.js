@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    margin: theme.spacing.unit * 4
+  },
   heroContent: {
     maxWidth: 600,
     margin: '0 auto',
@@ -28,7 +32,7 @@ class Landing extends React.Component {
     const { classes } = this.props;
 
     return(
-      <div>
+      <div className={classes.root}>
         <div className={classes.heroContent}>
           <Typography variant="display4" align="center" color="textPrimary" gutterBottom>
             DeepCell
