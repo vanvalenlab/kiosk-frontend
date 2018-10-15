@@ -44,11 +44,15 @@ async function getAwsKeys(params, keys) {
 }
   
 async function getAwsModels(req, res) {
+  let modelPrefix = config.model.prefix;
+  if (modelPrefix[modelPrefix.length - 1] !== '/') {
+    modelPrefix = modelPrefix + '/';
+  }
   try {
     let params = {
       Bucket: config.aws.bucketName,
       Delimiter: '/',
-      Prefix: config.model.prefix,
+      Prefix: modelPrefix,
       MaxKeys: 2147483647, // Maximum allowed by S3 API
     };
     let models = [];
