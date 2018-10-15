@@ -161,8 +161,10 @@ class Train extends React.Component {
             </Paper>
 
             <Grid item xs className='uploader'>
-              <FileUpload infoText="Training." onDroppedFile={(fileName, url) =>
-                this.setState({ fileName: fileName, dataUrl: url })} />
+              <FileUpload
+                infoText='Upload Here to Begin Training.'
+                onDroppedFile={(fileName, url) =>
+                  this.setState({ fileName: fileName, dataUrl: url })} />
             </Grid>
 
             { !this.state.submitted ?

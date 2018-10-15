@@ -38,7 +38,7 @@ class FileUpload extends Component {
     return (
       <div className='dropzone'>
         <Dropzone className='dropzoneCSS' accept='image/*' onDrop={this.onDrop.bind(this)} >
-          <p className='uploadInstructions'>Upload Here to Begin { this.props.infoText }</p>
+          <p className='uploadInstructions'>{ this.props.infoText }</p>
           <p className='uploadUnder'>Drag and Drop your files here or <span>click</span> to browse.</p>
           <div className='acceptedFiles'>
             { this.state.uploadedFileLocation !== null ?
@@ -56,6 +56,7 @@ class FileUpload extends Component {
 }
 
 FileUpload.propTypes = {
+  infoText: PropTypes.string,
   onDroppedFile: PropTypes.func
 };
 
