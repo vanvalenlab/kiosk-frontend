@@ -10,8 +10,7 @@ import NotFound from '../NotFound/NotFound';
 
 const styles = {
   root: {
-    minHeight: '90vh',
-    position: 'relative',
+    flexGrow: 1
   }
 };
 

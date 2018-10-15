@@ -5,19 +5,10 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   footer: {
-    backgroundColor: theme.palette.background.paper,
-    height: '60px',
-    width: '100%',
-    position:'absolute',
-    left:0,
-    bottom:0,
-    right:0,
-    paddingTop: '20px',
-  },
-  phantom: {
-    display: 'block',
-    padding: '1px',
-    width: '100%',
+    flex: 'none',
+    marginTop: theme.spacing.unit * 8,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 2}px`,
+    backgroundColor: theme.palette.background.paper
   }
 });
 
@@ -26,13 +17,12 @@ class Footer extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.footer}>
-        <div className={classes.phantom} />
+      <footer className={classes.footer}>
         <Typography variant='subheading' align='center' color='textSecondary' component='p'>
           © 2016-2018 The Van Valen Lab at the California Institute of Technology
           (Caltech). All rights reserved.
         </Typography>
-      </div>
+      </footer>
     );
   }
 }

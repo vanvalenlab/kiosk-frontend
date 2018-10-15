@@ -8,6 +8,9 @@ import Main from '../Main/Main';
 
 const styles = theme => ({
   root: {
+    display: 'flex',
+    minHeight: '100vh',
+    flexDirection: 'column'
   }
 });
 
@@ -17,7 +20,7 @@ class Container extends React.Component {
     return(
       <div className={classes.root}>
         <CssBaseline />
-        <NavBar />  
+        <NavBar />
         <Main />
         <Footer />
       </div>
