@@ -17,8 +17,9 @@ import './Predict.css';
 
 const styles = theme => ({
   root: {
-    paddingTop: theme.spacing.unit * 2,
     flexGrow: 1,
+    margin: theme.spacing.unit * 4,
+    paddingTop: theme.spacing.unit * 2
   },
   form: {
     display: 'flex',
