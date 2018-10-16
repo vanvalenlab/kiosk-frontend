@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
@@ -41,11 +42,12 @@ class Predict extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: '',
+      models: [],
       model: '',
       version: '',
       fileName: '',
       imageURL: '',
+      cuts: 0,
       downloadURL: null,
       submitted: false,
       showError: false,
@@ -83,8 +85,6 @@ class Predict extends React.Component {
   }
 
   predict() {
-    // temporary workaround to allow slicing of images
-    let cuts = this.state.model === 'mousebrain' ? 4 : 0;
     axios({
       method: 'post',
       url: '/api/predict',
@@ -94,7 +94,7 @@ class Predict extends React.Component {
         'imageURL': this.state.imageURL,
         'model_name': this.state.model,
         'model_version': this.state.version,
-        'cuts': cuts
+        'cuts': this.state.cuts
       }
     })
       .then((response) => {
@@ -114,7 +114,7 @@ class Predict extends React.Component {
                 this.setState({
                   downloadURL: response.data.value
                 });
-              } else if (response.data.value.slice(0, 5) === 'fail') {
+              } else if (response.data.value === 'failed') {
                 clearInterval(this.statusCheck);
                 this.setState({
                   showError: true,
@@ -203,18 +203,30 @@ class Predict extends React.Component {
               </Grid>
 
               <Grid item xs>
-                { this.state.model.length > 0 ?
-                  <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Version</FormLabel>
-                    <Select
-                      value={this.state.version}
-                      input={<Input name='version' id='version-placeholder' placeholder='' />}
-                      onChange={this.handleChange}>
-                      { this.state.models[this.state.model].map(v =>
-                        <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                  : null }
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Select A Version</FormLabel>
+                  <Select
+                    value={this.state.version}
+                    disabled={this.state.model === ''}
+                    input={<Input name='version' id='version-placeholder' placeholder='' />}
+                    onChange={this.handleChange}>
+                    { this.state.model && this.state.models[this.state.model].map(v =>
+                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Number of Slices</FormLabel>
+                  <TextField
+                    id='cuts-input'
+                    helperText='Most models use 0'
+                    name='cuts'
+                    onChange={this.handleChange}
+                    value={this.state.cuts}
+                  />
+                </FormControl>
               </Grid>
 
             </Paper>
