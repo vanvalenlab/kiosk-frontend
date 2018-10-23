@@ -47,6 +47,7 @@ class Predict extends React.Component {
       version: '',
       fileName: '',
       imageURL: '',
+      postprocess: '',
       cuts: 0,
       downloadURL: null,
       submitted: false,
@@ -94,6 +95,7 @@ class Predict extends React.Component {
         'imageURL': this.state.imageURL,
         'model_name': this.state.model,
         'model_version': this.state.version,
+        'postprocess_function': this.state.postprocess,
         'cuts': this.state.cuts
       }
     })
@@ -234,6 +236,22 @@ class Predict extends React.Component {
                     onChange={this.handleChange}>
                     { this.state.model && this.state.models[this.state.model].map(v =>
                       <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Post-Processing</FormLabel>
+                  <Select
+                    value={this.state.postprocess}
+                    input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
+                    displayEmpty
+                    className={classes.selectEmpty}
+                    onChange={this.handleChange}>
+                    <MenuItem value=''><em>None</em></MenuItem>
+                    <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
+                    <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

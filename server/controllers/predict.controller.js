@@ -16,6 +16,7 @@ async function predict(req, res) {
       'model_name', req.body.model_name,
       'model_version', req.body.model_version,
       'file_name', `${prefix}/${req.body.imageName}`,
+      'postprocess_function', req.body.postprocess_function,
       'cuts', req.body.cuts,
       'status', 'new'
     ], (err, redisRes) => {
