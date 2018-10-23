@@ -17,8 +17,7 @@ async function predict(req, res) {
       'model_version', req.body.model_version,
       'file_name', `${prefix}/${req.body.imageName}`,
       'cuts', req.body.cuts,
-      'output_url', 'none',
-      'processed', 'no'
+      'status', 'new'
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);

@@ -105,15 +105,37 @@ class Predict extends React.Component {
             url: '/api/redis',
             data: {
               'hash': redisHash,
-              'key': 'output_url'
+              'key': 'status'
             }
           })
             .then((response) => {
-              if (response.data.value.slice(0, 8) === 'https://') {
+              if (response.data.value === 'failed') {
                 clearInterval(this.statusCheck);
                 this.setState({
-                  downloadURL: response.data.value
+                  showError: true,
+                  errorText: `Got a failure code = "${response.data.value}".`
                 });
+              } else if (response.data.value === 'done') {
+                clearInterval(this.statusCheck);
+                axios({
+                  method: 'post',
+                  url: '/api/redis',
+                  data: {
+                    'hash': redisHash,
+                    'key': 'output_url'
+                  }
+                }).then((response) => {
+                  this.setState({
+                    downloadURL: response.data.value
+                  });
+                })
+                  .catch(error => {
+                    this.setState({
+                      showError: true,
+                      errorText: 'Job finished, but could not find output URL.'
+                    });
+                    console.log(`Error occurred while submitting prediction job: ${error}`);
+                  });
               } else if (response.data.value === 'failed') {
                 clearInterval(this.statusCheck);
                 this.setState({
@@ -125,7 +147,7 @@ class Predict extends React.Component {
             .catch(error => {
               this.setState({
                 showError: true,
-                errorText: 'Trouble communicating with redis.'
+                errorText: 'Trouble communicating with Redis.'
               });
               console.log(`Error occurred while getting redis status: ${error}`);
             });
