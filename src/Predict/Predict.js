@@ -115,7 +115,7 @@ class Predict extends React.Component {
                 clearInterval(this.statusCheck);
                 this.setState({
                   showError: true,
-                  errorText: `Got a failure code = "${response.data.value}".`
+                  errorText: `Job Failed: ${response.data.reason}`
                 });
               } else if (response.data.value === 'done') {
                 clearInterval(this.statusCheck);
@@ -252,6 +252,7 @@ class Predict extends React.Component {
                     <MenuItem value=''><em>None</em></MenuItem>
                     <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
                     <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
+                    <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
