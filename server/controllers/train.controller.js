@@ -1,13 +1,19 @@
 import httpStatus from 'http-status';
+import config from '../config/config';
 import client from '../config/redis';
 import logger from '../config/winston';
 
 async function train(req, res) {
-  const redisKey = req.body.imageName;
+  const redisKey = `${req.body.imageName}_${Date.now()}`;
+  let prefix = config.uploadDirectory;
+  if (prefix[prefix.length - 1] === '/') {
+    prefix = prefix.slice(0, prefix.length - 1);
+  }
   try {
     // set the initial keys & values for redis
     client.hmset([
       redisKey,
+      'file_name', `${prefix}/${req.body.imageName}`,
       'url', req.body.imageURL,
       'optimizer', req.body.optimizer,
       'field', req.body.fieldSize,
@@ -15,8 +21,7 @@ async function train(req, res) {
       'epochs', req.body.epochs,
       'transform', req.body.transform,
       'normalization', req.body.normalization,
-      'output_url', 'none',
-      'status', 'new'
+      'status', 'new_training'
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
