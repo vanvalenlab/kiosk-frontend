@@ -44,16 +44,18 @@ class Train extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fileName: '',
+      imageURL: '',
       optimizer: 'sgd',
       fieldSize: 60,
-      fileName: '',
-      dataUrl: '',
       submitted: false,
       downloadURL: null,
       skips: 0,
       epochs: 10,
       transform: '',
       normalization: '',
+      showError: false,
+      errorText: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -73,7 +75,7 @@ class Train extends React.Component {
       data: {
         optimizer: this.state.optimizer,
         fieldSize: this.state.fieldSize + 1,
-        imageURL: this.state.dataUrl,
+        imageURL: this.state.imageURL,
         imageName: this.state.fileName,
         skips: this.state.skips,
         epochs: this.state.epochs,
@@ -88,6 +90,10 @@ class Train extends React.Component {
         });
       })
       .catch(error => {
+        this.setState({
+          showError: true,
+          errorText: `${error}.`
+        });
         console.log(`Error occurred during POST to /api/train: ${error}`);
       });
   }
@@ -113,7 +119,7 @@ class Train extends React.Component {
       this.state.epochs > 0 &&
       this.state.optimizer.length > 0 &&
       this.state.fileName.length > 0 &&
-      this.state.dataUrl.length > 0
+      this.state.imageURL.length > 0
     );
   }
 
@@ -238,10 +244,21 @@ class Train extends React.Component {
 
             <Grid item xs className='uploader'>
               <FileUpload
-                infoText='Upload Here to Begin Training.'
+                infoText='Upload Training Data Here.'
                 onDroppedFile={(fileName, url) =>
-                  this.setState({ fileName: fileName, dataUrl: url })} />
+                  this.setState({ fileName: fileName, imageURL: url })} />
             </Grid>
+
+            { this.state.showError ?
+              <Typography
+                variant='subheading'
+                align='center'
+                color='error'
+                paragraph
+                style={{'paddingTop': '1em'}}>
+                {this.state.errorText}
+              </Typography>
+              : null }
 
             { !this.state.submitted ?
               <Grid item lg style={{'paddingTop': '2em'}}>
