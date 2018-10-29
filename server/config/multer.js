@@ -11,13 +11,21 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
+let prefix = config.uploadDirectory;
+if (prefix[prefix.length - 1] === '/') {
+  prefix = prefix.slice(0, prefix.length - 1);
+}
+if (prefix[0] === '/') {
+  prefix = prefix.slice(1);
+}
+
 const multer = Multer({
   storage: config.cloud === 'aws' ?
     multerS3({
       s3: s3,
       bucket: config.aws.bucketName,
       key: (req, file, cb) => {
-        cb(null, file.originalname);
+        cb(null, `${prefix}/${file.originalname}`);
       }
     })
     : Multer.memoryStorage(),

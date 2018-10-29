@@ -59,9 +59,9 @@ const cards = [
     name: 'MIBI Nuclei',
     description: 'Double-stranded DNA data from MIBI'
   }, {
-    file: 'mibi_multi_channel.tif',
-    name: 'MIBI Multiple Channel',
-    description: 'A Panel of stains from MIBI compressed as a .tiff file'
+    file: 'mousebrain.tif',
+    name: 'Mouse Brain Nuclei',
+    description: 'Mouse embryo nuclei Z-stack'
   }
 ];
 

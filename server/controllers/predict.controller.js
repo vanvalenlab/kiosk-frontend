@@ -1,44 +1,33 @@
 import httpStatus from 'http-status';
 import client from '../config/redis';
+import config from '../config/config';
 import logger from '../config/winston';
 
 async function predict(req, res) {
-  const redisKey = req.body.imageName;
-
-  // set the initial keys/values for redis
-  client.hmset([
-    redisKey,
-    'url', req.body.imageURL,
-    'model_name', req.body.model_name,
-    'model_version', req.body.model_version,
-    'output_url', 'none',
-    'processed', 'no'
-  ], (err, redisRes) => {
-    if (err) throw err;
-    logger.info(`redis.hmset response: ${redisRes}`);
-
-    client.on('monitor', (time, args, raw_reply) => {
-      logger.debug(`redis monitor: ${raw_reply}`);
-      if (args[1] === redisKey && args[2] === 'output_url' && args[3] !== 'none') {
-        logger.info(`redis key ${args[1]}.output_url set to: ${args[3]}`);
-        client.del(redisKey, (err, response) => {
-          if (err || response !== 1) {
-            if (err) {
-              logger.error(`Failed to delete redis key: ${err}`);
-            } else {
-              logger.error(`'No error, but failed to delete hash ${redisKey} with response ${response}`);
-            }
-            return res.sendStatus(httpStatus.CONFLICT);
-          } else if (args[3].toLowerCase().startsWith('fail')) {
-            logger.error(`Failed to get output_url due to failure: ${args[3]}`);
-            return res.sendStatus(httpStatus.SERVICE_UNAVAILABLE);
-          } else {
-            return res.status(httpStatus.OK).send({ outputURL: args[3] });
-          }
-        });
-      }
+  const redisKey = `${req.body.imageName}_${Date.now()}`;
+  let prefix = config.uploadDirectory;
+  if (prefix[prefix.length - 1] === '/') {
+    prefix = prefix.slice(0, prefix.length - 1);
+  }
+  try {
+    client.hmset([
+      redisKey,
+      'url', req.body.imageURL,
+      'model_name', req.body.model_name,
+      'model_version', req.body.model_version,
+      'file_name', `${prefix}/${req.body.imageName}`,
+      'postprocess_function', req.body.postprocess_function,
+      'cuts', req.body.cuts,
+      'status', 'new'
+    ], (err, redisRes) => {
+      if (err) throw err;
+      logger.info(`redis.hmset response: ${redisRes}`);
+      return res.status(httpStatus.OK).send({ hash: redisKey });
     });
-  });
+  } catch (err) {
+    logger.error(`Encountered Error in /predict: ${err}`);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
 }
 
 export default { predict };

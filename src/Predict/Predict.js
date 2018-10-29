@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
@@ -41,13 +42,17 @@ class Predict extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: '',
+      models: [],
       model: '',
       version: '',
       fileName: '',
       imageURL: '',
+      postprocess: '',
+      cuts: 0,
       downloadURL: null,
-      submitted: false
+      submitted: false,
+      showError: false,
+      errorText: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -64,7 +69,7 @@ class Predict extends React.Component {
   }
 
   retrieveModelsVersions() {
-    axios.get('/api/getModels')
+    axios.get('/api/models')
       .then((response) => {
         !this.isCancelled && this.setState({
           models: response.data.models
@@ -72,6 +77,10 @@ class Predict extends React.Component {
         console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
+        this.setState({
+          showError: true,
+          errorText: 'Could not fetch models from the cloud bucket.'
+        });
         console.log(`Error calling /api/getModels: ${error}`);
       });
   }
@@ -85,23 +94,80 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'imageURL': this.state.imageURL,
         'model_name': this.state.model,
-        'model_version': this.state.version
+        'model_version': this.state.version,
+        'postprocess_function': this.state.postprocess,
+        'cuts': this.state.cuts
       }
     })
       .then((response) => {
-        this.setState({
-          downloadURL: response.data.outputURL
-        });
+        let redisHash = response.data.hash;
+        this.statusCheck = setInterval(() => {
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'status'
+            }
+          })
+            .then((response) => {
+              if (response.data.value === 'failed') {
+                clearInterval(this.statusCheck);
+                this.setState({
+                  showError: true,
+                  errorText: `Job Failed: ${response.data.reason}`
+                });
+              } else if (response.data.value === 'done') {
+                clearInterval(this.statusCheck);
+                axios({
+                  method: 'post',
+                  url: '/api/redis',
+                  data: {
+                    'hash': redisHash,
+                    'key': 'output_url'
+                  }
+                }).then((response) => {
+                  this.setState({
+                    downloadURL: response.data.value
+                  });
+                })
+                  .catch(error => {
+                    this.setState({
+                      showError: true,
+                      errorText: 'Job finished, but could not find output URL.'
+                    });
+                    console.log(`Error occurred while submitting prediction job: ${error}`);
+                  });
+              } else if (response.data.value === 'failed') {
+                clearInterval(this.statusCheck);
+                this.setState({
+                  showError: true,
+                  errorText: `Got a failure code = "${response.data.value}".`
+                });
+              }
+            })
+            .catch(error => {
+              this.setState({
+                showError: true,
+                errorText: 'Trouble communicating with Redis.'
+              });
+              console.log(`Error occurred while getting redis status: ${error}`);
+            });
+        }, 3000);
       })
       .catch(error => {
-        console.log(`Error occurred while sending S3 Bucket URL to Express Server: ${error}`);
+        this.setState({
+          showError: true,
+          errorText: 'Could not get results from tensorflow-serving.'
+        });
+        console.log(`Error occurred while submitting prediction job: ${error}`);
       });
   }
 
   canBeSubmitted() {
     return (
       this.state.fileName.length > 0 &&
-      this.state.imageURL.length > 0 && 
+      this.state.imageURL.length > 0 &&
       this.state.model.length > 0 &&
       this.state.version.length > 0
     );
@@ -135,6 +201,7 @@ class Predict extends React.Component {
           style={{'paddingBottom': '1em'}}>
           Select a model and version | Upload your image | Download the results.
         </Typography>
+
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
 
@@ -160,19 +227,49 @@ class Predict extends React.Component {
               </Grid>
 
               <Grid item xs>
-                { this.state.model.length > 0 ?
-                  <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Version</FormLabel>
-                    <Select
-                      value={this.state.version}
-                      input={<Input name='version' id='version-placeholder' placeholder='' />}
-                      onChange={this.handleChange}>
-                      { this.state.models[this.state.model].map(v =>
-                        <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                  : null }
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Select A Version</FormLabel>
+                  <Select
+                    value={this.state.version}
+                    disabled={this.state.model === ''}
+                    input={<Input name='version' id='version-placeholder' placeholder='' />}
+                    onChange={this.handleChange}>
+                    { this.state.model && this.state.models[this.state.model].map(v =>
+                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                  </Select>
+                </FormControl>
               </Grid>
+
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Post-Processing</FormLabel>
+                  <Select
+                    value={this.state.postprocess}
+                    input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
+                    displayEmpty
+                    className={classes.selectEmpty}
+                    onChange={this.handleChange}>
+                    <MenuItem value=''><em>None</em></MenuItem>
+                    <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
+                    <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
+                    <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs>
+                <FormControl className={classes.formControl}>
+                  <FormLabel>Number of Slices</FormLabel>
+                  <TextField
+                    id='cuts-input'
+                    helperText='Most models use 0'
+                    name='cuts'
+                    onChange={this.handleChange}
+                    value={this.state.cuts}
+                  />
+                </FormControl>
+              </Grid>
+
             </Paper>
 
             <Grid item xs className='uploader'>
@@ -182,8 +279,19 @@ class Predict extends React.Component {
                   this.setState({ fileName: fileName, imageURL: url }) } />
             </Grid>
 
+            { this.state.showError ?
+              <Typography
+                variant='subheading'
+                align='center'
+                color='error'
+                paragraph
+                style={{'paddingTop': '1em'}}>
+                {this.state.errorText}
+              </Typography>
+              : null }
+
             { !this.state.submitted ?
-              <Grid item lg style={{'paddingTop': '2em'}}>
+              <Grid item lg style={{'paddingTop': '1em'}}>
                 <Button
                   variant='contained'
                   onClick={this.handleSubmit}
@@ -196,7 +304,7 @@ class Predict extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && this.state.downloadURL === null  ?
+            { this.state.submitted && !this.state.showError && this.state.downloadURL === null  ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>

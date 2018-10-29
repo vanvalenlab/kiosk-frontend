@@ -44,16 +44,21 @@ class Train extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      optimizer: '',
-      fieldSize: 61,
       fileName: '',
-      dataUrl: '',
+      imageURL: '',
+      optimizer: 'sgd',
+      fieldSize: 60,
       submitted: false,
       downloadURL: null,
+      skips: 0,
+      epochs: 10,
+      transform: '',
+      normalization: '',
+      showError: false,
+      errorText: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSliderChange = this.handleSliderChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
   }
@@ -62,7 +67,6 @@ class Train extends React.Component {
     this.isCancelled = true;
   }
 
-  //SEND UPLOADED IMAGE NAME TO REDIS FOR PREDICTION
   train() {
     axios({
       method: 'post',
@@ -70,9 +74,13 @@ class Train extends React.Component {
       timeout: 60 * 4 * 1000, // 4 minutes
       data: {
         optimizer: this.state.optimizer,
-        fieldSize: this.state.fieldSize,
-        imageURL: this.state.dataUrl,
-        imageName: this.state.fileName
+        fieldSize: this.state.fieldSize + 1,
+        imageURL: this.state.imageURL,
+        imageName: this.state.fileName,
+        skips: this.state.skips,
+        epochs: this.state.epochs,
+        transform: this.state.transform,
+        normalization: this.state.normalization
       }
     })
       .then((response) => {
@@ -82,6 +90,10 @@ class Train extends React.Component {
         });
       })
       .catch(error => {
+        this.setState({
+          showError: true,
+          errorText: `${error}.`
+        });
         console.log(`Error occurred during POST to /api/train: ${error}`);
       });
   }
@@ -104,16 +116,11 @@ class Train extends React.Component {
   canBeSubmitted() {
     return (
       this.state.fieldSize > 0 &&
+      this.state.epochs > 0 &&
       this.state.optimizer.length > 0 &&
       this.state.fileName.length > 0 &&
-      this.state.dataUrl.length > 0
+      this.state.imageURL.length > 0
     );
-  }
-
-  handleSliderChange(event, value) {
-    !this.isCancelled && this.setState({
-      field: value
-    });
   }
 
   render() {
@@ -148,24 +155,110 @@ class Train extends React.Component {
               </Grid>
 
               <Grid item xs>
-                <FormLabel>Receptive Field Size:</FormLabel>
-                <Typography id='slider-label'>{this.state.fieldSize}</Typography>
-                <Slider
-                  value={this.state.fieldSize}
-                  aria-labelledby='slider-label'
-                  min={21}
-                  max={121}
-                  step={5}
-                  onChange={this.handleSliderChange} />
+                <FormLabel>Transform</FormLabel>
+                <FormControl className={classes.formControl}>
+                  <Select
+                    value={this.state.transform}
+                    input={<Input name='transform' id='transform-placeholder' placeholder='' />}
+                    onChange={this.handleChange}
+                    displayEmpty
+                    className={classes.selectEmpty}>
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value='deepcell'>
+                      Deepcell
+                    </MenuItem>
+                    <MenuItem value='watershed'>
+                      Watershed
+                    </MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
+
+              <Grid item xs>
+                <FormLabel>Receptive Field Size:</FormLabel>
+                <Typography id='field-slider-label'>{this.state.fieldSize + 1}</Typography>
+                <Slider
+                  value={this.state.fieldSize + 1}
+                  aria-labelledby='field-slider-label'
+                  min={10}
+                  max={120}
+                  step={2}
+                  onChange={ (e, v) => this.setState({ fieldSize: v }) } />
+              </Grid>
+
+              <Grid item xs>
+                <FormLabel>Skip Connections:</FormLabel>
+                <Typography id='skip-slider-label'>{this.state.skips}</Typography>
+                <Slider
+                  value={this.state.skips}
+                  aria-labelledby='skip-slider-label'
+                  min={0}
+                  max={5}
+                  step={1}
+                  onChange={ (e, v) => this.setState({ skips: v }) } />
+              </Grid>
+
+              <Grid item xs>
+                <FormLabel>Epochs:</FormLabel>
+                <Typography id='epoch-slider-label'>{this.state.epochs}</Typography>
+                <Slider
+                  value={this.state.epochs}
+                  aria-labelledby='epoch-slider-label'
+                  min={1}
+                  max={100}
+                  step={1}
+                  onChange={ (e, v) => this.setState({ epochs: v }) } />
+              </Grid>
+
+              <Grid item xs>
+                <FormLabel>Normalization Method</FormLabel>
+                <FormControl className={classes.formControl}>
+                  <Select
+                    value={this.state.normalization}
+                    input={<Input name='normal' id='normal-placeholder' placeholder='' />}
+                    onChange={this.handleChange}
+                    displayEmpty
+                    className={classes.selectEmpty}>
+                    <MenuItem value=''>
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value='median'>
+                      Median
+                    </MenuItem>
+                    <MenuItem value='std'>
+                      Standard Deviation
+                    </MenuItem>
+                    <MenuItem value='max'>
+                      Maximum
+                    </MenuItem>
+                    <MenuItem value='whole_image'>
+                      Whole Image
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
             </Paper>
 
             <Grid item xs className='uploader'>
               <FileUpload
-                infoText='Upload Here to Begin Training.'
+                infoText='Upload Training Data Here.'
                 onDroppedFile={(fileName, url) =>
-                  this.setState({ fileName: fileName, dataUrl: url })} />
+                  this.setState({ fileName: fileName, imageURL: url })} />
             </Grid>
+
+            { this.state.showError ?
+              <Typography
+                variant='subheading'
+                align='center'
+                color='error'
+                paragraph
+                style={{'paddingTop': '1em'}}>
+                {this.state.errorText}
+              </Typography>
+              : null }
 
             { !this.state.submitted ?
               <Grid item lg style={{'paddingTop': '2em'}}>
