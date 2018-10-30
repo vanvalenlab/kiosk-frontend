@@ -182,10 +182,31 @@ class Predict extends React.Component {
     this.predict();
   }
 
+  preselectModelConfig(event) {
+    const model = event.target.value.toLowerCase();
+    let postProcess = '';
+    if (model.indexOf('deepcell') !== -1) {
+      postProcess = 'deepcell';
+    } else if (model.indexOf('watershed') !== -1) {
+      postProcess = 'watershed';
+    } else if (model.indexOf('mibi') !== -1) {
+      postProcess = 'mibi';
+    }
+    this.setState({
+      postprocess: postProcess,
+      version: this.state.models[event.target.value][0]
+    });
+  }
+
   handleChange(event) {
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
+    // if updating a model, default to the first version
+    // and check if the transform/postprocessing is in the name
+    if (event.target.name === 'model') {
+      this.preselectModelConfig(event);
+    }
   }
 
   render() {
