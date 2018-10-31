@@ -30,10 +30,7 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    minWidth: 120
   },
   progress: {
     margin: theme.spacing.unit * 2,
@@ -54,6 +51,7 @@ class Train extends React.Component {
       submitted: false,
       downloadURL: null,
       ndim: '2',
+      trainingType: 'conv',
       skips: 0,
       epochs: 10,
       transform: '',
@@ -82,6 +80,8 @@ class Train extends React.Component {
         imageURL: this.state.imageURL,
         imageName: this.state.fileName,
         skips: this.state.skips,
+        ndim: this.state.ndim,
+        trainingType: this.state.trainingType,
         epochs: this.state.epochs,
         transform: this.state.transform,
         normalization: this.state.normalization
@@ -136,6 +136,22 @@ class Train extends React.Component {
           <form autoComplete='off'>
 
             <Paper className='trainingSelection'>
+
+              <Grid item xs>
+                <FormControl component='fieldset' className={classes.formControl}>
+                  <FormLabel component='legend'>Training Method:</FormLabel>
+                  <RadioGroup
+                    aria-label='trainingType-label'
+                    name='trainingType'
+                    row={true}
+                    value={this.state.trainingType}
+                    onChange={this.handleChange}>
+                    <FormControlLabel value='conv' control={<Radio />} label='conv' />
+                    <FormControlLabel value='sample' control={<Radio />} label='sample' />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+
               <Grid item xs>
                 <FormLabel>Optimizer Type:</FormLabel>
                 <FormControl className={classes.formControl}>
@@ -143,8 +159,7 @@ class Train extends React.Component {
                     value={this.state.optimizer}
                     input={<Input name='optimizer' id='optimizer-placeholder' placeholder='' />}
                     onChange={this.handleChange}
-                    displayEmpty
-                    className={classes.selectEmpty}>
+                    displayEmpty>
                     <MenuItem value='sgd'>
                       SGD
                     </MenuItem>
@@ -162,8 +177,7 @@ class Train extends React.Component {
                     value={this.state.transform}
                     input={<Input name='transform' id='transform-placeholder' placeholder='' />}
                     onChange={this.handleChange}
-                    displayEmpty
-                    className={classes.selectEmpty}>
+                    displayEmpty>
                     <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
@@ -219,7 +233,7 @@ class Train extends React.Component {
                   <RadioGroup
                     aria-label='ndim-label'
                     name='ndim'
-                    row='true'
+                    row={true}
                     className={classes.group}
                     value={this.state.ndim}
                     onChange={this.handleChange}>
@@ -236,8 +250,7 @@ class Train extends React.Component {
                     value={this.state.normalization}
                     input={<Input name='normalization' id='normalization-placeholder' placeholder='' />}
                     onChange={this.handleChange}
-                    displayEmpty
-                    className={classes.selectEmpty}>
+                    displayEmpty>
                     <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>

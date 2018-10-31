@@ -22,6 +22,7 @@ async function train(req, res) {
       'epochs', req.body.epochs,
       'transform', req.body.transform,
       'normalization', req.body.normalization,
+      'training_type', req.body.trainingType,
       'status', 'new_training'
     ], (err, redisRes) => {
       if (err) throw err;
