@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Select from '@material-ui/core/Select';
 import Slider from '@material-ui/lab/Slider';
 import Typography from '@material-ui/core/Typography';
@@ -50,10 +53,11 @@ class Train extends React.Component {
       fieldSize: 60,
       submitted: false,
       downloadURL: null,
+      ndim: '2',
       skips: 0,
       epochs: 10,
       transform: '',
-      normalization: '',
+      normalization: 'std',
       showError: false,
       errorText: '',
     };
@@ -133,7 +137,7 @@ class Train extends React.Component {
 
             <Paper className='trainingSelection'>
               <Grid item xs>
-                <FormLabel>Optimizer Type</FormLabel>
+                <FormLabel>Optimizer Type:</FormLabel>
                 <FormControl className={classes.formControl}>
                   <Select
                     value={this.state.optimizer}
@@ -141,9 +145,6 @@ class Train extends React.Component {
                     onChange={this.handleChange}
                     displayEmpty
                     className={classes.selectEmpty}>
-                    <MenuItem value=''>
-                      <em>Optimizer</em>
-                    </MenuItem>
                     <MenuItem value='sgd'>
                       SGD
                     </MenuItem>
@@ -155,7 +156,7 @@ class Train extends React.Component {
               </Grid>
 
               <Grid item xs>
-                <FormLabel>Transform</FormLabel>
+                <FormLabel>Transform:</FormLabel>
                 <FormControl className={classes.formControl}>
                   <Select
                     value={this.state.transform}
@@ -213,11 +214,27 @@ class Train extends React.Component {
               </Grid>
 
               <Grid item xs>
-                <FormLabel>Normalization Method</FormLabel>
+                <FormControl component='fieldset' className={classes.formControl}>
+                  <FormLabel component='legend'>Data Dimensionality:</FormLabel>
+                  <RadioGroup
+                    aria-label='ndim-label'
+                    name='ndim'
+                    row='true'
+                    className={classes.group}
+                    value={this.state.ndim}
+                    onChange={this.handleChange}>
+                    <FormControlLabel value='2' control={<Radio />} label='2D' />
+                    <FormControlLabel value='3' control={<Radio />} label='3D' />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs>
+                <FormLabel>Normalization Method:</FormLabel>
                 <FormControl className={classes.formControl}>
                   <Select
                     value={this.state.normalization}
-                    input={<Input name='normal' id='normal-placeholder' placeholder='' />}
+                    input={<Input name='normalization' id='normalization-placeholder' placeholder='' />}
                     onChange={this.handleChange}
                     displayEmpty
                     className={classes.selectEmpty}>

@@ -15,6 +15,7 @@ async function train(req, res) {
       redisKey,
       'file_name', `${prefix}/${req.body.imageName}`,
       'url', req.body.imageURL,
+      'ndim', req.body.ndim,
       'optimizer', req.body.optimizer,
       'field', req.body.fieldSize,
       'skips', req.body.skips,
