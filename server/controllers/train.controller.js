@@ -4,7 +4,7 @@ import client from '../config/redis';
 import logger from '../config/winston';
 
 async function train(req, res) {
-  const redisKey = `${req.body.imageName}_${Date.now()}`;
+  const redisKey = `train_${req.body.imageName}_${Date.now()}`;
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
@@ -23,7 +23,7 @@ async function train(req, res) {
       'transform', req.body.transform,
       'normalization', req.body.normalization,
       'training_type', req.body.trainingType,
-      'status', 'new_training'
+      'status', 'new'
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
