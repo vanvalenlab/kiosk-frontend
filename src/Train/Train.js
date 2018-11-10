@@ -49,7 +49,7 @@ class Train extends React.Component {
       optimizer: 'sgd',
       fieldSize: 60,
       submitted: false,
-      downloadURL: null,
+      tensorboardUrl: null,
       ndim: '2',
       trainingType: 'conv',
       skips: 0,
@@ -88,17 +88,58 @@ class Train extends React.Component {
       }
     })
       .then((response) => {
-        console.log(response.data);
-        !this.isCancelled && this.setState({
-          trainResponse: response.data
-        });
+        let redisHash = response.data.hash;
+        this.statusCheck = setInterval(() => {
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'status'
+            }
+          })
+            .then((response) => {
+              if (response.data.value === 'failed') {
+                clearInterval(this.statusCheck);
+                this.setState({
+                  showError: true,
+                  errorText: `Job Failed: ${response.data.reason}`
+                });
+              } else if (response.data.value === 'training') {
+                clearInterval(this.statusCheck);
+                axios({
+                  method: 'post',
+                  url: '/api/redis',
+                  data: {
+                    'hash': redisHash,
+                    'key': 'model'
+                  }
+                }).then((response) => {
+                  this.setState({
+                    tenorboardUrl: `/tensorboard/${response.data.value}`
+                  });
+                })
+                  .catch(error => {
+                    this.setState({
+                      showError: true,
+                      errorText: `Model is training but could not get model name due to error: ${error}`
+                    });
+                  });
+              }
+            })
+            .catch(error => {
+              this.setState({
+                showError: true,
+                errorText: `Could not get status from redis due to error: ${error}.`
+              });
+            });
+        }, 3000);
       })
       .catch(error => {
         this.setState({
           showError: true,
-          errorText: `${error}.`
+          errorText: `Failed to put training job in the queue due to error: ${error}.`
         });
-        console.log(`Error occurred during POST to /api/train: ${error}`);
       });
   }
 
@@ -304,10 +345,36 @@ class Train extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && this.state.downloadURL === null  ?
+            { this.state.submitted && this.state.tensorboardUrl === null  ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>
+              : null }
+
+            { this.state.tensorboardUrl !== null ?
+              <div>
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href={this.state.tensorboardUrl}
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='secondary'>
+                    Go to TensorBoard
+                  </Button>
+                </Grid>
+
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href='/train'
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='primary'>
+                    Train another model
+                  </Button>
+                </Grid>
+              </div>
               : null }
 
           </form>
