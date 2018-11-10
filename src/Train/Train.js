@@ -345,7 +345,7 @@ class Train extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && this.state.tensorboardUrl === null  ?
+            { this.state.submitted && !this.state.showError && this.state.tesnorboardUrl === null ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>
