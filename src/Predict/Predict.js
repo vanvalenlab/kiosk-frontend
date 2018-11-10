@@ -74,14 +74,12 @@ class Predict extends React.Component {
         !this.isCancelled && this.setState({
           models: response.data.models
         });
-        console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
         this.setState({
           showError: true,
-          errorText: 'Could not fetch models from the cloud bucket.'
+          errorText: `Could not fetch models from the cloud bucket due to error: ${error}`
         });
-        console.log(`Error calling /api/getModels: ${error}`);
       });
   }
 
@@ -134,9 +132,8 @@ class Predict extends React.Component {
                   .catch(error => {
                     this.setState({
                       showError: true,
-                      errorText: 'Job finished, but could not find output URL.'
+                      errorText: `Job finished, but could not find output URL due to error: ${error}`
                     });
-                    console.log(`Error occurred while submitting prediction job: ${error}`);
                   });
               } else if (response.data.value === 'failed') {
                 clearInterval(this.statusCheck);
@@ -149,18 +146,16 @@ class Predict extends React.Component {
             .catch(error => {
               this.setState({
                 showError: true,
-                errorText: 'Trouble communicating with Redis.'
+                errorText: `Trouble communicating with Redis due to error: ${error}`
               });
-              console.log(`Error occurred while getting redis status: ${error}`);
             });
         }, 3000);
       })
       .catch(error => {
         this.setState({
           showError: true,
-          errorText: 'Could not get results from tensorflow-serving.'
+          errorText: `Could not get results from tensorflow-serving due to error: ${error}.`
         });
-        console.log(`Error occurred while submitting prediction job: ${error}`);
       });
   }
 
