@@ -69,6 +69,71 @@ class Train extends React.Component {
     this.isCancelled = true;
   }
 
+  showErrorMessage(errorText) {
+    this.setState({
+      showError: true,
+      errorText: errorText
+    });
+  }
+
+  expireRedisHash(redisHash) {
+    axios({
+      method: 'post',
+      url: '/api/redis/expire',
+      data: {
+        'hash': redisHash,
+        'expireIn': 3600
+      }
+    }).then((response) => {
+      if (parseInt(response.data.value) !== 1) {
+        this.showErrorMessage('Hash not expired');
+      }
+    }).catch((error) => {
+      let errMsg = `Failed to expire redis hash due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
+  checkJobStatus(redisHash, interval) {
+    this.statusCheck = setInterval(() => {
+      axios({
+        method: 'post',
+        url: '/api/redis',
+        data: {
+          'hash': redisHash,
+          'key': 'status'
+        }
+      }).then((response) => {
+        if (response.data.value === 'failed') {
+          clearInterval(this.statusCheck);
+          let errMsg = `Job Failed: ${response.data.reason}`;
+          this.showErrorMessage(errMsg);
+        } else if (response.data.value === 'training') {
+          clearInterval(this.statusCheck);
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'model'
+            }
+          }).then((response) => {
+            this.setState({
+              tenorboardUrl: `/tensorboard/${response.data.value}`
+            });
+            this.expireRedisHash(redisHash);
+          }).catch(error => {
+            let errMsg = `Model is training but could not get model name due to error: ${error}`;
+            this.showErrorMessage(errMsg);
+          });
+        }
+      }).catch(error => {
+        let errMsg = `Could not get status from redis due to error: ${error}.`;
+        this.showErrorMessage(errMsg);
+      });
+    }, interval);
+  }
+
   train() {
     axios({
       method: 'post',
@@ -86,61 +151,13 @@ class Train extends React.Component {
         transform: this.state.transform,
         normalization: this.state.normalization
       }
-    })
-      .then((response) => {
-        let redisHash = response.data.hash;
-        this.statusCheck = setInterval(() => {
-          axios({
-            method: 'post',
-            url: '/api/redis',
-            data: {
-              'hash': redisHash,
-              'key': 'status'
-            }
-          })
-            .then((response) => {
-              if (response.data.value === 'failed') {
-                clearInterval(this.statusCheck);
-                this.setState({
-                  showError: true,
-                  errorText: `Job Failed: ${response.data.reason}`
-                });
-              } else if (response.data.value === 'training') {
-                clearInterval(this.statusCheck);
-                axios({
-                  method: 'post',
-                  url: '/api/redis',
-                  data: {
-                    'hash': redisHash,
-                    'key': 'model'
-                  }
-                }).then((response) => {
-                  this.setState({
-                    tenorboardUrl: `/tensorboard/${response.data.value}`
-                  });
-                })
-                  .catch(error => {
-                    this.setState({
-                      showError: true,
-                      errorText: `Model is training but could not get model name due to error: ${error}`
-                    });
-                  });
-              }
-            })
-            .catch(error => {
-              this.setState({
-                showError: true,
-                errorText: `Could not get status from redis due to error: ${error}.`
-              });
-            });
-        }, 3000);
-      })
-      .catch(error => {
-        this.setState({
-          showError: true,
-          errorText: `Failed to put training job in the queue due to error: ${error}.`
-        });
-      });
+    }).then((response) => {
+      // job was submitted, update status until failed or training
+      this.checkJobStatus(response.data.hash, 3000);
+    }).catch(error => {
+      let errMsg = `Failed to put training job in the queue due to error: ${error}`
+      this.showErrorMessage(errMsg);
+    });
   }
 
   handleSubmit(event) {
