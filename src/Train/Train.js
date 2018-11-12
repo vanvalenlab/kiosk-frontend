@@ -155,7 +155,7 @@ class Train extends React.Component {
       // job was submitted, update status until failed or training
       this.checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
-      let errMsg = `Failed to put training job in the queue due to error: ${error}`
+      let errMsg = `Failed to put training job in the queue due to error: ${error}`;
       this.showErrorMessage(errMsg);
     });
   }

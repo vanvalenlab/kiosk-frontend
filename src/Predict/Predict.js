@@ -162,7 +162,7 @@ class Predict extends React.Component {
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
-      let errMsg = `Could not get results from tensorflow-serving due to error: ${error}.`
+      let errMsg = `Could not get results from tensorflow-serving due to error: ${error}.`;
       this.showErrorMessage(errMsg);
     });
   }
