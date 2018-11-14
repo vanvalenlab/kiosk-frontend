@@ -136,6 +136,7 @@ class Predict extends React.Component {
         if (response.data.value === 'failed') {
           clearInterval(this.statusCheck);
           this.getErrorReason(redisHash);
+          this.expireRedisHash(redisHash, 3600);
         } else if (response.data.value === 'done') {
           clearInterval(this.statusCheck);
           axios({

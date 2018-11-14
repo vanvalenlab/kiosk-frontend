@@ -124,6 +124,7 @@ class Train extends React.Component {
         if (response.data.value === 'failed') {
           clearInterval(this.statusCheck);
           this.getErrorReason(redisHash);
+          this.expireRedisHash(redisHash, 10);
         } else if (response.data.value === 'training') {
           clearInterval(this.statusCheck);
           axios({
@@ -137,7 +138,7 @@ class Train extends React.Component {
             this.setState({
               tenorboardUrl: `/tensorboard/${response.data.value}`
             });
-            this.expireRedisHash(redisHash, 3600);
+            // this.expireRedisHash(redisHash, 3600);
           }).catch(error => {
             let errMsg = `Model is training but could not get model name due to error: ${error}`;
             this.showErrorMessage(errMsg);
