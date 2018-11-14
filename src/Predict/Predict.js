@@ -105,13 +105,13 @@ class Predict extends React.Component {
     });
   }
 
-  expireRedisHash(redisHash) {
+  expireRedisHash(redisHash, expireIn) {
     axios({
       method: 'post',
       url: '/api/redis/expire',
       data: {
         'hash': redisHash,
-        'expireIn': 3600
+        'expireIn': expireIn
       }
     }).then((response) => {
       if (parseInt(response.data.value) !== 1) {
@@ -149,7 +149,7 @@ class Predict extends React.Component {
             this.setState({
               downloadURL: response.data.value
             });
-            this.expireRedisHash(redisHash);
+            this.expireRedisHash(redisHash, 3600);
           }).catch(error => {
             let errMsg = `Job finished. Error fetching output URL: ${error}`;
             this.showErrorMessage(errMsg);

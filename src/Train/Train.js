@@ -93,13 +93,13 @@ class Train extends React.Component {
     });
   }
 
-  expireRedisHash(redisHash) {
+  expireRedisHash(redisHash, expireIn) {
     axios({
       method: 'post',
       url: '/api/redis/expire',
       data: {
         'hash': redisHash,
-        'expireIn': 3600
+        'expireIn': expireIn
       }
     }).then((response) => {
       if (parseInt(response.data.value) !== 1) {
@@ -137,7 +137,7 @@ class Train extends React.Component {
             this.setState({
               tenorboardUrl: `/tensorboard/${response.data.value}`
             });
-            this.expireRedisHash(redisHash);
+            this.expireRedisHash(redisHash, 3600);
           }).catch(error => {
             let errMsg = `Model is training but could not get model name due to error: ${error}`;
             this.showErrorMessage(errMsg);
