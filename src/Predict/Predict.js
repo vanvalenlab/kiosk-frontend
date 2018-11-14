@@ -97,7 +97,7 @@ class Predict extends React.Component {
         'key': 'reason'
       }
     }).then((response) => {
-      let errMsg = `Job Failed: ${response.data.reason}`;
+      let errMsg = `Job Failed: ${response.data.value}`;
       this.showErrorMessage(errMsg);
     }).catch(error => {
       let errMsg = `Failed to get failure reason due to error: ${error}`;
