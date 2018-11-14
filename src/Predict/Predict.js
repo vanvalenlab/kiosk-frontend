@@ -88,6 +88,23 @@ class Predict extends React.Component {
     });
   }
 
+  getErrorReason(redisHash) {
+    axios({
+      method: 'post',
+      url: '/api/redis',
+      data: {
+        'hash': redisHash,
+        'key': 'reason'
+      }
+    }).then((response) => {
+      let errMsg = `Job Failed: ${response.data.reason}`;
+      this.showErrorMessage(errMsg);
+    }).catch(error => {
+      let errMsg = `Failed to get failure reason due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
   expireRedisHash(redisHash) {
     axios({
       method: 'post',
@@ -118,8 +135,7 @@ class Predict extends React.Component {
       }).then((response) => {
         if (response.data.value === 'failed') {
           clearInterval(this.statusCheck);
-          let errMsg = `Job Failed: ${response.data.reason}`;
-          this.showErrorMessage(errMsg);
+          this.getErrorReason(redisHash);
         } else if (response.data.value === 'done') {
           clearInterval(this.statusCheck);
           axios({
