@@ -54,7 +54,7 @@ class Train extends React.Component {
       trainingType: 'conv',
       skips: 0,
       epochs: 10,
-      transform: '',
+      transform: 'watershed',
       normalization: 'std',
       showError: false,
       errorText: '',
