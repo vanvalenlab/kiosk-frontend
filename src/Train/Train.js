@@ -155,7 +155,6 @@ class Train extends React.Component {
     axios({
       method: 'post',
       url: '/api/train',
-      timeout: 60 * 4 * 1000, // 4 minutes
       data: {
         optimizer: this.state.optimizer,
         fieldSize: this.state.fieldSize + 1,
