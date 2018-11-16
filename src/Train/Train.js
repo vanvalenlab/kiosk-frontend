@@ -136,7 +136,7 @@ class Train extends React.Component {
             }
           }).then((response) => {
             this.setState({
-              tensorboardUrl: `/tensorboard/${response.data.value}`
+              tensorboardUrl: `/tensorboard/#scalars&regexInput=${response.data.value}`
             });
             // this.expireRedisHash(redisHash, 3600);
           }).catch(error => {
