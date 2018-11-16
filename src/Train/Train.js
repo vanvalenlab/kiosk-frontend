@@ -138,7 +138,8 @@ class Train extends React.Component {
             this.setState({
               tensorboardUrl: `/tensorboard/#scalars&regexInput=${response.data.value}`
             });
-            // this.expireRedisHash(redisHash, 3600);
+            // don't expire the hash as training is
+            // in progress and could be long-running
           }).catch(error => {
             let errMsg = `Model is training but could not get model name due to error: ${error}`;
             this.showErrorMessage(errMsg);
