@@ -74,15 +74,93 @@ class Predict extends React.Component {
         !this.isCancelled && this.setState({
           models: response.data.models
         });
-        console.log(`Got Models: ${JSON.stringify(response.data.models, null, 4)}`);
       })
       .catch((error) => {
-        this.setState({
-          showError: true,
-          errorText: 'Could not fetch models from the cloud bucket.'
-        });
-        console.log(`Error calling /api/getModels: ${error}`);
+        let errMsg = `Could not fetch models from the cloud bucket due to error: ${error}`;
+        this.showErrorMessage(errMsg);
       });
+  }
+
+  showErrorMessage(errorText) {
+    this.setState({
+      showError: true,
+      errorText: errorText
+    });
+  }
+
+  getErrorReason(redisHash) {
+    axios({
+      method: 'post',
+      url: '/api/redis',
+      data: {
+        'hash': redisHash,
+        'key': 'reason'
+      }
+    }).then((response) => {
+      let errMsg = `Job Failed: ${response.data.value}`;
+      this.showErrorMessage(errMsg);
+    }).catch(error => {
+      let errMsg = `Failed to get failure reason due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
+  expireRedisHash(redisHash, expireIn) {
+    axios({
+      method: 'post',
+      url: '/api/redis/expire',
+      data: {
+        'hash': redisHash,
+        'expireIn': expireIn
+      }
+    }).then((response) => {
+      if (parseInt(response.data.value) !== 1) {
+        this.showErrorMessage('Hash not expired');
+      }
+    }).catch(error => {
+      let errMsg = `Failed to expire redis hash due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
+  checkJobStatus(redisHash, interval) {
+    this.statusCheck = setInterval(() => {
+      axios({
+        method: 'post',
+        url: '/api/redis',
+        data: {
+          'hash': redisHash,
+          'key': 'status'
+        }
+      }).then((response) => {
+        if (response.data.value === 'failed') {
+          clearInterval(this.statusCheck);
+          this.getErrorReason(redisHash);
+          this.expireRedisHash(redisHash, 3600);
+        } else if (response.data.value === 'done') {
+          clearInterval(this.statusCheck);
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'output_url'
+            }
+          }).then((response) => {
+            this.setState({
+              downloadURL: response.data.value
+            });
+            this.expireRedisHash(redisHash, 3600);
+          }).catch(error => {
+            let errMsg = `Job finished. Error fetching output URL: ${error}`;
+            this.showErrorMessage(errMsg);
+          });
+        }
+      }).catch(error => {
+        let errMsg = `Trouble communicating with Redis due to error: ${error}`;
+        this.showErrorMessage(errMsg);
+      });
+    }, interval);
   }
 
   predict() {
@@ -98,70 +176,12 @@ class Predict extends React.Component {
         'postprocess_function': this.state.postprocess,
         'cuts': this.state.cuts
       }
-    })
-      .then((response) => {
-        let redisHash = response.data.hash;
-        this.statusCheck = setInterval(() => {
-          axios({
-            method: 'post',
-            url: '/api/redis',
-            data: {
-              'hash': redisHash,
-              'key': 'status'
-            }
-          })
-            .then((response) => {
-              if (response.data.value === 'failed') {
-                clearInterval(this.statusCheck);
-                this.setState({
-                  showError: true,
-                  errorText: `Job Failed: ${response.data.reason}`
-                });
-              } else if (response.data.value === 'done') {
-                clearInterval(this.statusCheck);
-                axios({
-                  method: 'post',
-                  url: '/api/redis',
-                  data: {
-                    'hash': redisHash,
-                    'key': 'output_url'
-                  }
-                }).then((response) => {
-                  this.setState({
-                    downloadURL: response.data.value
-                  });
-                })
-                  .catch(error => {
-                    this.setState({
-                      showError: true,
-                      errorText: 'Job finished, but could not find output URL.'
-                    });
-                    console.log(`Error occurred while submitting prediction job: ${error}`);
-                  });
-              } else if (response.data.value === 'failed') {
-                clearInterval(this.statusCheck);
-                this.setState({
-                  showError: true,
-                  errorText: `Got a failure code = "${response.data.value}".`
-                });
-              }
-            })
-            .catch(error => {
-              this.setState({
-                showError: true,
-                errorText: 'Trouble communicating with Redis.'
-              });
-              console.log(`Error occurred while getting redis status: ${error}`);
-            });
-        }, 3000);
-      })
-      .catch(error => {
-        this.setState({
-          showError: true,
-          errorText: 'Could not get results from tensorflow-serving.'
-        });
-        console.log(`Error occurred while submitting prediction job: ${error}`);
-      });
+    }).then((response) => {
+      this.checkJobStatus(response.data.hash, 3000);
+    }).catch(error => {
+      let errMsg = `Could not get results from tensorflow-serving due to error: ${error}.`;
+      this.showErrorMessage(errMsg);
+    });
   }
 
   canBeSubmitted() {
@@ -325,7 +345,7 @@ class Predict extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && !this.state.showError && this.state.downloadURL === null  ?
+            { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>

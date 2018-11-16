@@ -49,12 +49,12 @@ class Train extends React.Component {
       optimizer: 'sgd',
       fieldSize: 60,
       submitted: false,
-      downloadURL: null,
+      tensorboardUrl: null,
       ndim: '2',
       trainingType: 'conv',
       skips: 0,
       epochs: 10,
-      transform: '',
+      transform: 'watershed',
       normalization: 'std',
       showError: false,
       errorText: '',
@@ -69,11 +69,93 @@ class Train extends React.Component {
     this.isCancelled = true;
   }
 
+  showErrorMessage(errorText) {
+    this.setState({
+      showError: true,
+      errorText: errorText
+    });
+  }
+
+  getErrorReason(redisHash) {
+    axios({
+      method: 'post',
+      url: '/api/redis',
+      data: {
+        'hash': redisHash,
+        'key': 'reason'
+      }
+    }).then((response) => {
+      let errMsg = `Job Failed: ${response.data.value}`;
+      this.showErrorMessage(errMsg);
+    }).catch(error => {
+      let errMsg = `Failed to get failure reason due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
+  expireRedisHash(redisHash, expireIn) {
+    axios({
+      method: 'post',
+      url: '/api/redis/expire',
+      data: {
+        'hash': redisHash,
+        'expireIn': expireIn
+      }
+    }).then((response) => {
+      if (parseInt(response.data.value) !== 1) {
+        this.showErrorMessage('Hash not expired');
+      }
+    }).catch((error) => {
+      let errMsg = `Failed to expire redis hash due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
+  checkJobStatus(redisHash, interval) {
+    this.statusCheck = setInterval(() => {
+      axios({
+        method: 'post',
+        url: '/api/redis',
+        data: {
+          'hash': redisHash,
+          'key': 'status'
+        }
+      }).then((response) => {
+        if (response.data.value === 'failed') {
+          clearInterval(this.statusCheck);
+          this.getErrorReason(redisHash);
+          this.expireRedisHash(redisHash, 10);
+        } else if (response.data.value === 'training') {
+          clearInterval(this.statusCheck);
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'model'
+            }
+          }).then((response) => {
+            this.setState({
+              tensorboardUrl: `/tensorboard/#scalars&regexInput=${response.data.value}`
+            });
+            // don't expire the hash as training is
+            // in progress and could be long-running
+          }).catch(error => {
+            let errMsg = `Model is training but could not get model name due to error: ${error}`;
+            this.showErrorMessage(errMsg);
+          });
+        }
+      }).catch(error => {
+        let errMsg = `Could not get status from redis due to error: ${error}.`;
+        this.showErrorMessage(errMsg);
+      });
+    }, interval);
+  }
+
   train() {
     axios({
       method: 'post',
       url: '/api/train',
-      timeout: 60 * 4 * 1000, // 4 minutes
       data: {
         optimizer: this.state.optimizer,
         fieldSize: this.state.fieldSize + 1,
@@ -86,20 +168,13 @@ class Train extends React.Component {
         transform: this.state.transform,
         normalization: this.state.normalization
       }
-    })
-      .then((response) => {
-        console.log(response.data);
-        !this.isCancelled && this.setState({
-          trainResponse: response.data
-        });
-      })
-      .catch(error => {
-        this.setState({
-          showError: true,
-          errorText: `${error}.`
-        });
-        console.log(`Error occurred during POST to /api/train: ${error}`);
-      });
+    }).then((response) => {
+      // job was submitted, update status until failed or training
+      this.checkJobStatus(response.data.hash, 3000);
+    }).catch(error => {
+      let errMsg = `Failed to put training job in the queue due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
   }
 
   handleSubmit(event) {
@@ -304,10 +379,36 @@ class Train extends React.Component {
               </Grid>
               : null }
 
-            { this.state.submitted && this.state.downloadURL === null  ?
+            { this.state.submitted && !this.state.showError && this.state.tensorboardUrl === null ?
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>
+              : null }
+
+            { this.state.tensorboardUrl !== null ?
+              <div>
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href={this.state.tensorboardUrl}
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='secondary'>
+                    Go to TensorBoard
+                  </Button>
+                </Grid>
+
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <Button
+                    href='/train'
+                    variant='contained'
+                    size='large'
+                    fullWidth
+                    color='primary'>
+                    Train another model
+                  </Button>
+                </Grid>
+              </div>
               : null }
 
           </form>

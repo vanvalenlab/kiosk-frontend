@@ -25,4 +25,7 @@ router.route('/models')
 router.route('/redis')
   .post(controllers.redisController.getKey);
 
+router.route('/redis/expire')
+  .post(controllers.redisController.expireHash);
+
 export default router;
