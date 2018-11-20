@@ -391,6 +391,7 @@ class Train extends React.Component {
                   <Button
                     href={this.state.tensorboardUrl}
                     variant='contained'
+                    target='_blank'
                     size='large'
                     fullWidth
                     color='secondary'>
