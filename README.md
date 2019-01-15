@@ -1,4 +1,7 @@
 # kiosk-frontend
+
+[![Build Status](https://travis-ci.com/vanvalenlab/kiosk-frontend.svg?branch=master)](https://travis-ci.com/vanvalenlab/kiosk-frontend)
+
 DeepCell graphical user interface built using React, Babel, Webpack. Run with `npm start` after git-cloning and npm-installing to run the app in development mode. Look into package.json for additional command-line accessible scripts. See section labeled "Front End Development/Production Commands Diagram"
 
 # Front End React Hierarchy Diagram
