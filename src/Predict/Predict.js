@@ -260,7 +260,7 @@ class Predict extends React.Component {
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      { Object.keys(this.state.models).map(m =>
+                      { Object.keys(this.state.models).sort().map(m =>
                         <MenuItem value={m} key={m}>{m}</MenuItem>) }
                     </Select>
                   </FormControl>
