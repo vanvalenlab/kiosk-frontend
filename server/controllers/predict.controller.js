@@ -18,6 +18,7 @@ async function predict(req, res) {
       'file_name', `${prefix}/${req.body.imageName}`,
       'postprocess_function', req.body.postprocess_function,
       'cuts', req.body.cuts,
+      'timestamp_upload', Date.now(),
       'status', 'new'
     ], (err, redisRes) => {
       if (err) throw err;
