@@ -252,6 +252,7 @@ class Predict extends React.Component {
                   <FormControl className={classes.formControl}>
                     <FormLabel>Select A Model</FormLabel>
                     <Select
+                      id='modelSelection'
                       value={this.state.model}
                       input={<Input name='model' id='model-placeholder' placeholder='' />}
                       onChange={this.handleChange}
