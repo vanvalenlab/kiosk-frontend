@@ -332,7 +332,7 @@ class Predict extends React.Component {
               : null }
 
             { !this.state.submitted ?
-              <Grid item lg style={{'paddingTop': '1em'}}>
+              <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
                 <Button
                   id='submitButton'
                   variant='contained'
