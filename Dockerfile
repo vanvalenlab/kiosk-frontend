@@ -1,4 +1,4 @@
-FROM node:carbon-alpine-yarn
+FROM node:carbon-alpine
 
 WORKDIR /usr/src/app
 
