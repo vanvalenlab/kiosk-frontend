@@ -12,11 +12,11 @@
     "clean": "rm -rf ./dist",
     "build:client": "webpack --mode production --config webpack.prod.js",
     "build:server": "babel -d ./dist/server ./server -s",
-    "build": "npm run clean && npm run build:server && npm run build:client",
+    "build": "yarn clean && yarn build:server && yarn build:client",
     "dev:server": "nodemon --exec babel-node ./server/index.js",
     "dev:client": "webpack-dev-server --mode development --open --config webpack.dev.js",
-    "start": "concurrently --kill-others-on-fail \"npm run dev:server\" \"npm run dev:client\"",
-    "start:prod": "npm run build && DEBUG='express:*' NODE_ENV='production' node ./dist/server/index.js"
+    "start": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
+    "start:prod": "yarn build && DEBUG='express:*' NODE_ENV='production' node ./dist/server/index.js"
   },
   "author": "The Van Valen Lab",
   "license": "SEE LICENSE IN LICENSE",

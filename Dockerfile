@@ -2,9 +2,9 @@ FROM node:carbon-alpine
 
 WORKDIR /usr/src/app
 
-COPY ./package.json ./package-lock.json ./
-RUN npm install
+COPY ./package.json ./yarn.lock ./
+RUN yarn
 
 COPY . .
 
-CMD npm run start:prod
+CMD yarn start:prod
