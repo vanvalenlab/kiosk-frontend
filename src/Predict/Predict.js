@@ -170,6 +170,7 @@ class Predict extends React.Component {
       timeout: 60 * 4 * 1000, // 4 minutes
       data: {
         'imageName': this.state.fileName,
+        'uploadedName': this.state.uploadedFileName,
         'imageURL': this.state.imageURL,
         'model_name': this.state.model,
         'model_version': this.state.version,
@@ -316,8 +317,11 @@ class Predict extends React.Component {
             <Grid item xs className='uploader'>
               <FileUpload
                 infoText='Upload Here to Begin Image Prediction.'
-                onDroppedFile={(fileName, url) =>
-                  this.setState({ fileName: fileName, imageURL: url }) } />
+                onDroppedFile={(uploadedName, fileName, url) =>
+                  this.setState({
+                    uploadedFileName: uploadedName,
+                    fileName: fileName,
+                    imageURL: url }) } />
             </Grid>
 
             { this.state.showError ?
