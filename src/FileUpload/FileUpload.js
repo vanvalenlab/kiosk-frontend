@@ -26,7 +26,7 @@ class FileUpload extends Component {
       })
         .then((response) => {
           this.setState({ uploadedFileLocation: response.data.imageURL});
-          onDroppedFile(f.name, response.data.imageURL);
+          onDroppedFile(response.data.uploadedName, f.name, response.data.imageURL);
         })
         .catch((error) => console.log(error));
     });

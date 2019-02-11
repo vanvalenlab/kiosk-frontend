@@ -1,5 +1,7 @@
 import httpStatus from 'http-status';
 import { format } from 'util';
+import crypto from 'crypto';
+import path from 'path';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
@@ -22,7 +24,11 @@ function gcpUpload(req, res, next) {
     prefix = prefix.slice(1);
   }
 
-  const filename = `${prefix}/${req.file.originalname}`;
+  const hashed = crypto.createHash('md5')
+    .update(`${req.file.originalname}_${Date.now()}`)
+    .digest('hex');
+
+  const filename = `${prefix}/${hashed}${path.extname(req.file.originalname)}`;
 
   // Create a new blob in the bucket and upload the file data.
   const blob = bucket.file(filename);
@@ -39,7 +45,10 @@ function gcpUpload(req, res, next) {
     const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
 
     blob.makePublic().then(() => {
-      res.status(httpStatus.OK).send({ imageURL: publicUrl });
+      res.status(httpStatus.OK).send({
+        imageURL: publicUrl,
+        uploadedName: filename
+      });
     });
   });
 
@@ -48,7 +57,11 @@ function gcpUpload(req, res, next) {
 
 function awsUpload(req, res) {
   try {
-    res.status(httpStatus.OK).send({ imageURL: `${req.file.location}` });
+    // TODO: do we need to hash AWS filenames?
+    res.status(httpStatus.OK).send({
+      imageURL: `${req.file.location}`,
+      uploadedName: req.file.location
+    });
   } catch (error) {
     logger.error(`Error uploading file: ${error}`);
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
