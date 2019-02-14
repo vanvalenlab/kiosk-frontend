@@ -74,6 +74,10 @@ const cards = [
     file: 'tracked/HeLa_S3.trks',
     name: 'Tracked Training Data - HeLa S3 Nuclei',
     description: 'Tracked training data for the HeLa S3 nuclei'
+  }, {
+    file: 'tracked/3T3_NIH.trks',
+    name: 'Tracked Training Data - NIH 3T3 Nuclei',
+    description: 'Tracked training data for the NIH 3T3 nuclei'
   }
 ];
 
