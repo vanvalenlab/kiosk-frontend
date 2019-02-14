@@ -99,7 +99,7 @@ async function getGcpModels(req, res) {
     await getGcpKeys(bucket, config.model.prefix, models);
     await Promise.all(models.map(m => getGcpKeys(bucket, m, allModels)));  
     let cleanModels = getModelObject(allModels);
-    logger.info(`Found Models: ${JSON.stringify(cleanModels, null, 4)}`);
+    logger.info(`Found GCP Models: ${JSON.stringify(cleanModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: cleanModels });
   } catch (err) {
     logger.error(err);
