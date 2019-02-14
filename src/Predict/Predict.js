@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
+import Visualization from '../Visualization/Visualization';
 import './Predict.css';
 
 const styles = theme => ({
@@ -35,7 +36,7 @@ const styles = theme => ({
   },
   progress: {
     margin: theme.spacing.unit * 2,
-  },
+  }
 });
 
 class Predict extends React.Component {
@@ -218,12 +219,17 @@ class Predict extends React.Component {
     });
   }
 
+  /*when this handleChange function is called, it will generate an event JSON.
+  That event JSON is shaped like this: 
+  {
+    "value":"some value",
+    "name":"some name"
+  }
+  */
   handleChange(event) {
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
-    // if updating a model, default to the first version
-    // and check if the transform/postprocessing is in the name
     if (event.target.name === 'model') {
       this.preselectModelConfig(event);
     }
@@ -234,93 +240,116 @@ class Predict extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography
-          variant='title'
-          align='center'
-          color='textSecondary'
-          paragraph
-          style={{'paddingBottom': '1em'}}>
-          Select a model and version | Upload your image | Download the results.
-        </Typography>
+        {/* GRID A: Contains Typography, Form, and "Visualization" Sections */}
+        <Grid container alignItems="flex-start" spacing={24} justify='center' direction="row">
+          
+          {/* GRID A 1 item */}
+          <Grid item xs={12}>
+            <Typography
+              variant='title'
+              align='center'
+              color='textSecondary'
+              paragraph
+              style={{'paddingBottom': '1em'}}>
+              Select a model and version | Upload your image | Download the results.
+            </Typography>        
+          </Grid>
 
-        <Grid container spacing={40} justify='space-evenly'>
-          <form autoComplete='off'>
-
-            <Paper className='selection'>
-              <Grid item xs>
-                { this.state.models !== null ?
-                  <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Model</FormLabel>
-                    <Select
-                      value={this.state.model}
-                      input={<Input name='model' id='model-placeholder' placeholder='' />}
-                      onChange={this.handleChange}
-                      displayEmpty
-                      className={classes.selectEmpty}>
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      { Object.keys(this.state.models).sort().map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                  : null }
+          {/* GRID A 2 item */}
+          <Grid item>
+            <form autoComplete='off'>
+              {/* GRID B Contains Only the Selection Form and the FileUpload Component, aligning them together. */}
+              <Grid container direction='row' justify='center' alignItems='flex-start'>
+                {/* Grid B 1 Item */}
+                <Grid item>
+                  <Paper>
+                    {/* GRID C Contains the Selection Form Items for Model, Version, Post Processing, Slices.*/}
+                    <Grid container direction="column" justify="flex-start" alignItems="flex-start">
+                      {/* GRID C 1 item */}
+                      <Grid item xs>
+                        { this.state.models !== null ?
+                          <FormControl className={classes.formControl}>
+                            <FormLabel>Select A Model</FormLabel>
+                            <Select
+                              value={this.state.model}
+                              input={<Input name='model' id='model-placeholder' placeholder='' />}
+                              onChange={this.handleChange}
+                              displayEmpty
+                              className={classes.selectEmpty}>
+                              <MenuItem value=''>
+                                <em>None</em>
+                              </MenuItem>
+                              { Object.keys(this.state.models).sort().map(m =>
+                                <MenuItem value={m} key={m}>{m}</MenuItem>) }
+                            </Select>
+                          </FormControl>
+                          : null }
+                        {/* GRID C 1 item  close*/}
+                      </Grid>
+                      {/* GRID C 2 item */}
+                      <Grid item xs>
+                        <FormControl className={classes.formControl}>
+                          <FormLabel>Select A Version</FormLabel>
+                          <Select
+                            value={this.state.version}
+                            disabled={this.state.model === ''}
+                            input={<Input name='version' id='version-placeholder' placeholder='' />}
+                            onChange={this.handleChange}>
+                            { this.state.model && this.state.models[this.state.model].map(v =>
+                              <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                          </Select>
+                        </FormControl>
+                        {/* GRID C 2 item  close*/}
+                      </Grid>
+                      {/* GRID C 3 item */}
+                      <Grid item xs>
+                        <FormControl className={classes.formControl}>
+                          <FormLabel>Post-Processing</FormLabel>
+                          <Select
+                            value={this.state.postprocess}
+                            input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
+                            displayEmpty
+                            className={classes.selectEmpty}
+                            onChange={this.handleChange}>
+                            <MenuItem value=''><em>None</em></MenuItem>
+                            <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
+                            <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
+                            <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {/* GRID C 3 item close */}
+                      </Grid>
+                      {/* GRID C 4 item */}
+                      <Grid item xs>
+                        <FormControl className={classes.formControl}>
+                          <FormLabel>Number of Slices</FormLabel>
+                          <TextField
+                            id='cuts-input'
+                            helperText='Most models use 0'
+                            name='cuts'
+                            onChange={this.handleChange}
+                            value={this.state.cuts}
+                          />
+                        </FormControl>
+                        {/* GRID C 4 item close */}
+                      </Grid>
+                      {/* Grid C Container Close */}
+                    </Grid>
+                  </Paper>
+                  {/* Grid B 1 Item Close*/}
+                </Grid>
+                {/* GRID B 2 item */}
+                <Grid item>
+                  <FileUpload
+                    infoText='Upload Here to Begin Image Prediction.'
+                    onDroppedFile={(fileName, url) =>
+                      this.setState({ fileName: fileName, imageURL: url }) } />
+                  {/* GRID B 2 item close */}
+                </Grid>
+                {/* GRID B Container Close*/}
               </Grid>
 
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Version</FormLabel>
-                  <Select
-                    value={this.state.version}
-                    disabled={this.state.model === ''}
-                    input={<Input name='version' id='version-placeholder' placeholder='' />}
-                    onChange={this.handleChange}>
-                    { this.state.model && this.state.models[this.state.model].map(v =>
-                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Post-Processing</FormLabel>
-                  <Select
-                    value={this.state.postprocess}
-                    input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
-                    displayEmpty
-                    className={classes.selectEmpty}
-                    onChange={this.handleChange}>
-                    <MenuItem value=''><em>None</em></MenuItem>
-                    <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
-                    <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
-                    <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Number of Slices</FormLabel>
-                  <TextField
-                    id='cuts-input'
-                    helperText='Most models use 0'
-                    name='cuts'
-                    onChange={this.handleChange}
-                    value={this.state.cuts}
-                  />
-                </FormControl>
-              </Grid>
-
-            </Paper>
-
-            <Grid item xs className='uploader'>
-              <FileUpload
-                infoText='Upload Here to Begin Image Prediction.'
-                onDroppedFile={(fileName, url) =>
-                  this.setState({ fileName: fileName, imageURL: url }) } />
-            </Grid>
-
-            { this.state.showError ?
+              {/* { this.state.showError ? */}
               <Typography
                 variant='subheading'
                 align='center'
@@ -329,9 +358,9 @@ class Predict extends React.Component {
                 style={{'paddingTop': '1em'}}>
                 {this.state.errorText}
               </Typography>
-              : null }
+              {/* : null } */}
 
-            { !this.state.submitted ?
+              {/* { !this.state.submitted ? */}
               <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
                 <Button
                   id='submitButton'
@@ -344,15 +373,15 @@ class Predict extends React.Component {
                   Submit
                 </Button>
               </Grid>
-              : null }
+              {/* : null } */}
 
-            { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
+              {/* { this.state.submitted && !this.state.showError && this.state.downloadURL === null ? */}
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
               </Grid>
-              : null }
+              {/* : null } */}
 
-            { this.state.downloadURL !== null ?
+              {/* { this.state.downloadURL !== null ? */}
               <div>
                 <Grid item lg style={{'paddingTop': '2em'}}>
                   <Button
@@ -376,9 +405,17 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
               </div>
-              : null }
+              {/* : null } */}
+            </form>
+          </Grid>
 
-          </form>
+          {/* GRID A 3 item */}
+          { this.state.model !== '' ?
+            <Grid item>
+              <Visualization
+                selectedModel={this.state.model} />
+            </Grid>
+            : null }
         </Grid>
       </div>
     );
