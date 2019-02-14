@@ -48,20 +48,32 @@ const styles = theme => ({
   }
 });
 
-const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples';
+const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
 const cards = [
   {
-    file: 'HeLa_nuclear.png',
+    file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'HeLa Nuclei',
     description: 'Nuclear stains of HeLa S3'
   }, {
-    file: 'mibi_nuclear.png',
+    file: 'nuclei/examples/mibi_nuclear.png',
     name: 'MIBI Nuclei',
     description: 'Double-stranded DNA data from MIBI'
   }, {
-    file: 'mousebrain.tif',
+    file: 'nuclei/examples/mousebrain.tif',
     name: 'Mouse Brain Nuclei',
     description: 'Mouse embryo nuclei Z-stack'
+  }, {
+    file: 'nuclei/examples/training_HeLa_S3.zip',
+    name: 'Training Data - HeLa S3 Nuclei',
+    description: 'Training data for the HeLa S3 nuclei'
+  }, {
+    file: 'tracked/tracking_HeLa_S3.zip',
+    name: 'HeLa S3 Raw + Segmentation',
+    description: 'Raw data and segmentations to submit for tracking'
+  }, {
+    file: 'tracked/HeLa_S3.trks',
+    name: 'Tracked Training Data - HeLa S3 Nuclei',
+    description: 'Tracked training data for the HeLa S3 nuclei'
   }
 ];
 
