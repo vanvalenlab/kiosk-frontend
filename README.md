@@ -19,3 +19,6 @@ The `App` Component in `/src` folder is the first parent Component that contains
 
 # Environment Variables Being Used
 In production, the environment variables are passed in through Kubernetes. In local development, the developer should consult the `.env.example` file on the root directory to enter the appropriate information into a new `.env` file (which should be located on root). The Express.js server will then attempt to find a `.env` file by which to complete certain processes.
+
+# Predict.js MaterialUI Grid Layout
+![Alt text](./docs/Predict.js_diagram.jpg)
