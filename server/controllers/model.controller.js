@@ -107,6 +107,26 @@ async function getGcpModels(req, res) {
   }
 }
 
-const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
+async function getGcpModelStats(req, res){
+  var visualizationJSON = {
+    'metrics':
+      [
+        {'value': 114.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'false_neg'},
+        {'value': 71.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'false_pos'},
+        {'value': 6.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'merge'},
+        {'value': 1705.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'n_pred'},
+        {'value': 1759.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'n_true'},
+        {'value': 21.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'split'},
+        {'value': 1530.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'true_pos'}
+      ],
+    'metadata':
+      {'notes': 'hela 128x128 dataset', 'model_name': 'zoom large watershed', 'date': '2019-02-20'}
+  };
 
-export default { getModels };
+  logger.info(`Got GCP Model Visualization Stats: ${JSON.stringify(visualizationJSON, null, 4)}`);
+  res.status(httpStatus.OK).send({ modelJSON: visualizationJSON });
+}
+
+const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
+const getModelStats = getGcpModelStats;
+export default { getModels, getModelStats };
