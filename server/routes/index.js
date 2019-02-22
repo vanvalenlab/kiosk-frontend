@@ -22,6 +22,9 @@ router.route('/train')
 router.route('/models')
   .get(controllers.modelController.getModels);
 
+router.route('/getModelStats')
+  .get(controllers.modelController.getModelStats);
+
 router.route('/redis')
   .post(controllers.redisController.getKey);
 
