@@ -11,10 +11,3 @@
 .trainingSelection * {
 	width: available;
 }
-
-/*754 px dom width*/
-@media only screen and (max-width: 829px) {
-    .dropzoneCSS {
-        width: 400px;
-    }
-}

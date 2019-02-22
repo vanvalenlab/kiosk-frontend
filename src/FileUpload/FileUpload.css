@@ -13,29 +13,6 @@
   padding: 0.5em;
 }
 
-/*754 px dom width*/
-@media only screen and (max-width: 754px) {
-    .dropzoneCSS {
-        width: 400px;
-    }
-}
-@media only screen and (max-width: 654px) {
-    .dropzoneCSS {
-        width: 300px;
-    }
-}
-@media only screen and (max-width: 554px) {
-    .dropzoneCSS {
-        width: 200px;
-    }
-}
-@media only screen and (max-width: 454px) {
-    .dropzoneCSS {
-        width: 195px;
-    }
-}
-/* END media queries on width*/
-
 .dropzoneCSS:hover {
   border-color: #00ff00;
 }
