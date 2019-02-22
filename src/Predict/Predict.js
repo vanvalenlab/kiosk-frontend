@@ -61,6 +61,9 @@ class Predict extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /* As soon as the Predict Component displays to the user,
+  a request is made to the Google Cloud Bucket for available Models and Versions.
+  */
   componentDidMount() {
     this.retrieveModelsVersions();
   }
@@ -68,7 +71,9 @@ class Predict extends React.Component {
   componentWillUnmount() {
     this.isCancelled = true;
   }
-
+ 
+  /* AJAX request to underlying Express server.
+  */
   retrieveModelsVersions() {
     axios.get('/api/models')
       .then((response) => {
@@ -81,14 +86,16 @@ class Predict extends React.Component {
         this.showErrorMessage(errMsg);
       });
   }
-
+  /* Reusable Error Message function.
+  */
   showErrorMessage(errorText) {
     this.setState({
       showError: true,
       errorText: errorText
     });
   }
-
+  /* AJAX Request to underlying Express Server for errors occurred during Prediction.
+  */
   getErrorReason(redisHash) {
     axios({
       method: 'post',
@@ -105,7 +112,7 @@ class Predict extends React.Component {
       this.showErrorMessage(errMsg);
     });
   }
-
+  /*Expiring Redis hash to delete the temporarily stored prediction data*/
   expireRedisHash(redisHash, expireIn) {
     axios({
       method: 'post',
@@ -123,7 +130,7 @@ class Predict extends React.Component {
       this.showErrorMessage(errMsg);
     });
   }
-
+  /*Retrieving information concerning the status of Prediction*/
   checkJobStatus(redisHash, interval) {
     this.statusCheck = setInterval(() => {
       axios({
@@ -339,7 +346,7 @@ class Predict extends React.Component {
                   {/* Grid B 1 Item Close*/}
                 </Grid>
                 {/* GRID B 2 item */}
-                <Grid item>
+                <Grid item xs={12} sm={6} style={{ paddingLeft: '1em' }}>
                   <FileUpload
                     infoText='Upload Here to Begin Image Prediction.'
                     onDroppedFile={(fileName, url) =>
@@ -349,63 +356,63 @@ class Predict extends React.Component {
                 {/* GRID B Container Close*/}
               </Grid>
 
-              {/* { this.state.showError ? */}
-              <Typography
-                variant='subheading'
-                align='center'
-                color='error'
-                paragraph
-                style={{'paddingTop': '1em'}}>
-                {this.state.errorText}
-              </Typography>
-              {/* : null } */}
+              { this.state.showError ?
+                <Typography
+                  variant='subheading'
+                  align='center'
+                  color='error'
+                  paragraph
+                  style={{'paddingTop': '1em'}}>
+                  {this.state.errorText}
+                </Typography>
+                : null }
 
-              {/* { !this.state.submitted ? */}
-              <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
-                <Button
-                  id='submitButton'
-                  variant='contained'
-                  onClick={this.handleSubmit}
-                  size='large'
-                  fullWidth
-                  disabled={!this.canBeSubmitted()}
-                  color='primary'>
-                  Submit
-                </Button>
-              </Grid>
-              {/* : null } */}
-
-              {/* { this.state.submitted && !this.state.showError && this.state.downloadURL === null ? */}
-              <Grid item lg style={{'paddingTop': '2em'}}>
-                <LinearProgress className={classes.progress} />
-              </Grid>
-              {/* : null } */}
-
-              {/* { this.state.downloadURL !== null ? */}
-              <div>
-                <Grid item lg style={{'paddingTop': '2em'}}>
+              { !this.state.submitted ?
+                <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
                   <Button
-                    href={this.state.downloadURL}
+                    id='submitButton'
                     variant='contained'
+                    onClick={this.handleSubmit}
                     size='large'
                     fullWidth
-                    color='secondary'>
-                    Download Results
-                  </Button>
-                </Grid>
-
-                <Grid item lg style={{'paddingTop': '2em'}}>
-                  <Button
-                    href='/predict'
-                    variant='contained'
-                    size='large'
-                    fullWidth
+                    disabled={!this.canBeSubmitted()}
                     color='primary'>
-                    Submit New Image
+                    Submit
                   </Button>
                 </Grid>
-              </div>
-              {/* : null } */}
+                : null }
+
+              { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <LinearProgress className={classes.progress} />
+                </Grid>
+                : null }
+
+              { this.state.downloadURL !== null ?
+                <div>
+                  <Grid item lg style={{'paddingTop': '2em'}}>
+                    <Button
+                      href={this.state.downloadURL}
+                      variant='contained'
+                      size='large'
+                      fullWidth
+                      color='secondary'>
+                      Download Results
+                    </Button>
+                  </Grid>
+
+                  <Grid item lg style={{'paddingTop': '2em'}}>
+                    <Button
+                      href='/predict'
+                      variant='contained'
+                      size='large'
+                      fullWidth
+                      color='primary'>
+                      Submit New Image
+                    </Button>
+                  </Grid>
+                </div>
+                : null }
             </form>
           </Grid>
 
