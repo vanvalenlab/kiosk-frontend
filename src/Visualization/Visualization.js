@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
+import * as d3 from 'd3';
+import {divergingBarChart} from './barchart.js';
 import './Visualization.css';
 
 const styles = theme => ({
@@ -13,9 +15,10 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   paper: {
-    padding: theme.spacing.unit * 10,
+    padding: theme.spacing.unit * 4,
     textAlign: 'center',
     verticanAlign: 'top',
+    width: '30em',
     color: theme.palette.text.secondary,
   },
 });
@@ -29,7 +32,8 @@ class Visualization extends React.Component {
       errorText: '',
       modelJSON:null,
       modelInfo:null,
-      modelMetrics:null
+      objectMetrics:[],
+      pixelMetrics:[]
     };
   }
 
@@ -50,6 +54,7 @@ class Visualization extends React.Component {
           modelJSON: response.data.modelJSON
         });
         this.modelInfo();
+        this.drawChart();
       }).catch(error =>{
         let errMsg = `Could not visualize Model stats from cloud bucket due to error: ${error}`;
         this.showErrorMessage(errMsg);
@@ -65,15 +70,15 @@ class Visualization extends React.Component {
 
   modelInfo(){
     var modelStats = this.state.modelJSON;
-    //Store the modelJSON obj in a var, separate it by it's only two possible keys - either "metadata" or "metrics".
+    //Store the modelJSON obj in a var, separate it by it's only two possible keys - either 'metadata' or 'metrics'.
     //modelInfo, data type is a javascript object. This will be used for populating basic info about the selected Model.
     var modelInfo = modelStats.metadata;
     //modelMetrics, data type is an array. Will be used to distill visualization and statistics.
     var modelMetrics = modelStats.metrics;
 
-    //Separate the various metrics objects by their type, which is either "pixel" or "object".
-    var objectMetrics = [];
-    var pixelMetrics = [];
+    //Separate the various metrics objects by their type, which is either 'pixel' or 'object'.
+    var objectTypes= [];
+    var pixelTypes = [];
     //Begin iteration through modelMetrics array (Array).
     for(var i=0; i<modelMetrics.length; i++){
       var metricsContent = modelMetrics[i];
@@ -82,17 +87,19 @@ class Visualization extends React.Component {
       for(var key in metricsContent){
         //if type Object
         if(key === 'stat_type' && metricsContent[key] === 'object'){
-          objectMetrics.push(metricsContent);
+          objectTypes.push(metricsContent);
         }
         //if type Pixel
         if(key === 'stat_type' && metricsContent[key] === 'pixel'){
-          pixelMetrics.push(metricsContent);
+          pixelTypes.push(metricsContent);
         }
       }
     }
 
     this.setState({
-      modelInfo: modelStats.modelInfo
+      modelInfo: modelInfo,
+      objectMetrics: objectTypes,
+      pixelMetrics: pixelTypes
     });
     
     console.log('Model stats var entered: ' + JSON.stringify(modelInfo));
@@ -100,12 +107,48 @@ class Visualization extends React.Component {
     
   }
 
+  drawChart(){
+    // const data is of type array. The array contains objects.
+    const metrics = this.state.objectMetrics;
+    metrics.sort(function(a, b){return a.value-b.value;});
+    const data = [];
+    const n_true = [];
+    const n_pred = [];
+    for (var i = 0; i < metrics.length; ++i) {
+      for(var key in metrics[i]){
+        if(key === 'name'){
+          if(metrics[i][key] !== 'n_true' && metrics[i][key] !=='n_pred'){
+            console.log('metrics[i][key]: ' + metrics[i][key]);
+            data.push({ data: metrics[i].value, label: metrics[i].name });
+          }
+        }
+      }
+    }
+    var chart = divergingBarChart();
+    for(var j=0;j<data.length;j++){
+      console.log('Here is the data: ' + JSON.stringify(data[j]));
+    }
+    d3.select('#chart').datum(data).call(chart);
+    d3.select(window).on('resize', resize);
+
+    // Reusable resizing function that affects the svgs utilized in the chart.
+    function resize() {
+      if (d3.select('#chart svg').empty()) {
+        return;
+      }
+      var w = +d3.select('#chart').style('width').replace(/(px)/g, '');
+      chart.width(w);
+      chart.height(200);
+      d3.select('#chart').call(chart);
+    }
+  }
+
 
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Grid container alignItems="flex-start" justify='flex-start' direction="row">
+        <Grid container alignItems='flex-start' justify='flex-start' direction='row'>
           <Grid item>
             <Paper className={classes.paper}>
               <Typography
@@ -116,31 +159,39 @@ class Visualization extends React.Component {
                 style={{}}>
                 Model Stats
               </Typography>
-              <Typography
-                variant='body1'
-                align='left'
-                color='primary'
-                paragraph
-                style={{}}>
-                Model Name: 
-              </Typography>
-              <Typography
-                variant='body1'
-                align='left'
-                color='primary'
-                paragraph
-                style={{}}>
-                Date of Data Collection:
-              </Typography>
-              <Typography
-                variant='body1'
-                align='left'
-                color='primary'
-                paragraph
-                style={{}}>
-                Notes:
-              </Typography>
-              {JSON.stringify(this.state.modelJSON)}
+              { this.state.modelInfo !== null ?
+                <div className='modelInfoParent'>
+                  <Typography
+                    variant='body1'
+                    align='left'
+                    color='textSecondary'
+                    paragraph
+                    style={{}}>
+                    Model Name:
+                  </Typography>
+                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.model_name)}</p>
+                  <Typography
+                    variant='body1'
+                    align='left'
+                    color='textSecondary'
+                    paragraph
+                    style={{}}>
+                    Date of Data Collection:
+                  </Typography>
+                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.date)}</p>
+                  <Typography
+                    variant='body1'
+                    align='left'
+                    color='textSecondary'
+                    paragraph
+                    style={{}}>
+                    Notes:
+                  </Typography>
+                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.notes)}</p>                
+                </div>
+                : null }
+              {JSON.stringify(this.state.objectMetrics)}
+              <div id='chart'></div>
             </Paper>        
           </Grid>
         </Grid>
