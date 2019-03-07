@@ -118,17 +118,21 @@ class Visualization extends React.Component {
       for(var key in metrics[i]){
         if(key === 'name'){
           if(metrics[i][key] !== 'n_true' && metrics[i][key] !=='n_pred'){
-            console.log('metrics[i][key]: ' + metrics[i][key]);
             data.push({ data: metrics[i].value, label: metrics[i].name });
+          }
+          if(metrics[i][key] === 'n_true'){
+            n_true.push({ data: metrics[i].value, label: metrics[i].name });
+          }
+          if(metrics[i][key] ==='n_pred'){
+            n_pred.push({ data: metrics[i].value, label: metrics[i].name });
           }
         }
       }
     }
     var chart = divergingBarChart();
-    for(var j=0;j<data.length;j++){
-      console.log('Here is the data: ' + JSON.stringify(data[j]));
-    }
     d3.select('#chart').datum(data).call(chart);
+    d3.select('#n_true').datum(n_true).call(chart);
+    d3.select('#n_pred').datum(n_pred).call(chart);
     d3.select(window).on('resize', resize);
 
     // Reusable resizing function that affects the svgs utilized in the chart.
@@ -190,7 +194,8 @@ class Visualization extends React.Component {
                   <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.notes)}</p>                
                 </div>
                 : null }
-              {JSON.stringify(this.state.objectMetrics)}
+              <div id='n_true'></div>
+              <div id='n_pred'></div>
               <div id='chart'></div>
             </Paper>        
           </Grid>

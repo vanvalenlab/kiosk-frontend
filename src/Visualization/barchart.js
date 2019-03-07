@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 
 export function divergingBarChart() {
-  var margin = {top: 20, right: 20, bottom: 20, left: 20},
+  var margin = {top: 20, right: 20, bottom: 20, left: -6},
     width = 1600,
     height = 150,
     barHeight = 50,
@@ -44,7 +44,7 @@ export function divergingBarChart() {
         .append('text').attr('class', 'metricValue')
         .attr('x', function(d, i) { return data.slice(0, i).reduce(function (a, d) { return a + barScale(d.value); }, 5) + (padding/2) + 5; })
         .attr('y', height-margin.bottom-10)
-        .attr('color', 'white')
+        .attr('fill', 'white')
         .attr('font-size', 12)
         .text(function(d) { return d.value; });
 
