@@ -13,7 +13,7 @@ async function train(req, res) {
     // set the initial keys & values for redis
     client.hmset([
       redisKey,
-      'file_name', `${prefix}/${req.body.imageName}`,
+      'input_file_name', `${prefix}/${req.body.imageName}`,
       'url', req.body.imageURL,
       'ndim', req.body.ndim,
       'optimizer', req.body.optimizer,
