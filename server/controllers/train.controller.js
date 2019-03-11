@@ -13,19 +13,20 @@ async function train(req, res) {
     // set the initial keys & values for redis
     client.hmset([
       redisKey,
-      'input_file_name', `${prefix}/${req.body.imageName}`,
-      'url', req.body.imageURL,
-      'ndim', req.body.ndim,
-      'optimizer', req.body.optimizer,
-      'field', req.body.fieldSize,
-      'skips', req.body.skips,
       'epochs', req.body.epochs,
-      'transform', req.body.transform,
+      'field', req.body.fieldSize,
+      'identity_upload', config.hostname,
+      'input_file_name', `${prefix}/${req.body.imageName}`,
+      'ndim', req.body.ndim,
       'normalization', req.body.normalization,
-      'training_type', req.body.trainingType,
-      'timestamp_upload', Date.now(),
+      'optimizer', req.body.optimizer,
+      'skips', req.body.skips,
+      'status', 'new',
       'timestamp_last_status_update', Date.now(),
-      'status', 'new'
+      'timestamp_upload', Date.now(),
+      'training_type', req.body.trainingType,
+      'transform', req.body.transform,
+      'url', req.body.imageURL
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
