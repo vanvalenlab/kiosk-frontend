@@ -20,6 +20,7 @@ async function predict(req, res) {
       'postprocess_function', req.body.postprocess_function,
       'cuts', req.body.cuts,
       'timestamp_upload', Date.now(),
+      'timestamp_last_status_update', Date.now(),
       'status', 'new'
     ], (err, redisRes) => {
       if (err) throw err;

@@ -23,6 +23,8 @@ async function train(req, res) {
       'transform', req.body.transform,
       'normalization', req.body.normalization,
       'training_type', req.body.trainingType,
+      'timestamp_upload', Date.now(),
+      'timestamp_last_status_update', Date.now(),
       'status', 'new'
     ], (err, redisRes) => {
       if (err) throw err;
