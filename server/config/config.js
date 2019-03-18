@@ -34,6 +34,8 @@ const envVarsSchema = Joi.object({
   GCLOUD_STORAGE_BUCKET: Joi.string()
     .description('Google Cloud bucket where data is uploaded and models are saved.')
     .default('deepcell-output'),
+  HOSTNAME: Joi.string()
+    .description('Kubernetes pod name'),
   REDIS_HOST: Joi.string().required()
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
@@ -48,6 +50,7 @@ if (error) {
 const config = {
   env: envVars.NODE_ENV,
   cloud: envVars.CLOUD_PROVIDER,
+  hostname: envVars.HOSTNAME,
   port: envVars.PORT,
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,

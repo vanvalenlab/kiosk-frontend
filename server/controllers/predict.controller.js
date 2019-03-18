@@ -12,15 +12,17 @@ async function predict(req, res) {
   try {
     client.hmset([
       redisKey,
-      'url', req.body.imageURL,
+      'cuts', req.body.cuts,
+      'identity_upload', config.hostname,
+      'input_file_name', req.body.uploadedName,
       'model_name', req.body.model_name,
       'model_version', req.body.model_version,
-      'file_name', req.body.uploadedName,
       'original_name', req.body.imageName,
       'postprocess_function', req.body.postprocess_function,
-      'cuts', req.body.cuts,
+      'status', 'new',
+      'timestamp_last_status_update', Date.now(),
       'timestamp_upload', Date.now(),
-      'status', 'new'
+      'url', req.body.imageURL
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
