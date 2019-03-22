@@ -83,9 +83,9 @@ export function divergingBarChart() {
         .attr('class', 'legend')
         .attr('font-size', 12);
 
-      svg = selection.select('svg');
-      svg.attr('width', width).attr('height', height);
-      var g = svg.select('g')
+      svgController = selection.select('svg');
+      svgController.attr('width', width).attr('height', height);
+      var g = svgController.select('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       var rectG = g.select('g.rects');
