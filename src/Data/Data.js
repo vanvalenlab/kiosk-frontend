@@ -9,7 +9,27 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
+//This function is described before the Class declaration for the Data component, below.
+function TabContainer({ children, dir }) {
+  return (
+    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
+      {children}
+    </Typography>
+  );
+}
+
+//propType description for React to check data type when TabContainer jsx instances are given prop's.
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+  dir: PropTypes.string.isRequired,
+};
+
+//Styles Object for MaterialUI styling
 const styles = theme => ({
   heroUnit: {
     backgroundColor: theme.palette.background.paper,
@@ -48,29 +68,75 @@ const styles = theme => ({
   }
 });
 
+//Static dev information for testing data cards.
 const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples';
 const cards = [
   {
-    file: 'HeLa_nuclear.png',
+    file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'HeLa Nuclei',
-    description: 'Nuclear stains of HeLa S3'
-  }, {
-    file: 'mibi_nuclear.png',
+    description: 'Nuclear stains of HeLa S3',
+    datatype: 'example'
+  },
+  {
+    file: 'nuclei/examples/mibi_nuclear.png',
     name: 'MIBI Nuclei',
-    description: 'Double-stranded DNA data from MIBI'
-  }, {
-    file: 'mousebrain.tif',
+    description: 'Double-stranded DNA data from MIBI',
+    datatype: 'example'
+  },
+  {
+    file: 'nuclei/examples/mousebrain.tif',
     name: 'Mouse Brain Nuclei',
-    description: 'Mouse embryo nuclei Z-stack'
+    description: 'Mouse embryo nuclei Z-stack',
+    datatype: 'example'
+  },
+  {
+    file: 'tracked/tracking_HeLa_S3.zip',
+    name: 'HeLa S3 Raw + Segmentation',
+    description: 'Raw data and segmentations to submit for tracking',
+    datatype: 'example'
+  },
+  {
+    file: 'nuclei/examples/training_HeLa_S3.zip',
+    name: 'Training Data - HeLa S3 Nuclei',
+    description: 'Training data for the HeLa S3 nuclei',
+    datatype: 'training'
+  },
+  {
+    file: 'tracked/HeLa_S3.trks',
+    name: 'Tracked Training Data - HeLa S3 Nuclei',
+    description: 'Tracked training data for the HeLa S3 nuclei',
+    datatype: 'training'
+  },
+  {
+    file: 'tracked/3T3_NIH.trks',
+    name: 'Tracked Training Data - NIH 3T3 Nuclei',
+    description: 'Tracked training data for the NIH 3T3 nuclei',
+    datatype: 'training'
   }
 ];
 
+//Class Declaration for Data Component
 class Data extends React.Component {
+  state = {
+    value: 0,
+  };
+
+  //Function to set the index of the child being parametized. (https://material-ui.com/api/tabs/)
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
+  handleChangeIndex = index => {
+    this.setState({ value: index });
+  };
+
   render() {
     const { classes } = this.props;
 
     return(
+      // Outermost Div
       <div>
+        {/* Top Banner Area */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
@@ -82,6 +148,8 @@ class Data extends React.Component {
             </Typography>
           </div>
         </div>
+        {/* Top Banner Area - END */}
+        {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
           <Grid container spacing={40}>
             {cards.map(card => (
@@ -114,7 +182,9 @@ class Data extends React.Component {
             ))}
           </Grid>
         </div>
+        {/* Bottom Data Card Display Area */}
       </div>
+      //END Outermost Div
     );
   }
 }
