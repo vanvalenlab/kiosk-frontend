@@ -13,20 +13,20 @@ import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import * as util from 'util'
 
 //This function is described before the Class declaration for the Data component, below.
-function TabContainer({ children, dir }) {
+function TabContainer(props) {
   return (
-    <Typography component="div" dir={dir} style={{ padding: 8 * 3 }}>
-      {children}
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
     </Typography>
   );
 }
 
 //propType description for React to check data type when TabContainer jsx instances are given prop's.
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 //Styles Object for MaterialUI styling
@@ -122,45 +122,22 @@ class Data extends React.Component {
     this.state = {
       value:0,
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
-  handleChange(event, value){
+  handleChange(event,value){
+    console.log("event: " + util.inspect(event.target));
+    console.log("value: " + value);
     this.setState({ value });
-  };
-  //react-swipeable-views, changes the index of the currently viewed tab.
-  handleChangeIndex(index){
-    this.setState({ value: index });
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
 
     return(
       // Outermost Div
       <div>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-          >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-          </Tabs>
-        </AppBar>
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={this.state.value}
-          onChangeIndex={this.handleChangeIndex}
-        >
-          <TabContainer dir={theme.direction}>Item One</TabContainer>
-          <TabContainer dir={theme.direction}>Item Two</TabContainer>
-          <TabContainer dir={theme.direction}>Item Three</TabContainer>
-        </SwipeableViews>
         {/* Top Banner Area */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
@@ -174,6 +151,21 @@ class Data extends React.Component {
           </div>
         </div>
         {/* Top Banner Area - END */}
+        <AppBar position="static" color="default">
+          <Tabs
+            value={this.state.value}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab value="one" label="New Arrivals in the Longest Text of Nonfiction" />
+            <Tab value="two" label="Item Two" />
+          </Tabs>
+        </AppBar>
+
+        {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
+        {this.state.value === 1 && <TabContainer>Item Two</TabContainer>}
         {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
           {/* Grid A */}
