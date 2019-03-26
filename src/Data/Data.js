@@ -117,25 +117,50 @@ const cards = [
 
 //Class Declaration for Data Component
 class Data extends React.Component {
-  state = {
-    value: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value:0,
+    };
+  }
 
-  //Function to set the index of the child being parametized. (https://material-ui.com/api/tabs/)
-  handleChange = (event, value) => {
+  //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
+  handleChange(event, value){
     this.setState({ value });
   };
-
-  handleChangeIndex = index => {
+  //react-swipeable-views, changes the index of the currently viewed tab.
+  handleChangeIndex(index){
     this.setState({ value: index });
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, theme } = this.props;
 
     return(
       // Outermost Div
       <div>
+        <AppBar position="static" color="default">
+          <Tabs
+            value={this.state.value}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+          >
+            <Tab label="Item One" />
+            <Tab label="Item Two" />
+            <Tab label="Item Three" />
+          </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={this.state.value}
+          onChangeIndex={this.handleChangeIndex}
+        >
+          <TabContainer dir={theme.direction}>Item One</TabContainer>
+          <TabContainer dir={theme.direction}>Item Two</TabContainer>
+          <TabContainer dir={theme.direction}>Item Three</TabContainer>
+        </SwipeableViews>
         {/* Top Banner Area */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
@@ -151,8 +176,10 @@ class Data extends React.Component {
         {/* Top Banner Area - END */}
         {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
+          {/* Grid A */}
           <Grid container spacing={40}>
             {cards.map(card => (
+              //Grid A1
               <Grid item key={cards.indexOf(card)} xs={12} sm={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -179,8 +206,10 @@ class Data extends React.Component {
                   </CardActions>
                 </Card>
               </Grid>
+              //Grid A1
             ))}
           </Grid>
+          {/* Grid A */}
         </div>
         {/* Bottom Data Card Display Area */}
       </div>
@@ -191,6 +220,7 @@ class Data extends React.Component {
 
 Data.propTypes = {
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Data);
+export default withStyles(styles, { withTheme: true })(Data);
