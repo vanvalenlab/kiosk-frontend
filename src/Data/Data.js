@@ -120,6 +120,8 @@ class Data extends React.Component {
         }
       ],
     };
+    //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
+    //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
     this.handleChange = this.handleChange.bind(this);
   }
 
