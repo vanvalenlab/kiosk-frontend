@@ -13,21 +13,7 @@ import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import * as util from 'util'
-
-//This function is described before the Class declaration for the Data component, below.
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
-
-//propType description for React to check data type when TabContainer jsx instances are given prop's.
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
-};
+import * as util from 'util';
 
 //Styles Object for MaterialUI styling
 const styles = theme => ({
@@ -68,59 +54,71 @@ const styles = theme => ({
   }
 });
 
-//Static dev information for testing data cards.
-const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples';
-const cards = [
-  {
-    file: 'nuclei/examples/HeLa_nuclear.png',
-    name: 'HeLa Nuclei',
-    description: 'Nuclear stains of HeLa S3',
-    datatype: 'example'
-  },
-  {
-    file: 'nuclei/examples/mibi_nuclear.png',
-    name: 'MIBI Nuclei',
-    description: 'Double-stranded DNA data from MIBI',
-    datatype: 'example'
-  },
-  {
-    file: 'nuclei/examples/mousebrain.tif',
-    name: 'Mouse Brain Nuclei',
-    description: 'Mouse embryo nuclei Z-stack',
-    datatype: 'example'
-  },
-  {
-    file: 'tracked/tracking_HeLa_S3.zip',
-    name: 'HeLa S3 Raw + Segmentation',
-    description: 'Raw data and segmentations to submit for tracking',
-    datatype: 'example'
-  },
-  {
-    file: 'nuclei/examples/training_HeLa_S3.zip',
-    name: 'Training Data - HeLa S3 Nuclei',
-    description: 'Training data for the HeLa S3 nuclei',
-    datatype: 'training'
-  },
-  {
-    file: 'tracked/HeLa_S3.trks',
-    name: 'Tracked Training Data - HeLa S3 Nuclei',
-    description: 'Tracked training data for the HeLa S3 nuclei',
-    datatype: 'training'
-  },
-  {
-    file: 'tracked/3T3_NIH.trks',
-    name: 'Tracked Training Data - NIH 3T3 Nuclei',
-    description: 'Tracked training data for the NIH 3T3 nuclei',
-    datatype: 'training'
-  }
-];
+//This function is described before the Class declaration for the Data component, below.
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+//propType description for React to check data type when TabContainer jsx instances are given prop's.
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
-//Class Declaration for Data Component
+//!!!!!!!!!!!Class Declaration for Data Component !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Data extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value:0,
+      value:'one',
+      baseUrl :'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
+      cards :[
+        {
+          file: 'nuclei/examples/HeLa_nuclear.png',
+          name: 'HeLa Nuclei',
+          description: 'Nuclear stains of HeLa S3',
+          datatype: 'example'
+        },
+        {
+          file: 'nuclei/examples/mibi_nuclear.png',
+          name: 'MIBI Nuclei',
+          description: 'Double-stranded DNA data from MIBI',
+          datatype: 'example'
+        },
+        {
+          file: 'nuclei/examples/mousebrain.tif',
+          name: 'Mouse Brain Nuclei',
+          description: 'Mouse embryo nuclei Z-stack',
+          datatype: 'example'
+        },
+        {
+          file: 'tracked/tracking_HeLa_S3.zip',
+          name: 'HeLa S3 Raw + Segmentation',
+          description: 'Raw data and segmentations to submit for tracking',
+          datatype: 'example'
+        },
+        {
+          file: 'nuclei/examples/training_HeLa_S3.zip',
+          name: 'Training Data - HeLa S3 Nuclei',
+          description: 'Training data for the HeLa S3 nuclei',
+          datatype: 'training'
+        },
+        {
+          file: 'tracked/HeLa_S3.trks',
+          name: 'Tracked Training Data - HeLa S3 Nuclei',
+          description: 'Tracked training data for the HeLa S3 nuclei',
+          datatype: 'training'
+        },
+        {
+          file: 'tracked/3T3_NIH.trks',
+          name: 'Tracked Training Data - NIH 3T3 Nuclei',
+          description: 'Tracked training data for the NIH 3T3 nuclei',
+          datatype: 'training'
+        }
+      ],
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -129,7 +127,7 @@ class Data extends React.Component {
   handleChange(event,value){
     console.log("event: " + util.inspect(event.target));
     console.log("value: " + value);
-    this.setState({ value });
+    this.setState({ value: value });
   };
 
   render() {
@@ -164,19 +162,19 @@ class Data extends React.Component {
           </Tabs>
         </AppBar>
 
-        {this.state.value === 0 && <TabContainer>Item One</TabContainer>}
-        {this.state.value === 1 && <TabContainer>Item Two</TabContainer>}
+        {this.state.value === 'one' && <TabContainer >Item One</TabContainer>}
+        {this.state.value === 'two' && <TabContainer >Item Two</TabContainer>}
         {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
           {/* Grid A */}
           <Grid container spacing={40}>
-            {cards.map(card => (
+            {this.state.cards.map(card => (
               //Grid A1
-              <Grid item key={cards.indexOf(card)} xs={12} sm={4}>
+              <Grid item key={this.state.cards.indexOf(card)} xs={12} sm={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image={`${baseUrl}/${card.file}`}
+                    image={`${this.state.baseUrl}/${card.file}`}
                     title={`${card.name}`}
                   />
                   <CardContent className={classes.cardContent}>
@@ -192,7 +190,7 @@ class Data extends React.Component {
                       size="small"
                       color="primary"
                       target="_blank"
-                      href={`${baseUrl}/${card.file}`}>
+                      href={`${this.state.baseUrl}/${card.file}`}>
                       Download
                     </Button>
                   </CardActions>
