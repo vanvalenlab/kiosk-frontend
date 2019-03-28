@@ -45,21 +45,25 @@ class DataCard extends React.Component {
     super(props);
     this.state = {
       baseUrl :'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
-      cards :[
+      cardType: this.props.cardType,
+      exampleallCards: [],
+      trainingCards: [],
+      cardsInUse: [],
+      allCards :[
         {
-          file: 'nuclei/examples/HeLa_nuclear.png',
+          file: 'HeLa_nuclear.png',
           name: 'HeLa Nuclei',
           description: 'Nuclear stains of HeLa S3',
           datatype: 'example'
         },
         {
-          file: 'nuclei/examples/mibi_nuclear.png',
+          file: 'mibi_nuclear.png',
           name: 'MIBI Nuclei',
           description: 'Double-stranded DNA data from MIBI',
           datatype: 'example'
         },
         {
-          file: 'nuclei/examples/mousebrain.tif',
+          file: 'mousebrain.tif',
           name: 'Mouse Brain Nuclei',
           description: 'Mouse embryo nuclei Z-stack',
           datatype: 'example'
@@ -67,11 +71,11 @@ class DataCard extends React.Component {
         {
           file: 'tracked/tracking_HeLa_S3.zip',
           name: 'HeLa S3 Raw + Segmentation',
-          description: 'Raw data and segmentations to submit for tracking',
+          description: 'Raw tracked example data and segmentations to submit for tracking',
           datatype: 'example'
         },
         {
-          file: 'nuclei/examples/training_HeLa_S3.zip',
+          file: 'training_HeLa_S3.zip',
           name: 'Training Data - HeLa S3 Nuclei',
           description: 'Training data for the HeLa S3 nuclei',
           datatype: 'training'
@@ -90,6 +94,45 @@ class DataCard extends React.Component {
         }
         ],
     };
+    //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
+    //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
+    this.organizeCardTypes = this.organizeCardTypes.bind(this);
+  }
+
+  componentDidMount() {
+    this.organizeCardTypes();
+  }
+
+
+  organizeCardTypes(){
+    console.log("Rendered!");
+    let cards = this.state.allCards;
+    let trainingCards = [];
+    let exampleCards =[];
+    let cardTypeFromProps = this.state.cardType;
+    console.log("The Tab's props is: " + cardTypeFromProps);
+    //iterating through each entry in the cards array.
+    for(let i=0; i<cards.length;i++){
+      console.log("Card of i: " + cards[i])
+      // iterating through each object in each cards entry.
+      for(let key in cards[i] ){
+        console.log("Card of i of key: " + cards[i][key])
+        if(key === 'datatype' && cards[i][key] === 'training' ){
+          trainingCards.push(cards[i]);
+        }
+        else if(key === 'datatype' && cards[i][key] === 'example' ){
+          exampleCards.push(cards[i]);
+        }
+      }      
+    }
+    if(cardTypeFromProps === 'example'){
+      console.log("Rendering example Card Types: " + exampleCards.length);
+      this.setState({cardsInUse:exampleCards});
+    }
+    if(cardTypeFromProps === 'training'){
+      console.log("Rendering training Card Types: " + trainingCards);
+      this.setState({cardsInUse:trainingCards});
+    }
   }
 
   render() {
@@ -102,9 +145,9 @@ class DataCard extends React.Component {
         <div className={classNames(classes.layout, classes.cardGrid)}>
           {/* Grid A */}
           <Grid container spacing={40}>
-            {this.state.cards.map(card => (
+            {this.state.cardsInUse.map(card => (
               //Grid A1
-              <Grid item key={this.state.cards.indexOf(card)} xs={12} sm={4}>
+              <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}

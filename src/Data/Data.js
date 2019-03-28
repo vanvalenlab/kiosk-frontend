@@ -66,7 +66,7 @@ class Data extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value:'one',
+      value:'example',
     };
     //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
     //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
@@ -75,8 +75,6 @@ class Data extends React.Component {
 
   //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
   handleChange(event,value){
-    console.log("event: " + util.inspect(event.target));
-    console.log("value: " + value);
     this.setState({ value: value });
   };
 
@@ -114,10 +112,15 @@ class Data extends React.Component {
           </Tabs>
         </AppBar>
 
+        {/* Example Cards */}
         {this.state.value === 'example' && <TabContainer >
-          <DataCard></DataCard>
+          <DataCard cardType={this.state.value} ></DataCard>
         </TabContainer>}
-        {this.state.value === 'training' && <TabContainer >Training Data</TabContainer>}
+
+        {/* Training Cards */}
+        {this.state.value === 'training' && <TabContainer >
+          <DataCard cardType={this.state.value} ></DataCard>
+        </TabContainer>}
         {/* END MaterialUI Tabs/tab appbar */}
       </div>
       //END Outermost Div
