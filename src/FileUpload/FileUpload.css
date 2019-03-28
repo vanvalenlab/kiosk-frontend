@@ -4,13 +4,14 @@
 }
 
 .dropzoneCSS {
-  /* width: 500px; */
+  width: 22em;
   height: auto;
   border-width: 2px;
   border-color: #B8B8B8;
   border-style: dashed;
   border-radius: 5px;
-  padding: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  margin-right: 3em;
 }
 
 .dropzoneCSS:hover {
