@@ -105,18 +105,15 @@ class DataCard extends React.Component {
 
 
   organizeCardTypes(){
-    console.log("Rendered!");
     let cards = this.state.allCards;
     let trainingCards = [];
     let exampleCards =[];
     let cardTypeFromProps = this.state.cardType;
-    console.log("The Tab's props is: " + cardTypeFromProps);
+
     //iterating through each entry in the cards array.
     for(let i=0; i<cards.length;i++){
-      console.log("Card of i: " + cards[i])
       // iterating through each object in each cards entry.
       for(let key in cards[i] ){
-        console.log("Card of i of key: " + cards[i][key])
         if(key === 'datatype' && cards[i][key] === 'training' ){
           trainingCards.push(cards[i]);
         }
@@ -126,11 +123,9 @@ class DataCard extends React.Component {
       }      
     }
     if(cardTypeFromProps === 'example'){
-      console.log("Rendering example Card Types: " + exampleCards.length);
       this.setState({cardsInUse:exampleCards});
     }
     if(cardTypeFromProps === 'training'){
-      console.log("Rendering training Card Types: " + trainingCards);
       this.setState({cardsInUse:trainingCards});
     }
   }
