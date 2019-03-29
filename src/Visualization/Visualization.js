@@ -38,7 +38,6 @@ class Visualization extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.selectedModel + 'was loaded.');
     this.getModelJSON();
   }
 
@@ -98,10 +97,7 @@ class Visualization extends React.Component {
       objectMetrics: objectTypes,
       pixelMetrics: pixelTypes
     });
-    
-    console.log('Model stats var entered: ' + JSON.stringify(modelInfo));
 
-    
   }
 
   drawChart(){
