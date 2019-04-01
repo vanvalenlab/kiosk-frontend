@@ -37,7 +37,7 @@ class FileUpload extends Component {
     //JSX that will be returned to the User's View
     return (
       <div className='dropzone'>
-        <Dropzone name="imageUploadInput" className='dropzoneCSS' accept='image/*,application/zip' onDrop={this.onDrop.bind(this)} >
+        <Dropzone name="imageUploadInput" className='dropzoneCSS' onDrop={this.onDrop.bind(this)} >
           <p className='uploadInstructions'>{ this.props.infoText }</p>
           <p className='uploadUnder'>Drag and Drop your files here or <span>click</span> to browse.</p>
           <div className='acceptedFiles'>
