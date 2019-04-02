@@ -42,18 +42,8 @@ class Landing extends React.Component {
           </Typography>
         </div>
         <div className={classes.buttonHolder}>
-          <Grid container spacing={40}>
-            <Grid item xs={6}>
-              <Button
-                size="large"
-                variant="contained"
-                color="secondary"
-                className={classNames(classes.button, classes.right)}
-                href="/predict">
-                Predict
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
+          <Grid container justify="center" spacing={40}>
+            <Grid item>
               <Button
                 size="large"
                 variant="contained"
@@ -61,6 +51,26 @@ class Landing extends React.Component {
                 className={classNames(classes.button, classes.left)}
                 href="/train">
                 Train
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                variant="contained"
+                color="secondary"
+                className={classNames(classes.button)}
+                href="/predict">
+                Predict
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                size="large"
+                variant="contained"
+                color="green"
+                className={classNames(classes.button, classes.right)}
+                href="/track">
+                Track
               </Button>
             </Grid>
           </Grid>
