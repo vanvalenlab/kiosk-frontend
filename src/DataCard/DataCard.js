@@ -46,33 +46,31 @@ class DataCard extends React.Component {
     this.state = {
       baseUrl :'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
       cardType: this.props.cardType,
-      exampleallCards: [],
-      trainingCards: [],
       cardsInUse: [],
       allCards :[
         {
           file: 'HeLa_nuclear.png',
           name: 'HeLa Nuclei',
           description: 'Nuclear stains of HeLa S3',
-          datatype: 'example'
+          datatype: 'prediction'
         },
         {
           file: 'mibi_nuclear.png',
           name: 'MIBI Nuclei',
           description: 'Double-stranded DNA data from MIBI',
-          datatype: 'example'
+          datatype: 'prediction'
         },
         {
           file: 'mousebrain.tif',
           name: 'Mouse Brain Nuclei',
           description: 'Mouse embryo nuclei Z-stack',
-          datatype: 'example'
+          datatype: 'prediction'
         },
         {
           file: 'tracked/tracking_HeLa_S3.zip',
           name: 'HeLa S3 Raw + Segmentation',
           description: 'Raw tracked example data and segmentations to submit for tracking',
-          datatype: 'example'
+          datatype: 'prediction'
         },
         {
           file: 'training_HeLa_S3.zip',
@@ -107,7 +105,7 @@ class DataCard extends React.Component {
   organizeCardTypes(){
     let cards = this.state.allCards;
     let trainingCards = [];
-    let exampleCards =[];
+    let predictionCards =[];
     let cardTypeFromProps = this.state.cardType;
 
     //iterating through each entry in the cards array.
@@ -117,13 +115,13 @@ class DataCard extends React.Component {
         if(key === 'datatype' && cards[i][key] === 'training' ){
           trainingCards.push(cards[i]);
         }
-        else if(key === 'datatype' && cards[i][key] === 'example' ){
-          exampleCards.push(cards[i]);
+        else if(key === 'datatype' && cards[i][key] === 'prediction' ){
+          predictionCards.push(cards[i]);
         }
       }      
     }
-    if(cardTypeFromProps === 'example'){
-      this.setState({cardsInUse:exampleCards});
+    if(cardTypeFromProps === 'prediction'){
+      this.setState({cardsInUse:predictionCards});
     }
     if(cardTypeFromProps === 'training'){
       this.setState({cardsInUse:trainingCards});

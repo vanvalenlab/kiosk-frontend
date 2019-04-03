@@ -65,7 +65,7 @@ class Data extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value:'example',
+      value:'prediction',
     };
     //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
     //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
@@ -106,13 +106,13 @@ class Data extends React.Component {
             textColor="primary"
             centered
           >
-            <Tab value="example" label="Example Data" />
+            <Tab value="prediction" label="Prediction Data" />
             <Tab value="training" label="Training Data" />
           </Tabs>
         </AppBar>
 
         {/* Example Cards */}
-        {this.state.value === 'example' && <TabContainer >
+        {this.state.value === 'prediction' && <TabContainer >
           <DataCard cardType={this.state.value} ></DataCard>
         </TabContainer>}
 
