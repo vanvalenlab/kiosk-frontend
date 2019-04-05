@@ -166,7 +166,13 @@ class Visualization extends React.Component {
                     style={{}}>
                     Model Name:
                   </Typography>
-                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.model_name)}</p>
+
+                  <Typography
+                    color='textSecondary'
+                    paragraph
+                  >{JSON.stringify(this.state.modelInfo.model_name)}
+                  </Typography>
+
                   <Typography
                     variant='body1'
                     align='left'
@@ -175,7 +181,13 @@ class Visualization extends React.Component {
                     style={{}}>
                     Date of Data Collection:
                   </Typography>
-                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.date)}</p>
+
+                  <Typography
+                    color='textSecondary'
+                    paragraph                  
+                  >{JSON.stringify(this.state.modelInfo.date)}
+                  </Typography>
+
                   <Typography
                     variant='body1'
                     align='left'
@@ -184,7 +196,12 @@ class Visualization extends React.Component {
                     style={{}}>
                     Notes:
                   </Typography>
-                  <p className='modelInfo'>{JSON.stringify(this.state.modelInfo.notes)}</p>                
+                  
+                  <Typography
+                    color='textSecondary'
+                    paragraph                  
+                  >{JSON.stringify(this.state.modelInfo.notes)}
+                  </Typography>                
                 </div>
                 : null }
               <div id='n_true'></div>
