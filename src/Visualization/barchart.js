@@ -10,7 +10,7 @@ export function divergingBarChart() {
     // All references to this variable will then become normalized as "positive" in integer value.
     dataValue = function(d) { return +d.data; },
     labelValue = function(d) { return d.label; },
-    color = [];
+    color = ['#5FA659','#99D8CA','#5A69DC','#C178F2','#767D8E'];
 
   //This function 'chart' will be the main function that is executed when references are called to
   // divergingBarChart() in in the higher-order Predict.js component in the function drawChart().
@@ -20,10 +20,6 @@ export function divergingBarChart() {
     //that is provided in the parameter-argument when calling using the d3 object.
     selection.each(function(data) {
       data = data.map(function(d) {
-        //calculate a random color hue.
-        var randomhue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-        //for each piece of data, assign a new color to that data and push it to the color array.
-        color.push(randomhue);
         return { value: dataValue(d), label: labelValue(d) };
       });
       //Reusable function that sums all values within the parameter-argument data object.
@@ -103,6 +99,11 @@ export function divergingBarChart() {
         .attr('width', function(d) {
           //if the value of the data is more than 1000, divide it by 10.
           if(d.value >= 1000){
+            //In the case that the data graph is the n_true or n_pred graph,
+            //then just scale it slightly so it displays a little more semantically.
+            if(d.label === 'n_true' || d.label === 'n_pred'){
+              return d.value/4.5;
+            }
             return d.value/10;
           }
           else{
