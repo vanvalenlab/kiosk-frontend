@@ -3,8 +3,12 @@
   src: url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 }
 
+.dropzone {
+  width: inherit;
+}
+
 .dropzoneCSS {
-  width: 22em;
+  width: inherit;
   height: auto;
   border-width: 2px;
   border-color: #B8B8B8;
