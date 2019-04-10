@@ -13,6 +13,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    overflowX: 'hidden'
   },
   paper: {
     padding: theme.spacing.unit * 4,
@@ -196,7 +197,7 @@ class Visualization extends React.Component {
                     style={{}}>
                     Notes:
                   </Typography>
-                  
+
                   <Typography
                     color='textSecondary'
                     paragraph                  
