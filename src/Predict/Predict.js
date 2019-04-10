@@ -263,7 +263,7 @@ class Predict extends React.Component {
           </Grid>
 
           {/* GRID A 2 item */}
-          <Grid item>
+          <Grid item xs={6}>
             <form autoComplete='off'>
               {/* GRID B Contains Only the Selection Form and the FileUpload Component, aligning them together. */}
               <Grid container direction='row' justify='center' alignItems='flex-start'>
@@ -346,7 +346,7 @@ class Predict extends React.Component {
                   {/* Grid B 1 Item Close*/}
                 </Grid>
                 {/* GRID B 2 item */}
-                <Grid item xs={12} sm={6} style={{ paddingLeft: '1em' }}>
+                <Grid item xs={12} sm={6} style={{ paddingLeft: '1em', width:'100%' }}>
                   <FileUpload
                     infoText='Upload Here to Begin Image Prediction.'
                     onDroppedFile={(fileName, url) =>
@@ -366,9 +366,9 @@ class Predict extends React.Component {
                   {this.state.errorText}
                 </Typography>
                 : null }
-
+              {/* this submit button is part of Grid B */}
               { !this.state.submitted ?
-                <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
+                <Grid id='submitButtonWrapper' lg item style={{'paddingTop': '1em'}}>
                   <Button
                     id='submitButton'
                     variant='contained'
@@ -418,7 +418,7 @@ class Predict extends React.Component {
 
           {/* GRID A 3 item */}
           { this.state.model !== '' ?
-            <Grid item>
+            <Grid item xs={6}>
               <Visualization
                 selectedModel={this.state.model} />
             </Grid>
