@@ -3,6 +3,7 @@ import AWS from 'aws-sdk';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
+import visualizationJSON from '../config/visualizationDummyData.js';
 
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
@@ -108,23 +109,15 @@ async function getGcpModels(req, res) {
 }
 
 async function getGcpModelStats(req, res){
-  var visualizationJSON = {
-    'metrics':
-      [
-        {'value': 114.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'false_neg'},
-        {'value': 71.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'false_pos'},
-        {'value': 6.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'merge'},
-        {'value': 1705.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'n_pred'},
-        {'value': 1759.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'n_true'},
-        {'value': 21.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'split'},
-        {'value': 1530.0, 'stat_type': 'object', 'feature': 'sum', 'name': 'true_pos'}
-      ],
-    'metadata':
-      {'notes': 'hela 128x128 dataset', 'model_name': 'zoom large watershed', 'date': '2019-02-20'}
-  };
-
-  logger.info(`Got GCP Model Visualization Stats: ${JSON.stringify(visualizationJSON, null, 4)}`);
-  res.status(httpStatus.OK).send({ modelJSON: visualizationJSON });
+  var modelStats = visualizationJSON;
+  //modelStats is an object with 1 key/value pair,
+  //where the value is an array containing js objects.
+  var modelObjects = modelStats.metrics;
+  for(var i=0; i<modelObjects.length; i++){
+    console.log('Current Object: '+modelObjects[i]);
+  }
+  logger.info(`Got GCP Model Visualization Stats: ${JSON.stringify(modelStats, null, 4)}`);
+  res.status(httpStatus.OK).send({ modelJSON: modelStats });
 }
 
 const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
