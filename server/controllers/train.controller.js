@@ -5,7 +5,7 @@ import logger from '../config/winston';
 
 async function train(req, res) {
   const redisKey = `train_${req.body.imageName}_${Date.now()}`;
-  const queueName = 'train';
+  // const queueName = 'train';
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
@@ -31,11 +31,11 @@ async function train(req, res) {
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
-      client.lpush(queueName, redisKey, (err, pushRes) => {
-        if (err) throw err;
-        logger.info(`redis.lpush response: ${pushRes}`);
-        return res.status(httpStatus.OK).send({ hash: redisKey });
-      });
+      // client.lpush(queueName, redisKey, (err, pushRes) => {
+      //   if (err) throw err;
+      //   logger.info(`redis.lpush response: ${pushRes}`);
+      return res.status(httpStatus.OK).send({ hash: redisKey });
+      // });
     });
   } catch (err) {
     logger.error(`Encountered Error in /train: ${err}`);
