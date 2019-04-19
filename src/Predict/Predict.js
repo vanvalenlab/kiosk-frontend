@@ -423,6 +423,9 @@ class Predict extends React.Component {
           {/* GRID A 3 item */}
           { this.state.model !== '' ?
             <Grid item xs={6}>
+              {/* https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#recommendation-fully-controlled-component
+                the above link teaches why key forces a rerender when state data changes.
+            */}
               <Visualization
                 selectedModel={this.state.model}
                 key={this.state.model}
