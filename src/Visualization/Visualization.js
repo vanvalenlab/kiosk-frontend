@@ -42,6 +42,8 @@ class Visualization extends React.Component {
     this.getModelJSON();
   }
 
+  /*  */
+
   // Upon the mounting of the component, this function is run within componentDidMount
   // in order to get the relevant statistics data about the selected model.
   getModelJSON(){
@@ -104,6 +106,7 @@ class Visualization extends React.Component {
   drawChart(){
     // const data is of type array. The array contains objects.
     const metrics = this.state.objectMetrics;
+    //Sorting the array by number, based on the value key.
     metrics.sort(function(a, b){return a.value-b.value;});
     const data = [];
     const n_true = [];
@@ -127,6 +130,7 @@ class Visualization extends React.Component {
     d3.select('#chart').datum(data).call(chart);
     d3.select('#n_true').datum(n_true).call(chart);
     d3.select('#n_pred').datum(n_pred).call(chart);
+    //resize() function utilized on the window.
     d3.select(window).on('resize', resize);
 
     // Reusable resizing function that affects the svgs utilized in the chart.
@@ -171,7 +175,7 @@ class Visualization extends React.Component {
                   <Typography
                     color='textSecondary'
                     paragraph
-                  >{JSON.stringify(this.state.modelInfo.model_name)}
+                  >{JSON.stringify(this.state.selectedModel)}
                   </Typography>
 
                   <Typography

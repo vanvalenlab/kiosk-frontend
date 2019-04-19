@@ -55,10 +55,12 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
     };
-
+    this.baseState = this.state;
     this.handleChange = this.handleChange.bind(this);
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearForm = this.handleChange.bind(this);
+    this.inputRef = React.createRef();
   }
 
   /* As soon as the Predict Component displays to the user,
@@ -234,10 +236,16 @@ class Predict extends React.Component {
   }
   */
   handleChange(event) {
+    //If the event contains a newly selected model,
+    // the value will be updated in the Predict Component State here, first.
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
+    /* Then, here, update the props passed to the Visualization Component via */
     if (event.target.name === 'model') {
+      //Exposing an Instance method to imperatively reset the internal state.
+      //Do this by using inputRef.
+      this.inputRef.current.resetVisualizationModel(event.target.value);
       this.preselectModelConfig(event);
     }
   }
@@ -420,7 +428,9 @@ class Predict extends React.Component {
           { this.state.model !== '' ?
             <Grid item xs={6}>
               <Visualization
-                selectedModel={this.state.model} />
+                selectedModel={this.state.model}
+                key={this.state.model}
+              />
             </Grid>
             : null }
         </Grid>
