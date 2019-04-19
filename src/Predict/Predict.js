@@ -60,7 +60,6 @@ class Predict extends React.Component {
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.clearForm = this.handleChange.bind(this);
-    this.inputRef = React.createRef();
   }
 
   /* As soon as the Predict Component displays to the user,
@@ -243,9 +242,6 @@ class Predict extends React.Component {
     });
     /* Then, here, update the props passed to the Visualization Component via */
     if (event.target.name === 'model') {
-      //Exposing an Instance method to imperatively reset the internal state.
-      //Do this by using inputRef.
-      this.inputRef.current.resetVisualizationModel(event.target.value);
       this.preselectModelConfig(event);
     }
   }

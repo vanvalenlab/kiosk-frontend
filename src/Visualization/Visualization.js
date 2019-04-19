@@ -42,7 +42,7 @@ class Visualization extends React.Component {
     this.getModelJSON();
   }
 
-  /*  */
+  /* */
 
   // Upon the mounting of the component, this function is run within componentDidMount
   // in order to get the relevant statistics data about the selected model.
