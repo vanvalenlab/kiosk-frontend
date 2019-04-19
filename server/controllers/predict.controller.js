@@ -5,6 +5,7 @@ import logger from '../config/winston';
 
 async function predict(req, res) {
   const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+  const queueName = 'predict';
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
@@ -26,7 +27,11 @@ async function predict(req, res) {
     ], (err, redisRes) => {
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
-      return res.status(httpStatus.OK).send({ hash: redisKey });
+      client.lpush(queueName, redisKey, (err, pushRes) => {
+        if (err) throw err;
+        logger.info(`redis.lpush response: ${pushRes}`);
+        return res.status(httpStatus.OK).send({ hash: redisKey });
+      });
     });
   } catch (err) {
     logger.error(`Encountered Error in /predict: ${err}`);
