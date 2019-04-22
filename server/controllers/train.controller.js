@@ -23,8 +23,8 @@ async function train(req, res) {
       'optimizer', req.body.optimizer,
       'skips', req.body.skips,
       'status', 'new',
-      'timestamp_last_status_update', Date.now(),
-      'timestamp_upload', Date.now(),
+      'updated_at', Date.now(),
+      'created_at', Date.now(),
       'training_type', req.body.trainingType,
       'transform', req.body.transform,
       'url', req.body.imageURL
