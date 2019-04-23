@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
-import visualizationJSON from '../config/visualizationDummyData.js';
+import { visualization1, visualization2, visualization3, visualization4, visualization5 } from '../config/visualizationDummyData.js';
 
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
@@ -109,15 +109,18 @@ async function getGcpModels(req, res) {
 }
 
 async function getGcpModelStats(req, res){
-  var modelStats = visualizationJSON;
-  //modelStats is an object with 1 key/value pair,
-  //where the value is an array containing js objects.
-  var modelObjects = modelStats.metrics;
-  for(var i=0; i<modelObjects.length; i++){
-    console.log('Current Object: '+modelObjects[i]);
-  }
-  logger.info(`Got GCP Model Visualization Stats: ${JSON.stringify(modelStats, null, 4)}`);
-  res.status(httpStatus.OK).send({ modelJSON: modelStats });
+  var arrayofDummyData = [];
+  arrayofDummyData.push(visualization1, visualization2, visualization3, visualization4, visualization5);
+  var max = 4;
+  var min = 0;
+  var randomNumber = Math.floor(Math.random() * (max - min) + min);
+  console.log('Here is the random number: ' + randomNumber);
+  //we select a random object from the lengthy visualization Array.
+  var randomDataObject = arrayofDummyData[randomNumber];
+  //log the randomData Object
+  logger.info(`Got GCP Model Visualization Stats: ${JSON.stringify(randomDataObject, null, 4)}`);
+  //send the data as a response to React where the ajax call was made.
+  res.status(httpStatus.OK).send({ modelArray: randomDataObject });
 }
 
 const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
