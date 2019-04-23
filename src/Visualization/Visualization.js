@@ -31,7 +31,7 @@ class Visualization extends React.Component {
       selectedModel: this.props.selectedModel,
       showError: false,
       errorText: '',
-      modelJSON:null,
+      modelArray:null,
       modelInfo:null,
       objectMetrics:[],
       pixelMetrics:[]
@@ -42,7 +42,11 @@ class Visualization extends React.Component {
     this.getModelJSON();
   }
 
-  /* */
+  /*
+  1. getModelJSON is run upon mounting of component. Stores state data into key/value for modelArray.
+  2. Runs modelInfo()
+  3. drawChart()
+  */
 
   // Upon the mounting of the component, this function is run within componentDidMount
   // in order to get the relevant statistics data about the selected model.
@@ -50,7 +54,7 @@ class Visualization extends React.Component {
     axios.get('/api/getModelStats')
       .then((response) => {
         this.setState({
-          modelJSON: response.data.modelJSON
+          modelArray: response.data.modelArray
         });
         this.modelInfo();
         this.drawChart();
@@ -68,9 +72,9 @@ class Visualization extends React.Component {
   }
 
   modelInfo(){
-    var modelStats = this.state.modelJSON;
-    //Store the modelJSON obj in a var, separate it by it's only two possible keys - either 'metadata' or 'metrics'.
-    //modelInfo, data type is a javascript object. This will be used for populating basic info about the selected Model.
+    var modelStats = this.state.modelArray;
+    
+    //Gather meta data concerning the model that is selected. Type: Array.
     var modelInfo = modelStats.metadata;
     //modelMetrics, data type is an array. Will be used to distill visualization and statistics.
     var modelMetrics = modelStats.metrics;
