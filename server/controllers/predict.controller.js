@@ -21,8 +21,8 @@ async function predict(req, res) {
       'original_name', req.body.imageName,
       'postprocess_function', req.body.postprocess_function,
       'status', 'new',
-      'created_at', Date.now().toISOString(),
-      'updated_at', Date.now().toISOString(),
+      'created_at', new Date().toISOString(),
+      'updated_at', new Date().toISOString(),
       'url', req.body.imageURL
     ], (err, redisRes) => {
       if (err) throw err;
