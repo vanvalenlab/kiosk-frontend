@@ -4,7 +4,7 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 async function track(req, res) {
-  const redisKey = `predict_track_${req.body.imageName}_${Date.now()}`;
+  const redisKey = `track_${req.body.imageName}_${Date.now()}`;
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
