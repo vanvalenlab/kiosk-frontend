@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 import { Storage } from '@google-cloud/storage';
 import config from '../config/config';
 import logger from '../config/winston';
-import { visualization1, visualization2, visualization3, visualization4, visualization5 } from '../config/visualizationDummyData.js';
+import { visualization1, visualization2, visualization3, visualization4, visualization5, visualization6, visualization7, visualization8, visualization9, visualization10, visualization11, visualization12, visualization13 } from '../config/visualizationDummyData.js';
 
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
@@ -110,9 +110,10 @@ async function getGcpModels(req, res) {
 
 async function getGcpModelStats(req, res){
   var arrayofDummyData = [];
-  arrayofDummyData.push(visualization1, visualization2, visualization3, visualization4, visualization5);
-  var max = 4;
+  arrayofDummyData.push(visualization1, visualization2, visualization3, visualization4, visualization5, visualization6, visualization7, visualization8, visualization9, visualization10, visualization11, visualization12, visualization13);
+  var max = 13;
   var min = 0;
+  //add 1 to account for the 0th place of the array.
   var randomNumber = Math.floor(Math.random() * (max - min) + min);
   console.log('Here is the random number: ' + randomNumber);
   //we select a random object from the lengthy visualization Array.

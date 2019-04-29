@@ -71,6 +71,8 @@ class Visualization extends React.Component {
     });
   }
 
+  //The data retrieved from the Express.js backend from /getModelStats [getGcpModelStats(req,res)]
+  //is organized here.
   modelInfo(){
     var modelStats = this.state.modelArray;
     
