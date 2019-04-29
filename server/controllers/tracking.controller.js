@@ -5,6 +5,7 @@ import logger from '../config/winston';
 
 async function track(req, res) {
   const redisKey = `track_${req.body.imageName}_${Date.now()}`;
+  const queueName = 'track';
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
@@ -18,13 +19,18 @@ async function track(req, res) {
       'model_version', req.body.model_version,
       'original_name', req.body.imageName,
       'status', 'new',
-      'timestamp_last_status_update', Date.now(),
-      'timestamp_upload', Date.now(),
+      'created_at', new Date().toISOString(),
+      'updated_at', new Date().toISOString(),
       'url', req.body.imageURL
     ], (err, redisRes) => {
+
       if (err) throw err;
       logger.info(`redis.hmset response: ${redisRes}`);
-      return res.status(httpStatus.OK).send({ hash: redisKey });
+      client.lpush(queueName, redisKey, (err, pushRes) => {
+        if (err) throw err;
+        logger.info(`redis.lpush response: ${pushRes}`);
+        return res.status(httpStatus.OK).send({ hash: redisKey });
+      });
     });
   } catch (err) {
     logger.error(`Encountered Error in /track: ${err}`);
