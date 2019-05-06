@@ -7,7 +7,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import DataCard from '../DataCard/Datacard.js';
 
-//Styles Object for MaterialUI styling
+// Styles Object for MaterialUI styling
 const styles = theme => ({
   heroUnit: {
     backgroundColor: theme.palette.background.paper,
@@ -46,7 +46,7 @@ const styles = theme => ({
   }
 });
 
-//This function is described before the Class declaration for the Data component, below.
+// This function is described before the Class declaration for the Data component, below.
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -54,25 +54,27 @@ function TabContainer(props) {
     </Typography>
   );
 }
-//propType description for React to check data type when TabContainer jsx instances are given prop's.
+
+// propType description for React to check data type when TabContainer jsx instances are given prop's.
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-//!!!!!!!!!!!Class Declaration for Data Component !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!!!!!!!!!!Class Declaration for Data Component !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Data extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value:'prediction',
     };
-    //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
-    //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
+    // Binding the function's name call to the "this" key word for this Class
+    // object, rather than the function HandleChange.
+    // refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
     this.handleChange = this.handleChange.bind(this);
   }
 
-  //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
+  // Function to set the index of the <Tab> child being parametized.
+  // (https://material-ui.com/api/tabs/)
   handleChange(event,value){
     this.setState({ value: value });
   }

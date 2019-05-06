@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-//Styles Object for MaterialUI styling
+// Styles Object for MaterialUI styling
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -38,13 +38,12 @@ const styles = theme => ({
   }
 });
 
-//!!!!!!!!!!!Class Declaration for DataCard Component !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!Class Declaration for DataCard Component !!!!!!!!!!!!!!!!!!!!!!!!!!
 class DataCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      baseUrl :'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
+      baseUrl: 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
       cardType: this.props.cardType,
       cardsInUse: [],
       allCards :[
@@ -92,8 +91,9 @@ class DataCard extends React.Component {
         }
       ],
     };
-    //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
-    //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
+    // Binding the function's name call to the "this" key word for this Class
+    // object, rather than the function HandleChange.
+    // refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
     this.organizeCardTypes = this.organizeCardTypes.bind(this);
   }
 
@@ -109,22 +109,22 @@ class DataCard extends React.Component {
     let cardTypeFromProps = this.state.cardType;
 
     //iterating through each entry in the cards array.
-    for(let i=0; i<cards.length;i++){
+    for (let i = 0; i < cards.length; ++i) {
       // iterating through each object in each cards entry.
-      for(let key in cards[i] ){
-        if(key === 'datatype' && cards[i][key] === 'training' ){
+      for (let key in cards[i] ) {
+        if (key === 'datatype' && cards[i][key] === 'training' ) {
           trainingCards.push(cards[i]);
         }
-        else if(key === 'datatype' && cards[i][key] === 'prediction' ){
+        else if (key === 'datatype' && cards[i][key] === 'prediction' ) {
           predictionCards.push(cards[i]);
         }
-      }      
+      }
     }
-    if(cardTypeFromProps === 'prediction'){
-      this.setState({cardsInUse:predictionCards});
+    if (cardTypeFromProps === 'prediction') {
+      this.setState({ cardsInUse:predictionCards });
     }
-    if(cardTypeFromProps === 'training'){
-      this.setState({cardsInUse:trainingCards});
+    if (cardTypeFromProps === 'training') {
+      this.setState({ cardsInUse:trainingCards });
     }
   }
 
