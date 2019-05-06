@@ -12,7 +12,6 @@ const storage = new Storage({
 
 function gcpUpload(req, res, next) {
   const bucket = storage.bucket(config.gcp.bucketName);
-
   if (!req.file) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
