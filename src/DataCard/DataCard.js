@@ -17,9 +17,9 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-        width: 1100,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+      width: 1100,
+      marginLeft: 'auto',
+      marginRight: 'auto',
     },
   },
   cardGrid: {
@@ -90,7 +90,7 @@ class DataCard extends React.Component {
           description: 'Tracked training data for the NIH 3T3 nuclei',
           datatype: 'training'
         }
-        ],
+      ],
     };
     //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
     //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
@@ -181,6 +181,7 @@ class DataCard extends React.Component {
 DataCard.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  cardType: PropTypes.object.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(DataCard);

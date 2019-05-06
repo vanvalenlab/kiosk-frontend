@@ -75,7 +75,7 @@ class Data extends React.Component {
   //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
   handleChange(event,value){
     this.setState({ value: value });
-  };
+  }
 
   render() {
     const { classes } = this.props;
