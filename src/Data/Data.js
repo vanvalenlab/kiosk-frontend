@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import DataCard from '../DataCard/Datacard.js';
 
+//Styles Object for MaterialUI styling
 const styles = theme => ({
   heroUnit: {
     backgroundColor: theme.palette.background.paper,
@@ -48,45 +46,44 @@ const styles = theme => ({
   }
 });
 
-const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
-const cards = [
-  {
-    file: 'nuclei/examples/HeLa_nuclear.png',
-    name: 'HeLa Nuclei',
-    description: 'Nuclear stains of HeLa S3'
-  }, {
-    file: 'nuclei/examples/mibi_nuclear.png',
-    name: 'MIBI Nuclei',
-    description: 'Double-stranded DNA data from MIBI'
-  }, {
-    file: 'nuclei/examples/mousebrain.tif',
-    name: 'Mouse Brain Nuclei',
-    description: 'Mouse embryo nuclei Z-stack'
-  }, {
-    file: 'tracked/tracking_HeLa_S3.zip',
-    name: 'HeLa S3 Raw + Segmentation',
-    description: 'Raw data and segmentations to submit for tracking'
-  }, {
-    file: 'nuclei/examples/training_HeLa_S3.zip',
-    name: 'Training Data - HeLa S3 Nuclei',
-    description: 'Training data for the HeLa S3 nuclei'
-  }, {
-    file: 'tracked/HeLa_S3.trks',
-    name: 'Tracked Training Data - HeLa S3 Nuclei',
-    description: 'Tracked training data for the HeLa S3 nuclei'
-  }, {
-    file: 'tracked/3T3_NIH.trks',
-    name: 'Tracked Training Data - NIH 3T3 Nuclei',
-    description: 'Tracked training data for the NIH 3T3 nuclei'
-  }
-];
+//This function is described before the Class declaration for the Data component, below.
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+//propType description for React to check data type when TabContainer jsx instances are given prop's.
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
 
+//!!!!!!!!!!!Class Declaration for Data Component !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Data extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value:'prediction',
+    };
+    //Binding the function's name call to the "this" key word for this Class object, rather than the function HandleChange.
+    //refer to: https://stackoverflow.com/questions/32317154/react-uncaught-typeerror-cannot-read-property-setstate-of-undefined
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  //Function to set the index of the <Tab> child being parametized. (https://material-ui.com/api/tabs/)
+  handleChange(event,value){
+    this.setState({ value: value });
+  };
+
   render() {
     const { classes } = this.props;
 
     return(
+      // Outermost Div
       <div>
+        {/* Start Top Banner Area */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
@@ -98,45 +95,41 @@ class Data extends React.Component {
             </Typography>
           </div>
         </div>
-        <div className={classNames(classes.layout, classes.cardGrid)}>
-          <Grid container spacing={40}>
-            {cards.map(card => (
-              <Grid item key={cards.indexOf(card)} xs={12} sm={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={`${baseUrl}/${card.file}`}
-                    title={`${card.name}`}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="headline" component="h2">
-                      { card.name }
-                    </Typography>
-                    <Typography>
-                      { card.description }
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      target="_blank"
-                      href={`${baseUrl}/${card.file}`}>
-                      Download
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </div>
+        {/* Top Banner Area - END */}
+
+        {/* Start MaterialUI Tabs/tab appbar */}
+        <AppBar position="static" color="default">
+          <Tabs
+            value={this.state.value}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab value="prediction" label="Prediction Data" />
+            <Tab value="training" label="Training Data" />
+          </Tabs>
+        </AppBar>
+
+        {/* Example Cards */}
+        {this.state.value === 'prediction' && <TabContainer >
+          <DataCard cardType={this.state.value} ></DataCard>
+        </TabContainer>}
+
+        {/* Training Cards */}
+        {this.state.value === 'training' && <TabContainer >
+          <DataCard cardType={this.state.value} ></DataCard>
+        </TabContainer>}
+        {/* END MaterialUI Tabs/tab appbar */}
       </div>
+      //END Outermost Div
     );
   }
 }
 
 Data.propTypes = {
   classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Data);
+export default withStyles(styles, { withTheme: true })(Data);
