@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import DataCard from '../DataCard/Datacard.js';
+import DataCard from '../DataCard/DataCard.js';
 
 // Styles Object for MaterialUI styling
 const styles = theme => ({
