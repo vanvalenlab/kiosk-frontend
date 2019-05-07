@@ -1,8 +1,11 @@
-import redis from 'redis';
+import Redis from 'ioredis';
 import config from './config';
 import logger from './winston';
 
-const client = redis.createClient(config.redis);
+const client = Redis.createClient({
+  host: config.redis.host,
+  port: config.redis.port,
+});
 
 // handle any errors whilst connecting to Redis.
 client.on('error', (err) => {
