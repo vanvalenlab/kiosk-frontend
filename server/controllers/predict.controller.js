@@ -3,38 +3,67 @@ import client from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
 
-async function predict(req, res) {
-  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
-  const queueName = 'predict';
-  let prefix = config.uploadDirectory;
-  if (prefix[prefix.length - 1] === '/') {
-    prefix = prefix.slice(0, prefix.length - 1);
-  }
+async function addRedisKey(redisKey, data, cb) {
   client.hmset([
     redisKey,
-    'cuts', req.body.cuts,
+    'cuts', data.cuts,
     'identity_upload', config.hostname,
-    'input_file_name', req.body.uploadedName,
-    'model_name', req.body.model_name,
-    'model_version', req.body.model_version,
-    'original_name', req.body.imageName,
-    'postprocess_function', req.body.postprocess_function,
+    'input_file_name', data.uploadedName,
+    'model_name', data.model_name,
+    'model_version', data.model_version,
+    'original_name', data.imageName,
+    'postprocess_function', data.postprocess_function,
+    'preprocess_function', data.preprocess_function,
+    'url', data.imageURL,
     'status', 'new',
     'created_at', new Date().toISOString(),
     'updated_at', new Date().toISOString(),
-    'url', req.body.imageURL
   ], (err, redisRes) => {
     if (err) {
-      logger.error(`Encountered Error in /predict: ${err}`);
-      return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+      logger.error(`Encountered error during "HMSET ${redisKey}": ${err}`);
+      throw err;
     }
-    logger.info(`redis.hmset response: ${redisRes}`);
-    client.lpush(queueName, redisKey, (err, pushRes) => {
+    return cb(redisRes);
+  });
+}
+
+async function predict(req, res) {
+  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+  const queueName = 'predict';
+  addRedisKey(redisKey, req.body, (redisResponse) => {
+    logger.info(`redis.hmset response: ${redisResponse}`);
+    client.lpush(queueName, redisKey, (err, pushResponse) => {
       if (err) throw err;
-      logger.info(`redis.lpush response: ${pushRes}`);
+      logger.info(`redis.lpush response: ${pushResponse}`);
       return res.status(httpStatus.OK).send({ hash: redisKey });
     });
   });
 }
 
-export default { predict };
+async function batchPredict(req, res) {
+  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+  const queueName = 'predict';
+
+  const maxJobs = 100;
+
+  if (req.body.jobs.length > maxJobs) {
+    return res.status(httpStatus.REQUEST_ENTITY_TOO_LARGE).send({
+      message: `A maximum of ${maxJobs} can be processed in one request.`
+    });
+  }
+
+  let hashes = [];
+  for (let i = 0; i < req.body.jobs.length; ++i) {
+    addRedisKey(redisKey, req.body.jobs[i], (redisResponse) => {
+      logger.info(`redis.hmset response: ${redisResponse}`);
+      client.lpush(queueName, redisKey, (err, pushResponse) => {
+        if (err) throw err;
+        logger.info(`redis.lpush response: ${pushResponse}`);
+        hashes.push(redisKey);
+      });
+    });
+  }
+  return res.status(httpStatus.OK).send({ hashes: hashes });
+}
+
+export default { predict, batchPredict };
