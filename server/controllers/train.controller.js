@@ -1,9 +1,10 @@
 import httpStatus from 'http-status';
 import config from '../config/config';
-import client from '../config/redis';
+import createClient from '../config/redis';
 import logger from '../config/winston';
 
 async function train(req, res) {
+  const client = createClient();
   const redisKey = `train_${req.body.imageName}_${Date.now()}`;
   // const queueName = 'train';
   let prefix = config.uploadDirectory;

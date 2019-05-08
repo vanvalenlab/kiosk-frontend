@@ -1,8 +1,9 @@
 import httpStatus from 'http-status';
-import client from '../config/redis';
+import createClient from '../config/redis';
 import logger from '../config/winston';
 
 async function getKey(req, res) {
+  const client = createClient();
   const redisHash = req.body.hash;
   const redisKey = req.body.key;
   client.hget(redisHash, redisKey, (err, value) => {
@@ -16,6 +17,7 @@ async function getKey(req, res) {
 }
 
 async function expireHash(req, res) {
+  const client = createClient();
   const redisHash = req.body.hash;
   const expireTime = req.body.expireIn || 3600;
 

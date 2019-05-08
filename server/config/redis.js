@@ -1,15 +1,17 @@
-import Redis from 'ioredis';
+// import Redis from 'ioredis';
+import redis from 'redis';
 import config from './config';
 import logger from './winston';
 
-const client = Redis.createClient({
-  host: config.redis.host,
-  port: config.redis.port,
-});
+function createClient() {
+  const client = redis.createClient(config.redis);
 
-// handle any errors whilst connecting to Redis.
-client.on('error', (err) => {
-  logger.error(`Error while communicating with Redis: ${err}`);
-});
+  // handle any errors whilst connecting to Redis.
+  client.on('error', (err) => {
+    logger.error(`Error while communicating with Redis: ${err}`);
+  });
 
-export default client;
+  return client;
+}
+
+export default createClient;
