@@ -43,19 +43,30 @@ async function getJobStatus(req, res) {
   }
 }
 
+async function batchGetKeys(req, res) {
+  const client = createClient();
+  const hashes = req.body.hashes;
+  const key = req.body.key;
+  const values = [];
+  try {
+    await Promise.all(hashes.map(h => getRedisValues(client, h, key, values)));
+    return res.status(httpStatus.OK).send({ values: values });
+  } catch (err) {
+    logger.error(`Error finding ${key} for hashes ${hashes}: ${err}`);
+    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+
 async function batchGetJobStatus(req, res) {
   const client = createClient();
-  const redisHashes = req.body.hashes;
-
+  const hashes = req.body.hashes;
   const statuses = [];
 
   try {
-    await Promise.all(req.body.hashes.map((h) => {
-      getRedisValues(client, h, 'status', statuses)
-    }));
+    await Promise.all(hashes.map(h => getRedisValues(client, h, 'status', statuses)));
     return res.status(httpStatus.OK).send({ statuses: statuses });
   } catch (err) {
-    logger.error(`Error waiting for status checks for ${redisHashes}: ${err}`);
+    logger.error(`Error waiting for status checks for ${hashes}: ${err}`);
     return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
@@ -83,5 +94,6 @@ export default {
   getKey,
   expireHash,
   getJobStatus,
+  batchGetKeys,
   batchGetJobStatus
 };

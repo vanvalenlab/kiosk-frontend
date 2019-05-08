@@ -28,6 +28,9 @@ router.route('/models')
 router.route('/redis')
   .post(controllers.redisController.getKey);
 
+router.route('/batch/redis')
+  .post(controllers.redisController.batchGetKeys);
+
 router.route('/status')
   .post(controllers.redisController.getJobStatus);
 
