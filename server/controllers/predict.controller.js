@@ -114,7 +114,7 @@ async function batchPredict(req, res) {
   }
 
   const client = createClient();
-  let hashes = [];
+  const hashes = [];
 
   try {
     await Promise.all(req.body.jobs.map(j => batchAddKeys(client, j, hashes)));
