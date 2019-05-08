@@ -128,17 +128,14 @@ class Predict extends React.Component {
     this.statusCheck = setInterval(() => {
       axios({
         method: 'post',
-        url: '/api/redis',
-        data: {
-          'hash': redisHash,
-          'key': 'status'
-        }
+        url: '/api/status',
+        data: { 'hash': redisHash }
       }).then((response) => {
-        if (response.data.value === 'failed') {
+        if (response.data.status === 'failed') {
           clearInterval(this.statusCheck);
           this.getErrorReason(redisHash);
           this.expireRedisHash(redisHash, 3600);
-        } else if (response.data.value === 'done') {
+        } else if (response.data.status === 'done') {
           clearInterval(this.statusCheck);
           axios({
             method: 'post',
