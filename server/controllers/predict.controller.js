@@ -1,4 +1,5 @@
 import httpStatus from 'http-status';
+import uuidv4 from 'uuid/v4';
 import { promisify } from 'util';
 import createClient from '../config/redis';
 import config from '../config/config';
@@ -65,7 +66,7 @@ async function pushRedisKey(client, redisKey) {
 }
 
 async function batchAddKeys(client, job, arr) {
-  let redisKey = `predict_${job.imageName}_${Date.now()}`;
+  let redisKey = `predict_${job.imageName}_${uuidv4()}`;
   await addRedisKey(client, redisKey, job);
   Array.prototype.push.apply(arr, [redisKey]);
 }
@@ -77,7 +78,7 @@ async function predict(req, res) {
   }
 
   const client = createClient();
-  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+  const redisKey = `predict_${req.body.imageName}_${uuidv4()}`;
 
   try {
     await addRedisKey(client, redisKey, req.body);
