@@ -31,6 +31,9 @@ router.route('/redis')
 router.route('/status')
   .post(controllers.redisController.getJobStatus);
 
+router.route('/batch/status')
+  .post(controllers.redisController.batchGetJobStatus);
+
 router.route('/redis/expire')
   .post(controllers.redisController.expireHash);
 
