@@ -1,69 +1,133 @@
 import httpStatus from 'http-status';
-import client from '../config/redis';
+import { promisify } from 'util';
+import createClient from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
 
-async function addRedisKey(redisKey, data, cb) {
-  client.hmset([
-    redisKey,
-    'cuts', data.cuts,
-    'identity_upload', config.hostname,
-    'input_file_name', data.uploadedName,
-    'model_name', data.model_name,
-    'model_version', data.model_version,
-    'original_name', data.imageName,
-    'postprocess_function', data.postprocess_function,
-    'preprocess_function', data.preprocess_function,
-    'url', data.imageURL,
-    'status', 'new',
-    'created_at', new Date().toISOString(),
-    'updated_at', new Date().toISOString(),
-  ], (err, redisRes) => {
-    if (err) {
-      logger.error(`Encountered error during "HMSET ${redisKey}": ${err}`);
-      throw err;
+// helper functions
+function isValidPredictdata(data) {
+  const requiredKeys = [
+    'modelName',
+    'modelVersion',
+    'imageName'
+  ];
+  for (let key of requiredKeys) {
+    if (!data.hasOwnProperty(key)) {
+      return false;
     }
-    return cb(redisRes);
-  });
+  }
+  return true;
 }
 
-async function predict(req, res) {
-  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+async function addRedisKey(client, redisKey, data) {
+  const hmsetAsync = promisify(client.hmset).bind(client);
+  const now = new Date().toISOString();
+  try {
+    const response = await hmsetAsync([
+      redisKey,
+      'original_name', data.imageName, // to save results with the same name
+      'input_file_name', data.uploadedName || data.imageName, // used for unique files
+      'model_name', data.modelName,
+      'model_version', data.modelVersion,
+      'postprocess_function', data.postprocessFunction || '',
+      'preprocess_function', data.preprocessFunction || '',
+      'cuts', data.cuts || '0', // to split up very large images
+      'url', data.imageUrl || '', // unused?
+      'status', 'new',
+      'created_at', now,
+      'updated_at', now,
+      'identity_upload', config.hostname,
+    ]);
+    logger.debug(`"HMSET ${redisKey}" response: ${response}`);
+    return response;
+  } catch (err) {
+    logger.error(`Encountered error during "HMSET ${redisKey}": ${err}`);
+    throw err;
+  }
+}
+
+async function pushRedisKey(client, redisKey) {
   const queueName = 'predict';
-  addRedisKey(redisKey, req.body, (redisResponse) => {
-    logger.info(`redis.hmset response: ${redisResponse}`);
-    client.lpush(queueName, redisKey, (err, pushResponse) => {
-      if (err) throw err;
-      logger.info(`redis.lpush response: ${pushResponse}`);
-      return res.status(httpStatus.OK).send({ hash: redisKey });
-    });
-  });
+  const lpushAsync = promisify(client.lpush).bind(client);
+  try {
+    let response;
+    if (Array.isArray(redisKey)) {
+      response = await lpushAsync(queueName, ...redisKey);
+    } else {
+      response = await lpushAsync(queueName, redisKey);
+    }
+    logger.debug(`"LPUSH ${redisKey}" response: ${response}`);
+    return response;
+  } catch (err) {
+    logger.error(`Encountered error during "LPUSH ${redisKey}": ${err}`);
+    throw err;
+  }
+}
+
+async function batchAddKeys(client, job, arr) {
+  let redisKey = `predict_${job.imageName}_${Date.now()}`;
+  await addRedisKey(client, redisKey, job);
+  Array.prototype.push.apply(arr, [redisKey]);
+}
+
+// route handlers
+async function predict(req, res) {
+  if (!isValidPredictdata(req.body)) {
+    return res.sendStatus(httpStatus.BAD_REQUEST);
+  }
+
+  const client = createClient();
+  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
+
+  try {
+    await addRedisKey(client, redisKey, req.body);
+    await pushRedisKey(client, redisKey);
+    return res.status(httpStatus.OK).send({ hash: redisKey });
+  } catch (err) {
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
 }
 
 async function batchPredict(req, res) {
-  const redisKey = `predict_${req.body.imageName}_${Date.now()}`;
-  const queueName = 'predict';
-
   const maxJobs = 100;
+  // check that the `jobs` key exists in the request
+  if (!req.body.hasOwnProperty('jobs')) {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: 'Missing required field `jobs`, the list of batch jobs.'
+    });
+  }
 
+  // check that the number of jobs does not exceed maxJobs
   if (req.body.jobs.length > maxJobs) {
     return res.status(httpStatus.REQUEST_ENTITY_TOO_LARGE).send({
       message: `A maximum of ${maxJobs} can be processed in one request.`
     });
   }
 
-  let hashes = [];
-  for (let i = 0; i < req.body.jobs.length; ++i) {
-    addRedisKey(redisKey, req.body.jobs[i], (redisResponse) => {
-      logger.info(`redis.hmset response: ${redisResponse}`);
-      client.lpush(queueName, redisKey, (err, pushResponse) => {
-        if (err) throw err;
-        logger.info(`redis.lpush response: ${pushResponse}`);
-        hashes.push(redisKey);
+  // check that each job is well formatted
+  for (let j = 0; j < req.body.jobs.length; ++j) {
+    if (!isValidPredictdata(req.body.jobs[j])) {
+      return res.status(httpStatus.BAD_REQUEST).send({
+        message: `Not all required fields exist in job ${req.body.jobs[j]}.`
       });
-    });
+    }
   }
-  return res.status(httpStatus.OK).send({ hashes: hashes });
+
+  const client = createClient();
+  let hashes = [];
+
+  try {
+    await Promise.all(req.body.jobs.map(j => batchAddKeys(client, j, hashes)));
+    logger.info(`hashes after waiting for all promises: ${hashes}`);
+    await pushRedisKey(client, hashes);
+    return res.status(httpStatus.OK).send({ hashes: hashes });
+  } catch (err) {
+    logger.error(`Encountered error: ${err}`);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
 }
 
-export default { predict, batchPredict };
+export default {
+  predict,
+  batchPredict
+};

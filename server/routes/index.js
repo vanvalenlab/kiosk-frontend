@@ -16,6 +16,9 @@ router.route('/upload')
 router.route('/predict')
   .post(controllers.predictController.predict);
 
+router.route('/batch/predict')
+  .post(controllers.predictController.batchPredict);
+
 router.route('/train')
   .post(controllers.trainController.train);
 
