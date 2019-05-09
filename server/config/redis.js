@@ -1,4 +1,3 @@
-// import Redis from 'ioredis';
 import redis from 'redis';
 import config from './config';
 import logger from './winston';
