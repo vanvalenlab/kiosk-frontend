@@ -5,7 +5,7 @@ import client from '../config/redis';
 import logger from '../config/winston';
 
 async function train(req, res) {
-  const redisKey = `train_${req.body.imageName}_${uuidv4()}`;
+  const redisKey = `train:${req.body.imageName}_${uuidv4()}`;
   // const queueName = 'train';
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {

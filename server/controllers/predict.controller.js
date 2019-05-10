@@ -66,7 +66,7 @@ async function pushRedisKey(client, redisKey) {
 }
 
 async function batchAddKeys(client, job, arr) {
-  let redisKey = `predict_${job.imageName}_${uuidv4()}`;
+  let redisKey = `predict:${job.imageName}:${uuidv4()}`;
   await addRedisKey(client, redisKey, job);
   Array.prototype.push.apply(arr, [redisKey]);
 }
@@ -77,7 +77,7 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  const redisKey = `predict_${req.body.imageName}_${uuidv4()}`;
+  const redisKey = `predict:${req.body.imageName}:${uuidv4()}`;
 
   try {
     await addRedisKey(client, redisKey, req.body);
