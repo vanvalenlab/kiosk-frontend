@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import { promisify } from 'util';
-import createClient from '../config/redis';
+import client from '../config/redis';
 import logger from '../config/winston';
 
 // helper functions
@@ -19,7 +19,6 @@ async function getRedisValues(client, key, field, arr) {
 
 // route handlers
 async function getKey(req, res) {
-  const client = createClient();
   const redisHash = req.body.hash;
   const redisKey = req.body.key;
   try {
@@ -32,7 +31,6 @@ async function getKey(req, res) {
 }
 
 async function getJobStatus(req, res) {
-  const client = createClient();
   const redisHash = req.body.hash;
   try {
     const value = await getRedisValue(client, redisHash, 'status');
@@ -44,7 +42,6 @@ async function getJobStatus(req, res) {
 }
 
 async function batchGetKeys(req, res) {
-  const client = createClient();
   const hashes = req.body.hashes;
   const key = req.body.key;
   const values = [];
@@ -58,7 +55,6 @@ async function batchGetKeys(req, res) {
 }
 
 async function batchGetJobStatus(req, res) {
-  const client = createClient();
   const hashes = req.body.hashes;
   const statuses = [];
 
@@ -72,7 +68,6 @@ async function batchGetJobStatus(req, res) {
 }
 
 async function expireHash(req, res) {
-  const client = createClient();
   const redisHash = req.body.hash;
   const expireTime = req.body.expireIn || 3600;
 

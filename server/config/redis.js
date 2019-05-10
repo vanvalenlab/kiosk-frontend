@@ -13,4 +13,6 @@ function createClient() {
   return client;
 }
 
-export default createClient;
+const client = createClient();
+
+export default client;

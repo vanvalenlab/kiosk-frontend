@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import uuidv4 from 'uuid/v4';
 import { promisify } from 'util';
-import createClient from '../config/redis';
+import client from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
 
@@ -77,7 +77,6 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  const client = createClient();
   const redisKey = `predict_${req.body.imageName}_${uuidv4()}`;
 
   try {
@@ -114,7 +113,6 @@ async function batchPredict(req, res) {
     }
   }
 
-  const client = createClient();
   const hashes = [];
 
   try {
