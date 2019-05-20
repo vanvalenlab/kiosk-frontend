@@ -16,6 +16,9 @@ router.route('/upload')
 router.route('/predict')
   .post(controllers.predictController.predict);
 
+router.route('/batch/predict')
+  .post(controllers.predictController.batchPredict);
+
 router.route('/train')
   .post(controllers.trainController.train);
 
@@ -24,6 +27,15 @@ router.route('/models')
 
 router.route('/redis')
   .post(controllers.redisController.getKey);
+
+router.route('/batch/redis')
+  .post(controllers.redisController.batchGetKeys);
+
+router.route('/status')
+  .post(controllers.redisController.getJobStatus);
+
+router.route('/batch/status')
+  .post(controllers.redisController.batchGetJobStatus);
 
 router.route('/redis/expire')
   .post(controllers.redisController.expireHash);
