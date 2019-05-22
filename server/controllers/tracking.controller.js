@@ -1,10 +1,11 @@
 import httpStatus from 'http-status';
+import uuidv4 from 'uuid/v4';
 import client from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
 
 async function track(req, res) {
-  const redisKey = `track_${req.body.imageName}_${Date.now()}`;
+  const redisKey = `track:${req.body.imageName}:${uuidv4()}`;
   const queueName = 'track';
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
