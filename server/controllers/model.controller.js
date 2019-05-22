@@ -42,7 +42,7 @@ async function getAwsKeys(params, keys) {
     await getAwsKeys(newParams, keys); // RECURSIVE CALL
   }
 }
-  
+
 async function getAwsModels(req, res) {
   let modelPrefix = config.model.prefix;
   if (modelPrefix[modelPrefix.length - 1] !== '/') {
@@ -66,7 +66,7 @@ async function getAwsModels(req, res) {
         MaxKeys: 2147483647, // Maximum allowed by S3 API
       };
     });
-  
+
     let allModels = [];
     await Promise.all(arrayOfParams.map(param => getAwsKeys(param, allModels)));
     let cleanModels = getModelObject(allModels);
@@ -97,7 +97,7 @@ async function getGcpModels(req, res) {
     let allModels = [];
     let models = [];
     await getGcpKeys(bucket, config.model.prefix, models);
-    await Promise.all(models.map(m => getGcpKeys(bucket, m, allModels)));  
+    await Promise.all(models.map(m => getGcpKeys(bucket, m, allModels)));
     let cleanModels = getModelObject(allModels);
     logger.info(`Found Models: ${JSON.stringify(cleanModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: cleanModels });

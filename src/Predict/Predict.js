@@ -46,8 +46,9 @@ class Predict extends React.Component {
       model: '',
       version: '',
       fileName: '',
-      imageURL: '',
+      imageUrl: '',
       postprocess: '',
+      preprocess: '',
       cuts: 0,
       downloadURL: null,
       submitted: false,
@@ -127,17 +128,14 @@ class Predict extends React.Component {
     this.statusCheck = setInterval(() => {
       axios({
         method: 'post',
-        url: '/api/redis',
-        data: {
-          'hash': redisHash,
-          'key': 'status'
-        }
+        url: '/api/status',
+        data: { 'hash': redisHash }
       }).then((response) => {
-        if (response.data.value === 'failed') {
+        if (response.data.status === 'failed') {
           clearInterval(this.statusCheck);
           this.getErrorReason(redisHash);
           this.expireRedisHash(redisHash, 3600);
-        } else if (response.data.value === 'done') {
+        } else if (response.data.status === 'done') {
           clearInterval(this.statusCheck);
           axios({
             method: 'post',
@@ -171,10 +169,11 @@ class Predict extends React.Component {
       data: {
         'imageName': this.state.fileName,
         'uploadedName': this.state.uploadedFileName,
-        'imageURL': this.state.imageURL,
-        'model_name': this.state.model,
-        'model_version': this.state.version,
-        'postprocess_function': this.state.postprocess,
+        'imageUrl': this.state.imageUrl,
+        'modelName': this.state.model,
+        'modelVersion': this.state.version,
+        'postprocessFunction': this.state.postprocess,
+        'preprocessFunction': this.state.preprocess,
         'cuts': this.state.cuts
       }
     }).then((response) => {
@@ -188,7 +187,7 @@ class Predict extends React.Component {
   canBeSubmitted() {
     return (
       this.state.fileName.length > 0 &&
-      this.state.imageURL.length > 0 &&
+      this.state.imageUrl.length > 0 &&
       this.state.model.length > 0 &&
       this.state.version.length > 0
     );
@@ -321,7 +320,7 @@ class Predict extends React.Component {
                   this.setState({
                     uploadedFileName: uploadedName,
                     fileName: fileName,
-                    imageURL: url }) } />
+                    imageUrl: url }) } />
             </Grid>
 
             { this.state.showError ?
