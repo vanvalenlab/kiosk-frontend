@@ -5,8 +5,5 @@ node_modules
 #ignore the react .env file
 .env
 
-#ignore build-and-push.sh convenience script
-build-and-push.sh
-
 dist/
 *.log
