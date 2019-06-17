@@ -1,4 +1,4 @@
-import redis from 'redis';
+import redis from 'redis-ha';
 import config from './config';
 import logger from './winston';
 

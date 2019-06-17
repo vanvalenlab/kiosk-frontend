@@ -47,7 +47,7 @@
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
     "react-tabs": "2.2.2",
-    "redis": "2.8.0",
+    "redis-ha": "^0.1.0",
     "uuid": "^3.3.2",
     "winston": "3.1.0"
   },
