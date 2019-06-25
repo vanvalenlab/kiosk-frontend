@@ -294,7 +294,7 @@ class Predict extends React.Component {
                     <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
                     <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
                     <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
-                    <MenuItem value='retinanet' key={'retinanet'}>Mibi</MenuItem>
+                    <MenuItem value='retinanet' key={'retinanet'}>Retinanet</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
