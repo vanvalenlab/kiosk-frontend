@@ -13,15 +13,15 @@ const styles = theme => ({
 });
 
 class Footer extends React.Component {
-var date = new Date();
-//Is this working??
-var curr_yr = date.getFullYear();
+
   render() {
+    var full_date = new Date();
+    var curr_yr = full_date.getFullYear();
     const { classes } = this.props;
     return (
       <footer className={classes.footer}>
         <Typography variant='subheading' align='center' color='textSecondary' component='p'>
-          © 2016-{curr_yr} The Van Valen Lab at the California Institute of Technology testing
+          © 2016-{curr_yr} The Van Valen Lab at the California Institute of Technology testing2
           (Caltech). All rights reserved.
         </Typography>
       </footer>
