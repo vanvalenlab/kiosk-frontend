@@ -13,14 +13,14 @@ const styles = theme => ({
 });
 
 class Footer extends React.Component {
-var full_date = new Date();
-var curr_yr = full_date.getFullYear();
+var date = new Date();
+var curr_yr = date.getFullYear();
   render() {
     const { classes } = this.props;
     return (
       <footer className={classes.footer}>
         <Typography variant='subheading' align='center' color='textSecondary' component='p'>
-          © 2016-testing The Van Valen Lab at the California Institute of Technology
+          © 2016-{curr_yr} The Van Valen Lab at the California Institute of Technology
           (Caltech). All rights reserved.
         </Typography>
       </footer>
