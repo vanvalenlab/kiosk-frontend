@@ -20,7 +20,7 @@ var curr_yr = date.getFullYear();
     return (
       <footer className={classes.footer}>
         <Typography variant='subheading' align='center' color='textSecondary' component='p'>
-          © 2016-{curr_yr} The Van Valen Lab at the California Institute of Technology
+          © 2016-{curr_yr} The Van Valen Lab at the California Institute of Technology testing
           (Caltech). All rights reserved.
         </Typography>
       </footer>
