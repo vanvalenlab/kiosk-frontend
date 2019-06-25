@@ -239,7 +239,7 @@ class Predict extends React.Component {
           align='center'
           color='textSecondary'
           paragraph
-          style={{'paddingBottom': '1em'}}>
+          style={{ 'paddingBottom': '1em' }}>
           Select a model and version | Upload your image | Download the results.
         </Typography>
 
@@ -248,7 +248,7 @@ class Predict extends React.Component {
 
             <Paper className='selection'>
               <Grid item xs>
-                { this.state.models !== null ?
+                {this.state.models !== null ?
                   <FormControl className={classes.formControl}>
                     <FormLabel>Select A Model</FormLabel>
                     <Select
@@ -260,11 +260,11 @@ class Predict extends React.Component {
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      { Object.keys(this.state.models).sort().map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
+                      {Object.keys(this.state.models).sort().map(m =>
+                        <MenuItem value={m} key={m}>{m}</MenuItem>)}
                     </Select>
                   </FormControl>
-                  : null }
+                  : null}
               </Grid>
 
               <Grid item xs>
@@ -275,8 +275,8 @@ class Predict extends React.Component {
                     disabled={this.state.model === ''}
                     input={<Input name='version' id='version-placeholder' placeholder='' />}
                     onChange={this.handleChange}>
-                    { this.state.model && this.state.models[this.state.model].map(v =>
-                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
+                    {this.state.model && this.state.models[this.state.model].map(v =>
+                      <MenuItem value={v} key={v}>{v}</MenuItem>)}
                   </Select>
                 </FormControl>
               </Grid>
@@ -294,6 +294,7 @@ class Predict extends React.Component {
                     <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
                     <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
                     <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
+                    <MenuItem value='retinanet' key={'retinanet'}>Mibi</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -320,22 +321,23 @@ class Predict extends React.Component {
                   this.setState({
                     uploadedFileName: uploadedName,
                     fileName: fileName,
-                    imageUrl: url }) } />
+                    imageUrl: url
+                  })} />
             </Grid>
 
-            { this.state.showError ?
+            {this.state.showError ?
               <Typography
                 variant='subheading'
                 align='center'
                 color='error'
                 paragraph
-                style={{'paddingTop': '1em'}}>
+                style={{ 'paddingTop': '1em' }}>
                 {this.state.errorText}
               </Typography>
-              : null }
+              : null}
 
-            { !this.state.submitted ?
-              <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
+            {!this.state.submitted ?
+              <Grid id='submitButtonWrapper' item lg style={{ 'paddingTop': '1em' }}>
                 <Button
                   id='submitButton'
                   variant='contained'
@@ -347,17 +349,17 @@ class Predict extends React.Component {
                   Submit
                 </Button>
               </Grid>
-              : null }
+              : null}
 
-            { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
-              <Grid item lg style={{'paddingTop': '2em'}}>
+            {this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
+              <Grid item lg style={{ 'paddingTop': '2em' }}>
                 <LinearProgress className={classes.progress} />
               </Grid>
-              : null }
+              : null}
 
-            { this.state.downloadURL !== null ?
+            {this.state.downloadURL !== null ?
               <div>
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg style={{ 'paddingTop': '2em' }}>
                   <Button
                     href={this.state.downloadURL}
                     variant='contained'
@@ -368,7 +370,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
 
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg style={{ 'paddingTop': '2em' }}>
                   <Button
                     href='/predict'
                     variant='contained'
@@ -379,7 +381,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
               </div>
-              : null }
+              : null}
 
           </form>
         </Grid>
