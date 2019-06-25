@@ -14,6 +14,7 @@ const styles = theme => ({
 
 class Footer extends React.Component {
 var date = new Date();
+//Is this working??
 var curr_yr = date.getFullYear();
   render() {
     const { classes } = this.props;
