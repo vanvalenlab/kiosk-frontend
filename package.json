@@ -16,7 +16,7 @@
     "dev:server": "nodemon --exec babel-node ./server/index.js",
     "dev:client": "webpack-dev-server --mode development --open --config webpack.dev.js",
     "start": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
-    "start:prod": "yarn build && DEBUG='express:*' NODE_ENV='production' node ./dist/server/index.js"
+    "start:prod": "DEBUG='express:*' NODE_ENV='production' node ./dist/server/index.js"
   },
   "author": "The Van Valen Lab",
   "license": "SEE LICENSE IN LICENSE",
