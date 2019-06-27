@@ -2,9 +2,11 @@ import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Footer from '../Footer/Footer';
-import NavBar from '../NavBar/NavBar';
-import Main from '../Main/Main';
+import loadable from '@loadable/component';
+
+const Footer = loadable(() => import('../Footer/Footer'));
+const NavBar = loadable(() => import('../NavBar/NavBar'));
+const Main = loadable(() => import('../Main/Main'));
 
 const styles = theme => ({
   root: {

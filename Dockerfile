@@ -7,4 +7,8 @@ RUN yarn
 
 COPY . .
 
+RUN yarn build
+
+RUN rm -rf server/ src/
+
 CMD yarn start:prod
