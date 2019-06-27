@@ -14,6 +14,8 @@ import winstonInstance from './winston';
 
 const app = express();
 
+app.use(compress());
+
 if (config.env === 'development') {
   app.use(morgan('dev', {
     skip: (req, res) => res.statusCode < 400,
@@ -48,12 +50,24 @@ if (config.env === 'production') {
 app.use(express.static(DIST_DIR));
 
 app.use(cookieParser());
-app.use(compress());
 app.use(helmet());  // secure apps by setting various HTTP headers
 app.use(cors());   // enable CORS - Cross Origin Resource Sharing
 
 // mount all routes
 app.use('/api', routes);
+
+app.get('*.js.gz', (req, res, next) => {
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'application/javascript');
+  next();
+});
+
+app.get('*.css.gz', (req, res, next) => {
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'text/css');
+  next();
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
