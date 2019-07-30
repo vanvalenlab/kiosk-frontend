@@ -248,7 +248,7 @@ class Predict extends React.Component {
 
             <Paper className='selection'>
               <Grid item xs>
-                {this.state.models !== null ?
+                { this.state.models !== null ?
                   <FormControl className={classes.formControl}>
                     <FormLabel>Select A Model</FormLabel>
                     <Select
@@ -260,11 +260,11 @@ class Predict extends React.Component {
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      {Object.keys(this.state.models).sort().map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>)}
+                      { Object.keys(this.state.models).sort().map(m =>
+                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
                     </Select>
                   </FormControl>
-                  : null}
+                  : null }
               </Grid>
 
               <Grid item xs>
@@ -275,8 +275,8 @@ class Predict extends React.Component {
                     disabled={this.state.model === ''}
                     input={<Input name='version' id='version-placeholder' placeholder='' />}
                     onChange={this.handleChange}>
-                    {this.state.model && this.state.models[this.state.model].map(v =>
-                      <MenuItem value={v} key={v}>{v}</MenuItem>)}
+                    { this.state.model && this.state.models[this.state.model].map(v =>
+                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
                   </Select>
                 </FormControl>
               </Grid>
@@ -325,7 +325,7 @@ class Predict extends React.Component {
                   })} />
             </Grid>
 
-            {this.state.showError ?
+            { this.state.showError ?
               <Typography
                 variant='subheading'
                 align='center'
@@ -334,9 +334,9 @@ class Predict extends React.Component {
                 style={{ 'paddingTop': '1em' }}>
                 {this.state.errorText}
               </Typography>
-              : null}
+              : null }
 
-            {!this.state.submitted ?
+            { !this.state.submitted ?
               <Grid id='submitButtonWrapper' item lg style={{ 'paddingTop': '1em' }}>
                 <Button
                   id='submitButton'
@@ -349,15 +349,15 @@ class Predict extends React.Component {
                   Submit
                 </Button>
               </Grid>
-              : null}
+              : null }
 
-            {this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
+            { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
               <Grid item lg style={{ 'paddingTop': '2em' }}>
                 <LinearProgress className={classes.progress} />
               </Grid>
-              : null}
+              : null  }
 
-            {this.state.downloadURL !== null ?
+            { this.state.downloadURL !== null ?
               <div>
                 <Grid item lg style={{ 'paddingTop': '2em' }}>
                   <Button
@@ -381,7 +381,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
               </div>
-              : null}
+              : null }
 
           </form>
         </Grid>
