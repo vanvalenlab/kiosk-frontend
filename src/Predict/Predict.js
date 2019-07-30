@@ -239,7 +239,7 @@ class Predict extends React.Component {
           align='center'
           color='textSecondary'
           paragraph
-          style={{'paddingBottom': '1em'}}>
+          style={{ 'paddingBottom': '1em' }}>
           Select a model and version | Upload your image | Download the results.
         </Typography>
 
@@ -294,6 +294,7 @@ class Predict extends React.Component {
                     <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
                     <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
                     <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
+                    <MenuItem value='retinanet' key={'retinanet'}>Retinanet</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -320,7 +321,8 @@ class Predict extends React.Component {
                   this.setState({
                     uploadedFileName: uploadedName,
                     fileName: fileName,
-                    imageUrl: url }) } />
+                    imageUrl: url
+                  })} />
             </Grid>
 
             { this.state.showError ?
@@ -329,13 +331,13 @@ class Predict extends React.Component {
                 align='center'
                 color='error'
                 paragraph
-                style={{'paddingTop': '1em'}}>
+                style={{ 'paddingTop': '1em' }}>
                 {this.state.errorText}
               </Typography>
               : null }
 
             { !this.state.submitted ?
-              <Grid id='submitButtonWrapper' item lg style={{'paddingTop': '1em'}}>
+              <Grid id='submitButtonWrapper' item lg style={{ 'paddingTop': '1em' }}>
                 <Button
                   id='submitButton'
                   variant='contained'
@@ -350,14 +352,14 @@ class Predict extends React.Component {
               : null }
 
             { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
-              <Grid item lg style={{'paddingTop': '2em'}}>
+              <Grid item lg style={{ 'paddingTop': '2em' }}>
                 <LinearProgress className={classes.progress} />
               </Grid>
               : null }
 
             { this.state.downloadURL !== null ?
               <div>
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg style={{ 'paddingTop': '2em' }}>
                   <Button
                     href={this.state.downloadURL}
                     variant='contained'
@@ -368,7 +370,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
 
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg style={{ 'paddingTop': '2em' }}>
                   <Button
                     href='/predict'
                     variant='contained'
