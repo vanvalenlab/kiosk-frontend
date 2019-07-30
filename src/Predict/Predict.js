@@ -355,7 +355,7 @@ class Predict extends React.Component {
               <Grid item lg style={{ 'paddingTop': '2em' }}>
                 <LinearProgress className={classes.progress} />
               </Grid>
-              : null  }
+              : null }
 
             { this.state.downloadURL !== null ?
               <div>
