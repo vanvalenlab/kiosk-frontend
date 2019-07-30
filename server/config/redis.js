@@ -16,6 +16,7 @@ import config from './config';
 
 const client = new Redis({
   sentinels: [config.redis],
+  showFriendlyErrorStack: true,
   name: 'mymaster',
 });
 
