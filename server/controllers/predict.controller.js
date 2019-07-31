@@ -47,8 +47,7 @@ async function addRedisKey(client, redisKey, data) {
   }
 }
 
-async function pushRedisKey(client, redisKey) {
-  const queueName = 'predict';
+async function pushRedisKey(client, queueName, redisKey) {
   const lpushAsync = promisify(client.lpush).bind(client);
   try {
     let response;
@@ -60,7 +59,7 @@ async function pushRedisKey(client, redisKey) {
     logger.debug(`"LPUSH ${redisKey}" response: ${response}`);
     return response;
   } catch (err) {
-    logger.error(`Encountered error during "LPUSH ${redisKey}": ${err}`);
+    logger.error(`Encountered error during "LPUSH ${queueName} ${redisKey}": ${err}`);
     throw err;
   }
 }
@@ -77,11 +76,18 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  const redisKey = `predict:${req.body.imageName}:${uuidv4()}`;
+  let queueName;
+  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
+    queueName = 'predict-zip';
+  } else {
+    queueName = 'predict';
+  }
+
+  const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
 
   try {
     await addRedisKey(client, redisKey, req.body);
-    await pushRedisKey(client, redisKey);
+    await pushRedisKey(client, queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
   } catch (err) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });

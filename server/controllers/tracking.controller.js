@@ -5,12 +5,20 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 async function track(req, res) {
-  const redisKey = `track:${req.body.imageName}:${uuidv4()}`;
-  const queueName = 'track';
+  let queueName;
+  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
+    queueName = 'track-zip';
+  } else {
+    queueName = 'track';
+  }
+
+  const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
+
   let prefix = config.uploadDirectory;
   if (prefix[prefix.length - 1] === '/') {
     prefix = prefix.slice(0, prefix.length - 1);
   }
+
   try {
     client.hmset([
       redisKey,
