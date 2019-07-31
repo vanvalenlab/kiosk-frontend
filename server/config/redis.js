@@ -3,7 +3,10 @@ import config from './config';
 import logger from './winston';
 
 function createBasicClient() {
-  const client = new Redis(config.redis);
+  const client = new Redis({
+    host: config.redis.host,
+    port: config.redis.port,
+  });
   return client;
 }
 
@@ -13,15 +16,18 @@ function createSentinel() {
     showFriendlyErrorStack: true,
     name: 'mymaster',
   });
-  client.on('error', (err) => {
-    logger.error(`Encountered error from Redis Sentinel ${err}`);
-    logger.info('Creating basic Redis client without a Sentinel.');
-    client.disconnect();
-    return createBasicClient();
-  });
   return client;
 }
 
-const client = createSentinel();
+function getClient() {
+  if (config.redis.sentinelEnabled) {
+    logger.debug('Sentinel mode is enabled.');
+    return createSentinel();
+  }
+  logger.debug('Sentinel mode is disabled.');
+  return createBasicClient();
+}
+
+const client = getClient();
 
 export default client;
