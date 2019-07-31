@@ -1,23 +1,27 @@
 import Redis from 'ioredis';
 import config from './config';
+import logger from './winston';
 
-// function createClient() {
-//   const client = redis.createClient(config.redis);
-//
-//   // handle any errors whilst connecting to Redis.
-//   client.on('error', (err) => {
-//     logger.error(`Error while communicating with Redis: ${err}`);
-//   });
-//
-//   return client;
-// }
+function createBasicClient() {
+  const client = new Redis(config.redis);
+  return client;
+}
 
-// const client = createClient();
+function createSentinel() {
+  const client = new Redis({
+    sentinels: [config.redis],
+    showFriendlyErrorStack: true,
+    name: 'mymaster',
+  });
+  client.on('error', (err) => {
+    logger.error(`Encountered error from Redis Sentinel ${err}`);
+    logger.info('Creating basic Redis client without a Sentinel.');
+    client.disconnect();
+    return createBasicClient();
+  });
+  return client;
+}
 
-const client = new Redis({
-  sentinels: [config.redis],
-  showFriendlyErrorStack: true,
-  name: 'mymaster',
-});
+const client = createSentinel();
 
 export default client;
