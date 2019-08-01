@@ -39,7 +39,8 @@ const envVarsSchema = Joi.object({
   REDIS_HOST: Joi.string().required()
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
-    .default(6379)
+    .default(6379),
+  REDIS_SENTINEL: Joi.boolean().valid(true)
 }).unknown().required();
 
 const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);
@@ -65,7 +66,8 @@ const config = {
   },
   redis: {
     host: envVars.REDIS_HOST,
-    port: envVars.REDIS_PORT
+    port: envVars.REDIS_PORT,
+    sentinelEnabled: envVars.REDIS_SENTINEL,
   },
   model: {
     prefix: envVars.MODEL_PREFIX
