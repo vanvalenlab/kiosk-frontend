@@ -205,8 +205,8 @@ class Predict extends React.Component {
   preselectModelConfig(event) {
     const model = event.target.value.toLowerCase();
     let postProcess = '';
-    if (model.indexOf('deepcell') !== -1) {
-      postProcess = 'deepcell';
+    if (model.indexOf('pixelwise') !== -1) {
+      postProcess = 'pixelwise';
     } else if (model.indexOf('watershed') !== -1) {
       postProcess = 'watershed';
     } else if (model.indexOf('mibi') !== -1) {
@@ -292,7 +292,7 @@ class Predict extends React.Component {
                     onChange={this.handleChange}>
                     <MenuItem value=''><em>None</em></MenuItem>
                     <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
-                    <MenuItem value='deepcell' key={'deepcell'}>Deepcell</MenuItem>
+                    <MenuItem value='pixelwise' key={'pixelwise'}>PixelWise</MenuItem>
                     <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
                     <MenuItem value='retinanet' key={'retinanet'}>Retinanet</MenuItem>
                   </Select>
