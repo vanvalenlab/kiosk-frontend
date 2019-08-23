@@ -205,7 +205,7 @@ class Predict extends React.Component {
   preselectModelConfig(event) {
     const model = event.target.value.toLowerCase();
     let postProcess = '';
-    if (model.indexOf('pixelwise') !== -1) {
+    if ((model.indexOf('deepcell') !== -1) | (model.indexOf('pixelwise') !== -1)) {
       postProcess = 'pixelwise';
     } else if (model.indexOf('watershed') !== -1) {
       postProcess = 'watershed';
