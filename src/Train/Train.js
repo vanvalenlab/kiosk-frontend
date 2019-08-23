@@ -256,8 +256,8 @@ class Train extends React.Component {
                     <MenuItem value=''>
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value='deepcell'>
-                      Deepcell
+                    <MenuItem value='pixelwise'>
+                      PixelWise
                     </MenuItem>
                     <MenuItem value='watershed'>
                       Watershed
