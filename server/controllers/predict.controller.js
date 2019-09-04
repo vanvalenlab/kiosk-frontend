@@ -77,7 +77,7 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  let queueName = this.state.cellTracking ? 'track' : 'predict';
+  let queueName = req.body.cellTracking ? 'track' : 'predict';
 
   if (req.body.imageName.toLowerCase().endsWith('.zip')) {
     queueName = `${queueName}-zip`;
