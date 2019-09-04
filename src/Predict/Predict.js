@@ -202,7 +202,7 @@ class Predict extends React.Component {
 
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
-          
+
             <Paper className='selection'>
               <Grid item xs>
                 <FormControl component='fieldset' className={classes.formControl}>
