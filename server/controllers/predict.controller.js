@@ -34,7 +34,7 @@ async function addRedisKey(client, redisKey, data) {
       'preprocess_function', data.preprocessFunction || '',
       'cuts', data.cuts || '0', // to split up very large images
       'url', data.imageUrl || '', // unused?
-      'scale', data.dataRescale ? '' : '1',
+      'scale', data.dataRescale === 'true' ? '' : '1',
       'status', 'new',
       'created_at', now,
       'updated_at', now,
@@ -77,7 +77,7 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  let queueName = req.body.cellTracking ? 'track' : 'predict';
+  let queueName = req.body.cellTracking === 'true' ? 'track' : 'predict';
 
   if (req.body.imageName.toLowerCase().endsWith('.zip')) {
     queueName = `${queueName}-zip`;
