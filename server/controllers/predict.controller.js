@@ -28,8 +28,8 @@ async function addRedisKey(client, redisKey, data) {
       redisKey,
       'original_name', data.imageName, // to save results with the same name
       'input_file_name', data.uploadedName || data.imageName, // used for unique files
-      'model_name', data.modelName,
-      'model_version', data.modelVersion,
+      'model_name', data.modelName || '',
+      'model_version', data.modelVersion || '',
       'postprocess_function', data.postprocessFunction || '',
       'preprocess_function', data.preprocessFunction || '',
       'cuts', data.cuts || '0', // to split up very large images
