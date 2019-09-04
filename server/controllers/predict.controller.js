@@ -8,8 +8,8 @@ import logger from '../config/winston';
 // helper functions
 function isValidPredictdata(data) {
   const requiredKeys = [
-    'modelName',
-    'modelVersion',
+    // 'modelName',
+    // 'modelVersion',
     'imageName'
   ];
   for (let key of requiredKeys) {
