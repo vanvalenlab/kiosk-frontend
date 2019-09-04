@@ -77,11 +77,10 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  let queueName;
+  let queueName = this.state.cellTracking ? 'track' : 'predict';
+
   if (req.body.imageName.toLowerCase().endsWith('.zip')) {
-    queueName = 'predict-zip';
-  } else {
-    queueName = 'predict';
+    queueName = `${queueName}-zip`;
   }
 
   const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
