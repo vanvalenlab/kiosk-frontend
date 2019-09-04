@@ -63,7 +63,7 @@ class Landing extends React.Component {
                 Predict
               </Button>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Button
                 size="large"
                 variant="contained"
@@ -72,7 +72,7 @@ class Landing extends React.Component {
                 href="/track">
                 Track
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       </div>

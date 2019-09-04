@@ -8,9 +8,10 @@
 
 .selection {
 	margin-right: 1em;
-	width: auto;
+    width: auto;
+    padding: 1em;
 }
 
 .selection * {
-	width: fit-content;
+	width: available;
 }

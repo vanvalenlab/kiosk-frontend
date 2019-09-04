@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
@@ -54,6 +53,8 @@ class Predict extends React.Component {
       submitted: false,
       showError: false,
       errorText: '',
+      cellTracking: 'true',
+      dataRescale: 'true',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -202,26 +203,11 @@ class Predict extends React.Component {
     this.predict();
   }
 
-  preselectModelConfig(event) {
-    const model = event.target.value.toLowerCase();
-    let postProcess = '';
-    if ((model.indexOf('deepcell') !== -1) | (model.indexOf('pixelwise') !== -1)) {
-      postProcess = 'pixelwise';
-    } else if (model.indexOf('watershed') !== -1) {
-      postProcess = 'watershed';
-    } else if (model.indexOf('mibi') !== -1) {
-      postProcess = 'mibi';
-    }
-    this.setState({
-      postprocess: postProcess,
-      version: this.state.models[event.target.value][0]
-    });
-  }
-
   handleChange(event) {
     !this.isCancelled && this.setState({
       [event.target.name]: event.target.value
     });
+    console.log("Event:" + event.target.name + " , " + event.target.value);
     // if updating a model, default to the first version
     // and check if the transform/postprocessing is in the name
     if (event.target.name === 'model') {
@@ -245,73 +231,36 @@ class Predict extends React.Component {
 
         <Grid container spacing={40} justify='space-evenly'>
           <form autoComplete='off'>
-
+          
             <Paper className='selection'>
               <Grid item xs>
-                { this.state.models !== null ?
-                  <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Model</FormLabel>
-                    <Select
-                      value={this.state.model}
-                      input={<Input name='model' id='model-placeholder' placeholder='' />}
-                      onChange={this.handleChange}
-                      displayEmpty
-                      className={classes.selectEmpty}>
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      { Object.keys(this.state.models).sort().map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                  : null }
-              </Grid>
-
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Version</FormLabel>
-                  <Select
-                    value={this.state.version}
-                    disabled={this.state.model === ''}
-                    input={<Input name='version' id='version-placeholder' placeholder='' />}
+                <FormControl component='fieldset' className={classes.formControl}>
+                  <FormLabel component='legend'>Cell Tracking:</FormLabel>
+                  <RadioGroup
+                    aria-label='cellTracking-label'
+                    name='cellTracking'
+                    row={true}
+                    value={this.state.cellTracking}
                     onChange={this.handleChange}>
-                    { this.state.model && this.state.models[this.state.model].map(v =>
-                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                  </Select>
+                    <FormControlLabel value='true' control={<Radio />} label='Enable' />
+                    <FormControlLabel value='false' control={<Radio />} label='Disable' />
+                  </RadioGroup>
                 </FormControl>
               </Grid>
-
               <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Post-Processing</FormLabel>
-                  <Select
-                    value={this.state.postprocess}
-                    input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
-                    displayEmpty
-                    className={classes.selectEmpty}
+                <FormControl component='fieldset' className={classes.formControl}>
+                  <FormLabel component='legend'>Rescaling of Data:</FormLabel>
+                  <RadioGroup
+                    aria-label='dataRescale-label'
+                    name='dataRescale'
+                    row={true}
+                    value={this.state.dataRescale}
                     onChange={this.handleChange}>
-                    <MenuItem value=''><em>None</em></MenuItem>
-                    <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
-                    <MenuItem value='pixelwise' key={'pixelwise'}>PixelWise</MenuItem>
-                    <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
-                    <MenuItem value='retinanet' key={'retinanet'}>Retinanet</MenuItem>
-                  </Select>
+                    <FormControlLabel value='true' control={<Radio />} label='Enable' />
+                    <FormControlLabel value='false' control={<Radio />} label='Disable' />
+                  </RadioGroup>
                 </FormControl>
               </Grid>
-
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Number of Slices</FormLabel>
-                  <TextField
-                    id='cuts-input'
-                    helperText='Most models use 0'
-                    name='cuts'
-                    onChange={this.handleChange}
-                    value={this.state.cuts}
-                  />
-                </FormControl>
-              </Grid>
-
             </Paper>
 
             <Grid item xs className='uploader'>

@@ -24,7 +24,7 @@ class Main extends React.Component {
           <Route exact path='/' component={Landing}/>
           <Route path='/train' component={Train}/>
           <Route path='/predict' component={Predict}/>
-          <Route path='/track' component={Track}/>
+          {/* <Route path='/track' component={Track}/> */}
           <Route path='/data' component={Data}/>
           <Route component={NotFound} />
         </Switch>

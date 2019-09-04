@@ -92,9 +92,9 @@ class NavBar extends React.Component {
         <Button color='inherit' href='/predict' className={classes.mobileMenuItem}>
           Predict
         </Button>
-        <Button color='inherit' href='/track' className={classes.mobileMenuItem}>
+        {/* <Button color='inherit' href='/track' className={classes.mobileMenuItem}>
           Track
-        </Button>
+        </Button> */}
         <Button color='inherit' href='/data' className={classes.mobileMenuItem}>
           Data
         </Button>
@@ -124,9 +124,9 @@ class NavBar extends React.Component {
               <Button color='inherit' href='/predict'>
                 Predict
               </Button>
-              <Button color='inherit' href='/track'>
+              {/* <Button color='inherit' href='/track'>
                 Track
-              </Button>
+              </Button> */}
               <Button color='inherit' href='/data'>
                 Data
               </Button>
