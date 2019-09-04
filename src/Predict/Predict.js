@@ -41,20 +41,14 @@ class Predict extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: [],
-      model: '',
-      version: '',
       fileName: '',
       imageUrl: '',
-      postprocess: '',
-      preprocess: '',
-      cuts: 0,
       downloadURL: null,
       submitted: false,
       showError: false,
       errorText: '',
       cellTracking: 'true',
-      dataRescale: 'true',
+      dataRescale: 'true'
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -63,24 +57,10 @@ class Predict extends React.Component {
   }
 
   componentDidMount() {
-    this.retrieveModelsVersions();
   }
 
   componentWillUnmount() {
     this.isCancelled = true;
-  }
-
-  retrieveModelsVersions() {
-    axios.get('/api/models')
-      .then((response) => {
-        !this.isCancelled && this.setState({
-          models: response.data.models
-        });
-      })
-      .catch((error) => {
-        let errMsg = `Could not fetch models from the cloud bucket due to error: ${error}`;
-        this.showErrorMessage(errMsg);
-      });
   }
 
   showErrorMessage(errorText) {
@@ -171,11 +151,8 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
-        'modelName': this.state.model,
-        'modelVersion': this.state.version,
-        'postprocessFunction': this.state.postprocess,
-        'preprocessFunction': this.state.preprocess,
-        'cuts': this.state.cuts
+        'cellTracking' : this.state.cellTracking,
+        'dataRescale': this.state.dataRescale
       }
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
@@ -188,9 +165,7 @@ class Predict extends React.Component {
   canBeSubmitted() {
     return (
       this.state.fileName.length > 0 &&
-      this.state.imageUrl.length > 0 &&
-      this.state.model.length > 0 &&
-      this.state.version.length > 0
+      this.state.imageUrl.length > 0
     );
   }
 
@@ -204,14 +179,10 @@ class Predict extends React.Component {
   }
 
   handleChange(event) {
-    !this.isCancelled && this.setState({
-      [event.target.name]: event.target.value
-    });
-    console.log("Event:" + event.target.name + " , " + event.target.value);
-    // if updating a model, default to the first version
-    // and check if the transform/postprocessing is in the name
-    if (event.target.name === 'model') {
-      this.preselectModelConfig(event);
+    if(!this.isCancelled) {
+        this.setState({
+            [event.target.name]: event.target.value
+          });
     }
   }
 
@@ -226,7 +197,7 @@ class Predict extends React.Component {
           color='textSecondary'
           paragraph
           style={{ 'paddingBottom': '1em' }}>
-          Select a model and version | Upload your image | Download the results.
+          Select Options | Upload your image | Download the results.
         </Typography>
 
         <Grid container spacing={40} justify='space-evenly'>
