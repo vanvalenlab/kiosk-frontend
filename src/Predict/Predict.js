@@ -10,6 +10,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
 import './Predict.css';
@@ -43,7 +44,7 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
       cellTracking: '',
-      dataRescale: 'true',
+      rescaling: 0,
       setOpen: false,
     };
 
@@ -210,33 +211,65 @@ class Predict extends React.Component {
 
         <Grid container direction="row" justify="center" alignItems="center">
           <form autoComplete='off'>
-            <Grid container direction="row" justify="center" alignItems="center">
+            <Grid container direction="row" justify="center" alignItems="flex-start">
               <Grid item xs={6}>
                 <Paper className='selection'>
-                  <Button onClick={this.handleOpen}>
-                    Cell Tracking
-                  </Button>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="cellTrackingValue">Data Type</InputLabel>
-                    <Select
-                      open={this.state.setOpen}
-                      onClose={this.handleClose}
-                      onOpen={this.handleOpen}
-                      onChange={this.handleChange}
-                      value={this.state.cellTracking}
-                      inputProps={{
-                        name: 'cellTracking',
-                        id: 'cellTrackingValue',
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={'segmentation'}>Segmentation</MenuItem>
-                      <MenuItem value={'tracking'}>Tracking</MenuItem>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                  >
+                    <Grid item>
+                      {/* Cell Tracking Input Tag */}
+                      <Button onClick={this.handleOpen}>
+                        Cell Tracking
+                      </Button>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="cellTrackingValue">Data Type</InputLabel>
+                        <Select
+                          open={this.state.setOpen}
+                          onClose={this.handleClose}
+                          onOpen={this.handleOpen}
+                          onChange={this.handleChange}
+                          value={this.state.cellTracking}
+                          inputProps={{
+                            name: 'cellTracking',
+                            id: 'cellTrackingValue',
+                          }}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={'segmentation'}>Segmentation</MenuItem>
+                          <MenuItem value={'tracking'}>Tracking</MenuItem>
 
-                    </Select>
-                  </FormControl>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item>
+                      {/* Rescaling Number Input Tag */}
+                      <Button>
+                        Data Rescaling
+                      </Button>
+                      <FormControl className={classes.formControl}>
+                        <TextField
+                          id="outlined-number"
+                          label="Rescaling Value"
+                          value={this.state.rescaling}
+                          onChange={this.handleChange}
+                          type="number"
+                          className={classes.textField, 'rescalingField'}
+                          margin="normal"
+                          variant="outlined"
+                          inputProps={{
+                            name: 'rescaling',
+                            id: 'rescalingValue',
+                          }}
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
                 </Paper>
               </Grid>
             
