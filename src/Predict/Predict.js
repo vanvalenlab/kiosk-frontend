@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -21,19 +20,15 @@ const styles = theme => ({
     margin: theme.spacing.unit * 4,
     paddingTop: theme.spacing.unit * 2
   },
-  form: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
-  },
   progress: {
     margin: theme.spacing.unit * 2,
+  },
+  button: {
+    display: 'block',
+    marginTop: theme.spacing * 2,
+  },
+  formControl: {
+    minWidth: 220,
   },
 });
 
@@ -47,13 +42,16 @@ class Predict extends React.Component {
       submitted: false,
       showError: false,
       errorText: '',
-      cellTracking: 'true',
-      dataRescale: 'true'
+      cellTracking: '',
+      dataRescale: 'true',
+      setOpen: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
   }
 
   componentDidMount() {
@@ -180,11 +178,21 @@ class Predict extends React.Component {
 
   handleChange(event) {
     if(!this.isCancelled) {
-        this.setState({
-            [event.target.name]: event.target.value
-          });
+      this.setState({
+        [event.target.name]: event.target.value
+      });
     }
   }
+
+  handleClose() {
+    this.setState({setOpen : false});
+  }
+
+  handleOpen() {
+    this.setState({setOpen : true});
+  }
+
+
 
   render() {
     const { classes } = this.props;
@@ -200,47 +208,49 @@ class Predict extends React.Component {
           Select Options | Upload your image | Download the results.
         </Typography>
 
-        <Grid container spacing={40} justify='center' direction='row'>
+        <Grid container direction="row" justify="center" alignItems="center">
           <form autoComplete='off'>
-            <Grid item xs>
+            <Grid container direction="row" justify="center" alignItems="center">
+              <Grid item xs={6}>
                 <Paper className='selection'>
-                    <FormControl component='fieldset' className={classes.formControl}>
-                    <FormLabel component='legend'>Cell Tracking:</FormLabel>
-                    <RadioGroup
-                        aria-label='cellTracking-label'
-                        name='cellTracking'
-                        row={true}
-                        value={this.state.cellTracking}
-                        onChange={this.handleChange}>
-                        <FormControlLabel value='true' control={<Radio />} label='Enable' />
-                        <FormControlLabel value='false' control={<Radio />} label='Disable' />
-                    </RadioGroup>
-                    </FormControl>
-                    <FormControl component='fieldset' className={classes.formControl}>
-                    <FormLabel component='legend'>Rescaling of Data:</FormLabel>
-                    <RadioGroup
-                        aria-label='dataRescale-label'
-                        name='dataRescale'
-                        row={true}
-                        value={this.state.dataRescale}
-                        onChange={this.handleChange}>
-                        <FormControlLabel value='true' control={<Radio />} label='Enable' />
-                        <FormControlLabel value='false' control={<Radio />} label='Disable' />
-                    </RadioGroup>
-                    </FormControl>
-                </Paper>
-            </Grid>
-            <Grid item xs className='uploader'>
-              <FileUpload
-                infoText='Upload Here to Begin Image Prediction.'
-                onDroppedFile={(uploadedName, fileName, url) =>
-                  this.setState({
-                    uploadedFileName: uploadedName,
-                    fileName: fileName,
-                    imageUrl: url
-                  })} />
-            </Grid>
+                  <Button onClick={this.handleOpen}>
+                    Cell Tracking
+                  </Button>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="cellTrackingValue">Data Type</InputLabel>
+                    <Select
+                      open={this.state.setOpen}
+                      onClose={this.handleClose}
+                      onOpen={this.handleOpen}
+                      onChange={this.handleChange}
+                      value={this.state.cellTracking}
+                      inputProps={{
+                        name: 'cellTracking',
+                        id: 'cellTrackingValue',
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={'segmentation'}>Segmentation</MenuItem>
+                      <MenuItem value={'tracking'}>Tracking</MenuItem>
 
+                    </Select>
+                  </FormControl>
+                </Paper>
+              </Grid>
+            
+              <Grid item xs={6} className='uploader'>
+                <FileUpload
+                  infoText='Upload Here to Begin Image Prediction.'
+                  onDroppedFile={(uploadedName, fileName, url) =>
+                    this.setState({
+                      uploadedFileName: uploadedName,
+                      fileName: fileName,
+                      imageUrl: url
+                    })} />
+              </Grid>
+            </Grid>
             { this.state.showError ?
               <Typography
                 variant='subheading'

@@ -86,15 +86,9 @@ class NavBar extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <Button color='inherit' href='/train' className={classes.mobileMenuItem}>
-          Train
-        </Button>
         <Button color='inherit' href='/predict' className={classes.mobileMenuItem}>
           Predict
         </Button>
-        {/* <Button color='inherit' href='/track' className={classes.mobileMenuItem}>
-          Track
-        </Button> */}
         <Button color='inherit' href='/data' className={classes.mobileMenuItem}>
           Data
         </Button>
@@ -118,15 +112,9 @@ class NavBar extends React.Component {
             </Typography>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <Button color='inherit' href='/train'>
-                Train
-              </Button>
               <Button color='inherit' href='/predict'>
                 Predict
               </Button>
-              {/* <Button color='inherit' href='/track'>
-                Track
-              </Button> */}
               <Button color='inherit' href='/data'>
                 Data
               </Button>

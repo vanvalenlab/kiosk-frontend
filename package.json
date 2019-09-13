@@ -14,7 +14,7 @@
     "build:server": "babel -d ./dist/server ./server -s",
     "build": "yarn clean && yarn build:server && yarn build:client",
     "dev:server": "nodemon --exec babel-node ./server/index.js",
-    "dev:client": "webpack-dev-server --mode development --open --config webpack.dev.js",
+    "dev:client": "webpack-dev-server --mode development --open --hot --config webpack.dev.js",
     "start": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
     "start:prod": "DEBUG='express:*' NODE_ENV='production' node ./dist/server/index.js"
   },
