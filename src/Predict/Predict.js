@@ -200,40 +200,36 @@ class Predict extends React.Component {
           Select Options | Upload your image | Download the results.
         </Typography>
 
-        <Grid container spacing={40} justify='space-evenly'>
+        <Grid container spacing={40} justify='center' direction='row'>
           <form autoComplete='off'>
-          
-            <Paper className='selection'>
-              <Grid item xs>
-                <FormControl component='fieldset' className={classes.formControl}>
-                  <FormLabel component='legend'>Cell Tracking:</FormLabel>
-                  <RadioGroup
-                    aria-label='cellTracking-label'
-                    name='cellTracking'
-                    row={true}
-                    value={this.state.cellTracking}
-                    onChange={this.handleChange}>
-                    <FormControlLabel value='true' control={<Radio />} label='Enable' />
-                    <FormControlLabel value='false' control={<Radio />} label='Disable' />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs>
-                <FormControl component='fieldset' className={classes.formControl}>
-                  <FormLabel component='legend'>Rescaling of Data:</FormLabel>
-                  <RadioGroup
-                    aria-label='dataRescale-label'
-                    name='dataRescale'
-                    row={true}
-                    value={this.state.dataRescale}
-                    onChange={this.handleChange}>
-                    <FormControlLabel value='true' control={<Radio />} label='Enable' />
-                    <FormControlLabel value='false' control={<Radio />} label='Disable' />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-            </Paper>
-
+            <Grid item xs>
+                <Paper className='selection'>
+                    <FormControl component='fieldset' className={classes.formControl}>
+                    <FormLabel component='legend'>Cell Tracking:</FormLabel>
+                    <RadioGroup
+                        aria-label='cellTracking-label'
+                        name='cellTracking'
+                        row={true}
+                        value={this.state.cellTracking}
+                        onChange={this.handleChange}>
+                        <FormControlLabel value='true' control={<Radio />} label='Enable' />
+                        <FormControlLabel value='false' control={<Radio />} label='Disable' />
+                    </RadioGroup>
+                    </FormControl>
+                    <FormControl component='fieldset' className={classes.formControl}>
+                    <FormLabel component='legend'>Rescaling of Data:</FormLabel>
+                    <RadioGroup
+                        aria-label='dataRescale-label'
+                        name='dataRescale'
+                        row={true}
+                        value={this.state.dataRescale}
+                        onChange={this.handleChange}>
+                        <FormControlLabel value='true' control={<Radio />} label='Enable' />
+                        <FormControlLabel value='false' control={<Radio />} label='Disable' />
+                    </RadioGroup>
+                    </FormControl>
+                </Paper>
+            </Grid>
             <Grid item xs className='uploader'>
               <FileUpload
                 infoText='Upload Here to Begin Image Prediction.'
