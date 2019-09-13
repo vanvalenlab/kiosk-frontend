@@ -8,8 +8,8 @@ import logger from '../config/winston';
 // helper functions
 function isValidPredictdata(data) {
   const requiredKeys = [
-    'modelName',
-    'modelVersion',
+    // 'modelName',
+    // 'modelVersion',
     'imageName'
   ];
   for (let key of requiredKeys) {
@@ -28,12 +28,13 @@ async function addRedisKey(client, redisKey, data) {
       redisKey,
       'original_name', data.imageName, // to save results with the same name
       'input_file_name', data.uploadedName || data.imageName, // used for unique files
-      'model_name', data.modelName,
-      'model_version', data.modelVersion,
+      'model_name', data.modelName || '',
+      'model_version', data.modelVersion || '',
       'postprocess_function', data.postprocessFunction || '',
       'preprocess_function', data.preprocessFunction || '',
       'cuts', data.cuts || '0', // to split up very large images
       'url', data.imageUrl || '', // unused?
+      'scale', data.dataRescale === 'true' ? '' : '1',
       'status', 'new',
       'created_at', now,
       'updated_at', now,
@@ -76,11 +77,10 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  let queueName;
+  let queueName = req.body.cellTracking === 'true' ? 'track' : 'predict';
+
   if (req.body.imageName.toLowerCase().endsWith('.zip')) {
-    queueName = 'predict-zip';
-  } else {
-    queueName = 'predict';
+    queueName = `${queueName}-zip`;
   }
 
   const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
