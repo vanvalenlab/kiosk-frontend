@@ -11,6 +11,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
 import './Predict.css';
@@ -45,6 +47,7 @@ class Predict extends React.Component {
       errorText: '',
       cellTracking: '',
       rescaling: 0,
+      rescalingDisabled:'true',
       setOpen: false,
     };
 
@@ -178,10 +181,17 @@ class Predict extends React.Component {
   }
 
   handleChange(event) {
+    console.log('Event: ' + event.target.name + ' : ' + event.target.value);
     if(!this.isCancelled) {
       this.setState({
         [event.target.name]: event.target.value
       });
+      //if event is checkbox-animation related
+      if(event.target.name === 'rescalingDisabled'){
+        this.setState({
+          [event.target.name]: event.target.checked
+        });
+      }
     }
   }
 
@@ -253,20 +263,52 @@ class Predict extends React.Component {
                         Data Rescaling
                       </Button>
                       <FormControl className={classes.formControl}>
-                        <TextField
-                          id="outlined-number"
-                          label="Rescaling Value"
-                          value={this.state.rescaling}
-                          onChange={this.handleChange}
-                          type="number"
-                          className={classes.textField, 'rescalingField'}
-                          margin="normal"
-                          variant="outlined"
-                          inputProps={{
-                            name: 'rescaling',
-                            id: 'rescalingValue',
-                          }}
-                        />
+                        {/* this is a rather length ternary operator. be advised */}
+                        { this.state.rescalingDisabled ?
+                          <FormControlLabel
+                            control={
+                              <Checkbox checked={this.state.rescalingDisabled}
+                                onChange={this.handleChange}
+                                value={this.state.rescalingDisabled}
+                                inputProps={{
+                                  name: 'rescalingDisabled'
+                                }}
+                              />
+                            }
+                            label=" Disable Auto Rescaling"
+                          />
+                          :
+                          <Grid>
+                            <TextField
+                              id="outlined-number"
+                              label="Rescaling Value"
+                              value={this.state.rescaling}
+                              onChange={this.handleChange}
+                              type="number"
+                              className={classes.textField, 'rescalingField'}
+                              margin="normal"
+                              variant="outlined"
+                              inputProps={{
+                                name: 'rescaling',
+                                id: 'rescalingValue',
+                              }}
+                            />
+
+                            <FormControlLabel
+                              control={
+                                <Checkbox checked={this.state.rescalingDisabled}
+                                  onChange={this.handleChange}
+                                  value={this.state.rescalingDisabled}
+                                  inputProps={{
+                                    name: 'rescalingDisabled'
+                                  }}
+                                />
+                              }
+                              label="Enable Auto Rescaling"
+                            />
+                          </Grid>
+                        }
+                        {/* END Forewarned Ternary Operator */}
                       </FormControl>
                     </Grid>
                   </Grid>
