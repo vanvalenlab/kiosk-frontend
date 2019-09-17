@@ -181,8 +181,7 @@ class Predict extends React.Component {
   }
 
   handleChange(event) {
-    console.log('Event: ' + event.target.name + ' : ' + event.target.value);
-    if(!this.isCancelled) {
+    if (!this.isCancelled) {
       this.setState({
         [event.target.name]: event.target.value
       });
@@ -202,8 +201,6 @@ class Predict extends React.Component {
   handleOpen() {
     this.setState({setOpen : true});
   }
-
-
 
   render() {
     const { classes } = this.props;
@@ -232,11 +229,11 @@ class Predict extends React.Component {
                   >
                     <Grid item>
                       {/* Cell Tracking Input Tag */}
-                      <Button onClick={this.handleOpen}>
-                        Cell Tracking
-                      </Button>
+                      <Typography onClick={this.handleOpen}>
+                        Job Type
+                      </Typography>
                       <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="cellTrackingValue">Data Type</InputLabel>
+                        {/* <InputLabel htmlFor="cellTrackingValue">Job Type</InputLabel> */}
                         <Select
                           open={this.state.setOpen}
                           onClose={this.handleClose}
@@ -248,20 +245,14 @@ class Predict extends React.Component {
                             id: 'cellTrackingValue',
                           }}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
                           <MenuItem value={'segmentation'}>Segmentation</MenuItem>
                           <MenuItem value={'tracking'}>Tracking</MenuItem>
 
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item style={{paddingTop: '1em'}}>
                       {/* Rescaling Number Input Tag */}
-                      <Button>
-                        Data Rescaling
-                      </Button>
                       <FormControl className={classes.formControl}>
                         {/* this is a rather length ternary operator. be advised */}
                         { this.state.rescalingDisabled ?
@@ -275,7 +266,7 @@ class Predict extends React.Component {
                                 }}
                               />
                             }
-                            label=" Disable Auto Rescaling"
+                            label="Rescale Automatically"
                           />
                           :
                           <Grid>
@@ -304,7 +295,7 @@ class Predict extends React.Component {
                                   }}
                                 />
                               }
-                              label="Enable Auto Rescaling"
+                              label="Rescale Automatically"
                             />
                           </Grid>
                         }
@@ -314,7 +305,7 @@ class Predict extends React.Component {
                   </Grid>
                 </Paper>
               </Grid>
-            
+
               <Grid item xs={6} className='uploader'>
                 <FileUpload
                   infoText='Upload Here to Begin Image Prediction.'
