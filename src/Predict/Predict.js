@@ -253,52 +253,33 @@ class Predict extends React.Component {
                     <Grid item style={{paddingTop: '1em'}}>
                       {/* Rescaling Number Input Tag */}
                       <FormControl className={classes.formControl}>
-                        {/* this is a rather length ternary operator. be advised */}
-                        { this.state.rescalingDisabled ?
-                          <FormControlLabel
-                            control={
-                              <Checkbox checked={this.state.rescalingDisabled}
-                                onChange={this.handleChange}
-                                value={this.state.rescalingDisabled}
-                                inputProps={{
-                                  name: 'rescalingDisabled'
-                                }}
-                              />
-                            }
-                            label="Rescale Automatically"
-                          />
-                          :
-                          <Grid>
-                            <TextField
-                              id="outlined-number"
-                              label="Rescaling Value"
-                              value={this.state.rescaling}
+                        <FormControlLabel
+                          control={
+                            <Checkbox checked={this.state.rescalingDisabled}
                               onChange={this.handleChange}
-                              type="number"
-                              className={classes.textField, 'rescalingField'}
-                              margin="normal"
-                              variant="outlined"
+                              value={this.state.rescalingDisabled}
                               inputProps={{
-                                name: 'rescaling',
-                                id: 'rescalingValue',
+                                name: 'rescalingDisabled'
                               }}
                             />
-
-                            <FormControlLabel
-                              control={
-                                <Checkbox checked={this.state.rescalingDisabled}
-                                  onChange={this.handleChange}
-                                  value={this.state.rescalingDisabled}
-                                  inputProps={{
-                                    name: 'rescalingDisabled'
-                                  }}
-                                />
-                              }
-                              label="Rescale Automatically"
-                            />
-                          </Grid>
-                        }
-                        {/* END Forewarned Ternary Operator */}
+                          }
+                          label="Rescale Automatically"
+                        />
+                        <TextField
+                          id="outlined-number"
+                          label="Rescaling Value"
+                          disabled={this.state.rescalingDisabled}
+                          value={this.state.rescaling}
+                          onChange={this.handleChange}
+                          type="number"
+                          className={classes.textField, 'rescalingField'}
+                          margin="normal"
+                          variant="outlined"
+                          inputProps={{
+                            name: 'rescaling',
+                            id: 'rescalingValue',
+                          }}
+                        />
                       </FormControl>
                     </Grid>
                   </Grid>
