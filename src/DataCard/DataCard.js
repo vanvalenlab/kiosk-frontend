@@ -43,48 +43,66 @@ class DataCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      baseUrl: 'https://s3-us-west-1.amazonaws.com/deepcell-data/nuclei/examples',
+      baseUrl: 'https://s3-us-west-1.amazonaws.com/deepcell-data',
       cardType: this.props.cardType,
       cardsInUse: [],
       allCards :[
         {
-          file: 'HeLa_nuclear.png',
+          file: 'nuclei/examples/HeLa_nuclear.png',
           name: 'HeLa Nuclei',
           description: 'Nuclear stains of HeLa S3',
           datatype: 'prediction'
         },
         {
-          file: 'mibi_nuclear.png',
+          file: 'nuclei/examples/mibi_nuclear.png',
           name: 'MIBI Nuclei',
           description: 'Double-stranded DNA data from MIBI',
           datatype: 'prediction'
         },
+        // {
+        //   file: 'nuclei/examples/mousebrain.tif',
+        //   name: 'Mouse Brain Nuclei',
+        //   description: 'Mouse embryo nuclei Z-stack',
+        //   datatype: 'prediction'
+        // },
         {
-          file: 'mousebrain.tif',
-          name: 'Mouse Brain Nuclei',
-          description: 'Mouse embryo nuclei Z-stack',
-          datatype: 'prediction'
-        },
-        {
-          file: 'tracked/tracking_HeLa_S3.zip',
+          file: 'nuclei/examples/tracked/tracking_HeLa_S3.zip',
           name: 'HeLa S3 Raw + Segmentation',
           description: 'Raw tracked example data and segmentations to submit for tracking',
           datatype: 'prediction'
         },
         {
-          file: 'training_HeLa_S3.zip',
+          file: 'tiff_stack_examples/3T3_nuc_example_256.tif ',
+          name: '3T3 Nuclear Movie',
+          description: 'Sample 3T3 nuclear movie for automated segmentation and tracking.',
+          datatype: 'prediction'
+        },
+        {
+          file: 'tiff_stack_examples/3T3_cyto_example_256.tif ',
+          name: '3T3 Cytoplasm Movie (Fluorescence)',
+          description: 'Sample 3T3 flourescent cytoplasm movie for automated segmentation and tracking.',
+          datatype: 'prediction'
+        },
+        {
+          file: 'tiff_stack_examples/3T3_phase_example_256.tif ',
+          name: '3T3 Ctyoplasm Movie (Phase)',
+          description: 'Sample 3T3 brightfield movie for automated segmentation and tracking.',
+          datatype: 'prediction'
+        },
+        {
+          file: 'nuclei/examples/training_HeLa_S3.zip',
           name: 'Training Data - HeLa S3 Nuclei',
           description: 'Training data for the HeLa S3 nuclei',
           datatype: 'training'
         },
         {
-          file: 'tracked/HeLa_S3.trks',
+          file: 'nuclei/examples/tracked/HeLa_S3.trks',
           name: 'Tracked Training Data - HeLa S3 Nuclei',
           description: 'Tracked training data for the HeLa S3 nuclei',
           datatype: 'training'
         },
         {
-          file: 'tracked/3T3_NIH.trks',
+          file: 'nuclei/examples/tracked/3T3_NIH.trks',
           name: 'Tracked Training Data - NIH 3T3 Nuclei',
           description: 'Tracked training data for the NIH 3T3 nuclei',
           datatype: 'training'
