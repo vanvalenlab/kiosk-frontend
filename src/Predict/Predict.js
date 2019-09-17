@@ -45,8 +45,8 @@ class Predict extends React.Component {
       submitted: false,
       showError: false,
       errorText: '',
-      cellTracking: '',
       rescaling: 0,
+      cellTracking: 'segmentation',
       rescalingDisabled:'true',
       setOpen: false,
     };
