@@ -66,7 +66,7 @@ class DataCard extends React.Component {
         //   datatype: 'prediction'
         // },
         {
-          file: 'nuclei/examples/tracked/tracking_HeLa_S3.zip',
+          file: 'tracked/tracking_HeLa_S3.zip',
           name: 'HeLa S3 Raw + Segmentation',
           description: 'Raw tracked example data and segmentations to submit for tracking',
           datatype: 'prediction'
