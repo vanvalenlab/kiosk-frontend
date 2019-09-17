@@ -154,7 +154,7 @@ class Predict extends React.Component {
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
         'cellTracking' : this.state.cellTracking,
-        'dataRescale': this.state.dataRescale
+        'dataRescale': this.state.rescalingDisabled ? '' : this.state.rescaling
       }
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
@@ -247,7 +247,6 @@ class Predict extends React.Component {
                         >
                           <MenuItem value={'segmentation'}>Segmentation</MenuItem>
                           <MenuItem value={'tracking'}>Tracking</MenuItem>
-
                         </Select>
                       </FormControl>
                     </Grid>
