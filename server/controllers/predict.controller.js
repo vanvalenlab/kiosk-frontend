@@ -77,7 +77,16 @@ async function predict(req, res) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 
-  let queueName = req.body.cellTracking === 'true' ? 'track' : 'predict';
+  let queueName;
+
+  if (req.body.cellTracking === 'segmentation') {
+    queueName = 'predict';
+  } else if (req.body.cellTracking === 'tracking') {
+    queueName = 'track';
+  } else {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: `Invalid Job Type: ${req.body.cellTracking}.`});
+  }
 
   if (req.body.imageName.toLowerCase().endsWith('.zip')) {
     queueName = `${queueName}-zip`;
