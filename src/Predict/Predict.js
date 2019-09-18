@@ -46,7 +46,7 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
       cellTracking: 'segmentation',
-      rescalingDisabled: true,
+      rescalingDisabled: 'true',
       rescaling: 1,
       setOpen: false,
     };
@@ -154,7 +154,7 @@ class Predict extends React.Component {
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
         'cellTracking' : this.state.cellTracking,
-        'dataRescale': this.state.rescalingDisabled ? '' : this.state.rescaling
+        'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
       }
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
@@ -188,7 +188,7 @@ class Predict extends React.Component {
       //if event is checkbox-animation related
       if(event.target.name === 'rescalingDisabled'){
         this.setState({
-          [event.target.name]: event.target.checked
+          [event.target.name]: event.target.checked.toString()
         });
       }
     }
@@ -255,7 +255,7 @@ class Predict extends React.Component {
                       <FormControl className={classes.formControl}>
                         <FormControlLabel
                           control={
-                            <Checkbox checked={this.state.rescalingDisabled}
+                            <Checkbox checked={this.state.rescalingDisabled === 'true'}
                               onChange={this.handleChange}
                               value={this.state.rescalingDisabled}
                               inputProps={{
@@ -268,7 +268,7 @@ class Predict extends React.Component {
                         <TextField
                           id="outlined-number"
                           label="Rescaling Value"
-                          disabled={this.state.rescalingDisabled}
+                          disabled={this.state.rescalingDisabled === 'true'}
                           value={this.state.rescaling}
                           onChange={this.handleChange}
                           type="number"
