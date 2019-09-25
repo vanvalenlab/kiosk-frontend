@@ -92,9 +92,6 @@ class NavBar extends React.Component {
         <Button color='inherit' href='/data' className={classes.mobileMenuItem}>
           Data
         </Button>
-        <Button color='inherit' href='/' className={classes.mobileMenuItem}>
-          Jupyter
-        </Button>
         <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank' className={classes.mobileMenuItem}>
           <Icon className={classNames(classes.icon, 'fab fa-github fa-2x')} />
         </Button>
@@ -117,9 +114,6 @@ class NavBar extends React.Component {
               </Button>
               <Button color='inherit' href='/data'>
                 Data
-              </Button>
-              <Button color='inherit' href='/'>
-                Jupyter
               </Button>
               <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank'>
                 <Icon className={classNames(classes.icon, 'fab fa-github fa-2x')} />

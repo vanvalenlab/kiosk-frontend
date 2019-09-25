@@ -45,9 +45,9 @@ class Predict extends React.Component {
       submitted: false,
       showError: false,
       errorText: '',
-      cellTracking: '',
-      rescaling: 0,
-      rescalingDisabled:'true',
+      cellTracking: 'segmentation',
+      rescalingDisabled: 'true',
+      rescaling: 1,
       setOpen: false,
     };
 
@@ -154,7 +154,7 @@ class Predict extends React.Component {
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
         'cellTracking' : this.state.cellTracking,
-        'dataRescale': this.state.dataRescale
+        'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
       }
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
@@ -181,15 +181,14 @@ class Predict extends React.Component {
   }
 
   handleChange(event) {
-    console.log('Event: ' + event.target.name + ' : ' + event.target.value);
-    if(!this.isCancelled) {
+    if (!this.isCancelled) {
       this.setState({
         [event.target.name]: event.target.value
       });
       //if event is checkbox-animation related
       if(event.target.name === 'rescalingDisabled'){
         this.setState({
-          [event.target.name]: event.target.checked
+          [event.target.name]: event.target.checked.toString()
         });
       }
     }
@@ -202,8 +201,6 @@ class Predict extends React.Component {
   handleOpen() {
     this.setState({setOpen : true});
   }
-
-
 
   render() {
     const { classes } = this.props;
@@ -232,11 +229,11 @@ class Predict extends React.Component {
                   >
                     <Grid item>
                       {/* Cell Tracking Input Tag */}
-                      <Button onClick={this.handleOpen}>
-                        Cell Tracking
-                      </Button>
+                      <Typography onClick={this.handleOpen}>
+                        Job Type
+                      </Typography>
                       <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="cellTrackingValue">Data Type</InputLabel>
+                        {/* <InputLabel htmlFor="cellTrackingValue">Job Type</InputLabel> */}
                         <Select
                           open={this.state.setOpen}
                           onClose={this.handleClose}
@@ -248,73 +245,47 @@ class Predict extends React.Component {
                             id: 'cellTrackingValue',
                           }}
                         >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
                           <MenuItem value={'segmentation'}>Segmentation</MenuItem>
                           <MenuItem value={'tracking'}>Tracking</MenuItem>
-
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item style={{paddingTop: '1em'}}>
                       {/* Rescaling Number Input Tag */}
-                      <Button>
-                        Data Rescaling
-                      </Button>
                       <FormControl className={classes.formControl}>
-                        {/* this is a rather length ternary operator. be advised */}
-                        { this.state.rescalingDisabled ?
-                          <FormControlLabel
-                            control={
-                              <Checkbox checked={this.state.rescalingDisabled}
-                                onChange={this.handleChange}
-                                value={this.state.rescalingDisabled}
-                                inputProps={{
-                                  name: 'rescalingDisabled'
-                                }}
-                              />
-                            }
-                            label=" Disable Auto Rescaling"
-                          />
-                          :
-                          <Grid>
-                            <TextField
-                              id="outlined-number"
-                              label="Rescaling Value"
-                              value={this.state.rescaling}
+                        <FormControlLabel
+                          control={
+                            <Checkbox checked={this.state.rescalingDisabled === 'true'}
                               onChange={this.handleChange}
-                              type="number"
-                              className={classes.textField, 'rescalingField'}
-                              margin="normal"
-                              variant="outlined"
+                              value={this.state.rescalingDisabled}
                               inputProps={{
-                                name: 'rescaling',
-                                id: 'rescalingValue',
+                                name: 'rescalingDisabled'
                               }}
                             />
-
-                            <FormControlLabel
-                              control={
-                                <Checkbox checked={this.state.rescalingDisabled}
-                                  onChange={this.handleChange}
-                                  value={this.state.rescalingDisabled}
-                                  inputProps={{
-                                    name: 'rescalingDisabled'
-                                  }}
-                                />
-                              }
-                              label="Enable Auto Rescaling"
-                            />
-                          </Grid>
-                        }
-                        {/* END Forewarned Ternary Operator */}
+                          }
+                          label="Rescale Automatically"
+                        />
+                        <TextField
+                          id="outlined-number"
+                          label="Rescaling Value"
+                          disabled={this.state.rescalingDisabled === 'true'}
+                          value={this.state.rescaling}
+                          onChange={this.handleChange}
+                          type="number"
+                          className={classes.textField, 'rescalingField'}
+                          margin="normal"
+                          variant="outlined"
+                          inputProps={{
+                            name: 'rescaling',
+                            id: 'rescalingValue',
+                          }}
+                        />
                       </FormControl>
                     </Grid>
                   </Grid>
                 </Paper>
               </Grid>
-            
+
               <Grid item xs={6} className='uploader'>
                 <FileUpload
                   infoText='Upload Here to Begin Image Prediction.'

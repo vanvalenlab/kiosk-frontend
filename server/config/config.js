@@ -40,7 +40,8 @@ const envVarsSchema = Joi.object({
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
     .default(6379),
-  REDIS_SENTINEL: Joi.boolean().valid(true)
+  REDIS_SENTINEL: Joi.boolean()
+    .default(true)
 }).unknown().required();
 
 const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);

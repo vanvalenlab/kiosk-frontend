@@ -38,7 +38,7 @@ class Landing extends React.Component {
             DeepCell
           </Typography>
           <Typography variant="title" align="center" color="textSecondary" paragraph>
-            Use an existing model to segment images or train a new model.
+            Use a deep learning model to segment images.
           </Typography>
         </div>
         <div className={classes.buttonHolder}>
@@ -49,8 +49,8 @@ class Landing extends React.Component {
                 variant="contained"
                 color="primary"
                 className={classNames(classes.button, classes.left)}
-                href="/train">
-                Train
+                href="/data">
+                Data
               </Button>
             </Grid>
             <Grid item>
