@@ -85,6 +85,8 @@ async function predict(req, res) {
     queueName = 'track';
   } else if (req.body.cellTracking === 'mibi') {
     queueName = 'mibi';
+  } else if (req.body.cellTracking === 'spot') {
+    queueName = 'spot';
   } else {
     return res.status(httpStatus.BAD_REQUEST).send({
       message: `Invalid Job Type: ${req.body.cellTracking}.`});

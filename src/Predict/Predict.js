@@ -248,6 +248,7 @@ class Predict extends React.Component {
                           <MenuItem value={'segmentation'}>Segmentation</MenuItem>
                           <MenuItem value={'tracking'}>Tracking</MenuItem>
                           <MenuItem value={'mibi'}>MIBI</MenuItem>
+                          <MenuItem value={'spot'}>Spot Detection</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
