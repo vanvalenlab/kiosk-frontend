@@ -61,6 +61,13 @@ class DataCard extends React.Component {
           thumbnail: 'thumbnails/mibi_nuclear.png',
           datatype: 'prediction'
         },
+        {
+          file: 'spot_detection.tif',
+          name: 'FISH Dots',
+          description: 'Spot Detection data from FISH Seq',
+          thumbnail: 'thumbnails/spot_detection.png',
+          datatype: 'prediction'
+        },
         // {
         //   file: 'nuclei/examples/mousebrain.tif',
         //   name: 'Mouse Brain Nuclei',
