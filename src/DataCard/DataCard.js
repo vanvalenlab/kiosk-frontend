@@ -62,9 +62,16 @@ class DataCard extends React.Component {
           datatype: 'prediction'
         },
         {
+          file: 'tiff_stack_examples/mibi_5channels.tif',
+          name: 'MIBI Whole Cell',
+          description: '5 channel cellular marker data from MIBI',
+          thumbnail: 'thumbnails/mibi_nuclear.png',
+          datatype: 'prediction'
+        },
+        {
           file: 'spot_detection.tif',
           name: 'FISH Dots',
-          description: 'Spot Detection data from FISH Seq',
+          description: 'Spot Detection data from seqFISH',
           thumbnail: 'thumbnails/spot_detection.png',
           datatype: 'prediction'
         },
@@ -89,20 +96,20 @@ class DataCard extends React.Component {
           thumbnail: 'thumbnails/3T3_nuc_example_256.png',
           datatype: 'prediction'
         },
-        {
-          file: 'tiff_stack_examples/3T3_cyto_example_256.tif',
-          name: '3T3 Cytoplasm Movie (Fluorescence)',
-          description: 'Sample 3T3 flourescent cytoplasm movie for automated segmentation and tracking.',
-          thumbnail: 'thumbnails/3T3_cyto_example_256.png',
-          datatype: 'prediction'
-        },
-        {
-          file: 'tiff_stack_examples/3T3_phase_example_256.tif',
-          name: '3T3 Ctyoplasm Movie (Phase)',
-          description: 'Sample 3T3 brightfield movie for automated segmentation and tracking.',
-          thumbnail: 'thumbnails/3T3_phase_example_256.png',
-          datatype: 'prediction'
-        },
+        // {
+        //   file: 'tiff_stack_examples/3T3_cyto_example_256.tif',
+        //   name: '3T3 Cytoplasm Movie (Fluorescence)',
+        //   description: 'Sample 3T3 flourescent cytoplasm movie for automated segmentation and tracking.',
+        //   thumbnail: 'thumbnails/3T3_cyto_example_256.png',
+        //   datatype: 'prediction'
+        // },
+        // {
+        //   file: 'tiff_stack_examples/3T3_phase_example_256.tif',
+        //   name: '3T3 Ctyoplasm Movie (Phase)',
+        //   description: 'Sample 3T3 brightfield movie for automated segmentation and tracking.',
+        //   thumbnail: 'thumbnails/3T3_phase_example_256.png',
+        //   datatype: 'prediction'
+        // },
         {
           file: 'nuclei/examples/training_HeLa_S3.zip',
           name: 'Training Data - HeLa S3 Nuclei',
