@@ -45,6 +45,7 @@ class Predict extends React.Component {
       submitted: false,
       showError: false,
       errorText: '',
+      progress: 0,
       cellTracking: 'segmentation',
       rescalingDisabled: 'true',
       rescaling: 1,
@@ -135,6 +136,22 @@ class Predict extends React.Component {
           }).catch(error => {
             let errMsg = `Job finished. Error fetching output URL: ${error}`;
             this.showErrorMessage(errMsg);
+          });
+        } else {
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'progress'
+            }
+          }).then((response) => {
+            let maybe_num = parseInt(response.data.value, 10);
+            if (!isNaN(maybe_num)) {
+              this.setState({
+                progress: maybe_num
+              });
+            }
           });
         }
       }).catch(error => {
@@ -324,9 +341,23 @@ class Predict extends React.Component {
               : null }
 
             { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
-              <Grid item lg style={{ 'paddingTop': '2em' }}>
-                <LinearProgress className={classes.progress} />
-              </Grid>
+              this.state.progress === 0 || this.state.progress === null ?
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <LinearProgress
+                    variant="buffer"
+                    value={0}
+                    valueBuffer={0}
+                    className={classes.progress}
+                  />
+                </Grid>
+                :
+                <Grid item lg style={{'paddingTop': '2em'}}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={this.state.progress}
+                    className={classes.progress}
+                  />
+                </Grid>
               : null }
 
             { this.state.downloadURL !== null ?
