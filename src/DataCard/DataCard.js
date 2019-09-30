@@ -54,13 +54,13 @@ class DataCard extends React.Component {
           thumbnail: 'thumbnails/HeLa_nuclear.png',
           datatype: 'prediction'
         },
-        {
-          file: 'nuclei/examples/mibi_nuclear.png',
-          name: 'MIBI Nuclei',
-          description: 'Double-stranded DNA data from MIBI',
-          thumbnail: 'thumbnails/mibi_nuclear.png',
-          datatype: 'prediction'
-        },
+        // {
+        //   file: 'nuclei/examples/mibi_nuclear.png',
+        //   name: 'MIBI Nuclei',
+        //   description: 'Double-stranded DNA data from MIBI',
+        //   thumbnail: 'thumbnails/mibi_nuclear.png',
+        //   datatype: 'prediction'
+        // },
         {
           file: 'tiff_stack_examples/mibi_5channels.tif',
           name: 'MIBI Whole Cell',
@@ -82,13 +82,13 @@ class DataCard extends React.Component {
         // thumbnail: 'thumbnails/HeLa_nuclear.png',
         //   datatype: 'prediction'
         // },
-        {
-          file: 'tracked/tracking_HeLa_S3.zip',
-          name: 'HeLa S3 Raw + Segmentation',
-          description: 'Raw tracked example data and segmentations to submit for tracking',
-          thumbnail: 'thumbnails/HeLa_nuclear.png',
-          datatype: 'prediction'
-        },
+        // {
+        //   file: 'tracked/tracking_HeLa_S3.zip',
+        //   name: 'HeLa S3 Raw + Segmentation',
+        //   description: 'Raw tracked example data and segmentations to submit for tracking',
+        //   thumbnail: 'thumbnails/HeLa_nuclear.png',
+        //   datatype: 'prediction'
+        // },
         {
           file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
           name: '3T3 Nuclear Movie',
@@ -182,7 +182,7 @@ class DataCard extends React.Component {
           <Grid container spacing={40}>
             {this.state.cardsInUse.map(card => (
               //Grid A1
-              <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
+              <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={6} md={3}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
