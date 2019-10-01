@@ -14,16 +14,16 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   layout: {
     width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
       width: 1100,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
   cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
+    padding: `${theme.spacing(8)}px 0`,
   },
   card: {
     height: '100%',
@@ -165,7 +165,7 @@ class DataCard extends React.Component {
         {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
           {/* Grid A */}
-          <Grid container spacing={40}>
+          <Grid container spacing={4}>
             {this.state.cardsInUse.map(card => (
               //Grid A1
               <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
@@ -176,10 +176,10 @@ class DataCard extends React.Component {
                     title={`${card.name}`}
                   />
                   <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="headline" component="h2">
+                    <Typography gutterBottom variant="h5">
                       { card.name }
                     </Typography>
-                    <Typography>
+                    <Typography variant="subtitle1">
                       { card.description }
                     </Typography>
                   </CardContent>
@@ -209,7 +209,7 @@ class DataCard extends React.Component {
 DataCard.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  cardType: PropTypes.object.isRequired
+  cardType: PropTypes.string.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(DataCard);

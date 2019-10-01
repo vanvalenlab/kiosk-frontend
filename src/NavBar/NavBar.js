@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { loadCSS } from 'fg-loadcss/src/loadCSS';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -93,7 +92,7 @@ class NavBar extends React.Component {
           Data
         </Button>
         <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank' className={classes.mobileMenuItem}>
-          <Icon className={classNames(classes.icon, 'fab fa-github fa-2x')} />
+          <Icon className='fab fa-github fa-2x' />
         </Button>
       </Menu>
     );
@@ -102,7 +101,7 @@ class NavBar extends React.Component {
       <div className={classes.root}>
         <AppBar position='static'>
           <Toolbar>
-            <Typography variant='title' color='inherit' className={classes.grow}>
+            <Typography variant='subtitle1' color='inherit' className={classes.grow}>
               <IconButton color='inherit' href='/'>
                 DeepCell
               </IconButton>
@@ -116,7 +115,7 @@ class NavBar extends React.Component {
                 Data
               </Button>
               <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank'>
-                <Icon className={classNames(classes.icon, 'fab fa-github fa-2x')} />
+                <Icon className='fab fa-github fa-2x' />
               </Button>
             </div>
             <div className={classes.sectionMobile}>
