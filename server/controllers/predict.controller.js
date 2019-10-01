@@ -8,8 +8,8 @@ import logger from '../config/winston';
 // helper functions
 function isValidPredictdata(data) {
   const requiredKeys = [
-    'modelName',
-    'modelVersion',
+    // 'modelName',
+    // 'modelVersion',
     'imageName'
   ];
   for (let key of requiredKeys) {
@@ -28,12 +28,13 @@ async function addRedisKey(client, redisKey, data) {
       redisKey,
       'original_name', data.imageName, // to save results with the same name
       'input_file_name', data.uploadedName || data.imageName, // used for unique files
-      'model_name', data.modelName,
-      'model_version', data.modelVersion,
+      'model_name', data.modelName || '',
+      'model_version', data.modelVersion || '',
       'postprocess_function', data.postprocessFunction || '',
       'preprocess_function', data.preprocessFunction || '',
       'cuts', data.cuts || '0', // to split up very large images
       'url', data.imageUrl || '', // unused?
+      'scale', data.dataRescale,
       'status', 'new',
       'created_at', now,
       'updated_at', now,
@@ -77,10 +78,18 @@ async function predict(req, res) {
   }
 
   let queueName;
-  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
-    queueName = 'predict-zip';
-  } else {
+
+  if (req.body.cellTracking === 'segmentation') {
     queueName = 'predict';
+  } else if (req.body.cellTracking === 'tracking') {
+    queueName = 'track';
+  } else {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: `Invalid Job Type: ${req.body.cellTracking}.`});
+  }
+
+  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
+    queueName = `${queueName}-zip`;
   }
 
   const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;

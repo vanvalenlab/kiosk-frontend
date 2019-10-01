@@ -2,39 +2,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import Input from '@material-ui/core/Input';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
-import './Predict.css';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4,
-    paddingTop: theme.spacing.unit * 2
-  },
-  form: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
   },
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
+  },
+  paddedTop: {
+    paddingTop: theme.spacing(4),
+  },
+  title: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(4),
+    height: '100%',
   },
 });
 
@@ -42,44 +41,31 @@ class Predict extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: [],
-      model: '',
-      version: '',
       fileName: '',
       imageUrl: '',
-      postprocess: '',
-      preprocess: '',
-      cuts: 0,
       downloadURL: null,
       submitted: false,
       showError: false,
       errorText: '',
+      progress: 0,
+      cellTracking: 'segmentation',
+      rescalingDisabled: 'true',
+      rescaling: 1,
+      setOpen: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.canBeSubmitted = this.canBeSubmitted.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
   }
 
   componentDidMount() {
-    this.retrieveModelsVersions();
   }
 
   componentWillUnmount() {
     this.isCancelled = true;
-  }
-
-  retrieveModelsVersions() {
-    axios.get('/api/models')
-      .then((response) => {
-        !this.isCancelled && this.setState({
-          models: response.data.models
-        });
-      })
-      .catch((error) => {
-        let errMsg = `Could not fetch models from the cloud bucket due to error: ${error}`;
-        this.showErrorMessage(errMsg);
-      });
   }
 
   showErrorMessage(errorText) {
@@ -153,6 +139,22 @@ class Predict extends React.Component {
             let errMsg = `Job finished. Error fetching output URL: ${error}`;
             this.showErrorMessage(errMsg);
           });
+        } else {
+          axios({
+            method: 'post',
+            url: '/api/redis',
+            data: {
+              'hash': redisHash,
+              'key': 'progress'
+            }
+          }).then((response) => {
+            let maybe_num = parseInt(response.data.value, 10);
+            if (!isNaN(maybe_num)) {
+              this.setState({
+                progress: maybe_num
+              });
+            }
+          });
         }
       }).catch(error => {
         let errMsg = `Trouble communicating with Redis due to error: ${error}`;
@@ -170,16 +172,13 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
-        'modelName': this.state.model,
-        'modelVersion': this.state.version,
-        'postprocessFunction': this.state.postprocess,
-        'preprocessFunction': this.state.preprocess,
-        'cuts': this.state.cuts
+        'cellTracking' : this.state.cellTracking,
+        'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
       }
     }).then((response) => {
       this.checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
-      let errMsg = `Could not get results from tensorflow-serving due to error: ${error}.`;
+      let errMsg = `Failed to create job due to error: ${error}.`;
       this.showErrorMessage(errMsg);
     });
   }
@@ -187,9 +186,7 @@ class Predict extends React.Component {
   canBeSubmitted() {
     return (
       this.state.fileName.length > 0 &&
-      this.state.imageUrl.length > 0 &&
-      this.state.model.length > 0 &&
-      this.state.version.length > 0
+      this.state.imageUrl.length > 0
     );
   }
 
@@ -202,31 +199,26 @@ class Predict extends React.Component {
     this.predict();
   }
 
-  preselectModelConfig(event) {
-    const model = event.target.value.toLowerCase();
-    let postProcess = '';
-    if ((model.indexOf('deepcell') !== -1) | (model.indexOf('pixelwise') !== -1)) {
-      postProcess = 'pixelwise';
-    } else if (model.indexOf('watershed') !== -1) {
-      postProcess = 'watershed';
-    } else if (model.indexOf('mibi') !== -1) {
-      postProcess = 'mibi';
+  handleChange(event) {
+    if (!this.isCancelled) {
+      this.setState({
+        [event.target.name]: event.target.value
+      });
+      //if event is checkbox-animation related
+      if(event.target.name === 'rescalingDisabled'){
+        this.setState({
+          [event.target.name]: event.target.checked.toString()
+        });
+      }
     }
-    this.setState({
-      postprocess: postProcess,
-      version: this.state.models[event.target.value][0]
-    });
   }
 
-  handleChange(event) {
-    !this.isCancelled && this.setState({
-      [event.target.name]: event.target.value
-    });
-    // if updating a model, default to the first version
-    // and check if the transform/postprocessing is in the name
-    if (event.target.name === 'model') {
-      this.preselectModelConfig(event);
-    }
+  handleClose() {
+    this.setState({setOpen : false});
+  }
+
+  handleOpen() {
+    this.setState({setOpen : true});
   }
 
   render() {
@@ -235,109 +227,114 @@ class Predict extends React.Component {
     return (
       <div className={classes.root}>
         <Typography
-          variant='title'
+          className={classes.title}
+          variant='h5'
           align='center'
-          color='textSecondary'
-          paragraph
-          style={{ 'paddingBottom': '1em' }}>
-          Select a model and version | Upload your image | Download the results.
+          color='textPrimary'>
+          Select Options | Upload your image | Download the results.
         </Typography>
 
-        <Grid container spacing={40} justify='space-evenly'>
-          <form autoComplete='off'>
+        <Container maxWidth="md">
+          <form autoComplete="off">
+            <Grid container direction="row" justify="center" spacing={6}>
 
-            <Paper className='selection'>
-              <Grid item xs>
-                { this.state.models !== null ?
-                  <FormControl className={classes.formControl}>
-                    <FormLabel>Select A Model</FormLabel>
-                    <Select
-                      value={this.state.model}
-                      input={<Input name='model' id='model-placeholder' placeholder='' />}
-                      onChange={this.handleChange}
-                      displayEmpty
-                      className={classes.selectEmpty}>
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      { Object.keys(this.state.models).sort().map(m =>
-                        <MenuItem value={m} key={m}>{m}</MenuItem>) }
-                    </Select>
-                  </FormControl>
-                  : null }
+              {/* Job Options section */}
+              <Grid item xs={12} sm={6} md={6}>
+                <Paper className={classes.paper}>
+                  <Grid container direction="column" justify="center">
+
+                    {/* Job Type Dropdown */}
+                    <Grid item xs={12} sm={12} md={6}>
+                      <Typography onClick={this.handleOpen}>
+                        Job Type
+                      </Typography>
+                      <FormControl>
+                        <Select
+                          open={this.state.setOpen}
+                          onClose={this.handleClose}
+                          onOpen={this.handleOpen}
+                          onChange={this.handleChange}
+                          value={this.state.cellTracking}
+                          inputProps={{
+                            name: 'cellTracking',
+                            id: 'cellTrackingValue',
+                          }}
+                        >
+                          <MenuItem value={'segmentation'}>Segmentation</MenuItem>
+                          <MenuItem value={'tracking'}>Tracking</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+                    {/* Image Rescaling Options */}
+                    <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
+                      <FormGroup row>
+                        <FormControl>
+
+                          <FormControlLabel
+                            control={
+                              <Checkbox checked={this.state.rescalingDisabled === 'true'}
+                                onChange={this.handleChange}
+                                value={this.state.rescalingDisabled}
+                                inputProps={{
+                                  name: 'rescalingDisabled'
+                                }}
+                              />
+                            }
+                            label="Rescale Automatically"
+                          />
+
+                          <TextField
+                            id="outlined-number"
+                            label="Rescaling Value"
+                            disabled={this.state.rescalingDisabled === 'true'}
+                            value={this.state.rescaling}
+                            onChange={this.handleChange}
+                            type="number"
+                            margin="dense"
+                            variant="standard"
+                            inputProps={{
+                              name: 'rescaling',
+                              id: 'rescalingValue',
+                            }}
+                          />
+                        </FormControl>
+                      </FormGroup>
+                    </Grid>
+
+                  </Grid>
+                </Paper>
               </Grid>
 
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Select A Version</FormLabel>
-                  <Select
-                    value={this.state.version}
-                    disabled={this.state.model === ''}
-                    input={<Input name='version' id='version-placeholder' placeholder='' />}
-                    onChange={this.handleChange}>
-                    { this.state.model && this.state.models[this.state.model].map(v =>
-                      <MenuItem value={v} key={v}>{v}</MenuItem>) }
-                  </Select>
-                </FormControl>
+              {/* File Upload section */}
+              <Grid item xs={12} sm={6} md={6}>
+                <Paper className={classes.paper}>
+                  <FileUpload
+                    infoText='Upload Here to Begin Image Prediction.'
+                    onDroppedFile={(uploadedName, fileName, url) =>
+                      this.setState({
+                        uploadedFileName: uploadedName,
+                        fileName: fileName,
+                        imageUrl: url
+                      })} />
+                </Paper>
               </Grid>
 
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Post-Processing</FormLabel>
-                  <Select
-                    value={this.state.postprocess}
-                    input={<Input name='postprocess' id='postprocess-placeholder' placeholder='' />}
-                    displayEmpty
-                    className={classes.selectEmpty}
-                    onChange={this.handleChange}>
-                    <MenuItem value=''><em>None</em></MenuItem>
-                    <MenuItem value='watershed' key={'watershed'}>Watershed</MenuItem>
-                    <MenuItem value='pixelwise' key={'pixelwise'}>PixelWise</MenuItem>
-                    <MenuItem value='mibi' key={'mibi'}>Mibi</MenuItem>
-                    <MenuItem value='retinanet' key={'retinanet'}>Retinanet</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs>
-                <FormControl className={classes.formControl}>
-                  <FormLabel>Number of Slices</FormLabel>
-                  <TextField
-                    id='cuts-input'
-                    helperText='Most models use 0'
-                    name='cuts'
-                    onChange={this.handleChange}
-                    value={this.state.cuts}
-                  />
-                </FormControl>
-              </Grid>
-
-            </Paper>
-
-            <Grid item xs className='uploader'>
-              <FileUpload
-                infoText='Upload Here to Begin Image Prediction.'
-                onDroppedFile={(uploadedName, fileName, url) =>
-                  this.setState({
-                    uploadedFileName: uploadedName,
-                    fileName: fileName,
-                    imageUrl: url
-                  })} />
             </Grid>
 
-            { this.state.showError ?
+            {/* Display error to user */}
+            { this.state.showError &&
               <Typography
+                className={classes.paddedTop}
                 variant='subheading'
                 align='center'
-                color='error'
-                paragraph
-                style={{ 'paddingTop': '1em' }}>
+                color='error'>
                 {this.state.errorText}
-              </Typography>
-              : null }
+              </Typography> }
 
-            { !this.state.submitted ?
-              <Grid id='submitButtonWrapper' item lg style={{ 'paddingTop': '1em' }}>
+            {/* Submit button */}
+            { !this.state.submitted &&
+              <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
                 <Button
                   id='submitButton'
                   variant='contained'
@@ -348,18 +345,33 @@ class Predict extends React.Component {
                   color='primary'>
                   Submit
                 </Button>
-              </Grid>
-              : null }
+              </Grid> }
 
+            {/* Progress bar for submitted jobs */}
             { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
-              <Grid item lg style={{ 'paddingTop': '2em' }}>
-                <LinearProgress className={classes.progress} />
-              </Grid>
+              this.state.progress === 0 || this.state.progress === null ?
+                <Grid item lg className={classes.paddedTop}>
+                  <LinearProgress
+                    variant="buffer"
+                    value={0}
+                    valueBuffer={0}
+                    className={classes.progress}
+                  />
+                </Grid>
+                :
+                <Grid item lg className={classes.paddedTop}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={this.state.progress}
+                    className={classes.progress}
+                  />
+                </Grid>
               : null }
 
-            { this.state.downloadURL !== null ?
+            {/* Download results and Retry buttons */}
+            { this.state.downloadURL !== null &&
               <div>
-                <Grid item lg style={{ 'paddingTop': '2em' }}>
+                <Grid item lg className={classes.paddedTop}>
                   <Button
                     href={this.state.downloadURL}
                     variant='contained'
@@ -370,7 +382,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
 
-                <Grid item lg style={{ 'paddingTop': '2em' }}>
+                <Grid item lg className={classes.paddedTop}>
                   <Button
                     href='/predict'
                     variant='contained'
@@ -380,11 +392,10 @@ class Predict extends React.Component {
                     Submit New Image
                   </Button>
                 </Grid>
-              </div>
-              : null }
+              </div> }
 
           </form>
-        </Grid>
+        </Container>
       </div>
     );
   }

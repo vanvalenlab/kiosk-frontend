@@ -1,34 +1,45 @@
 import React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import Landing from '../Landing/Landing';
-import Train from '../Train/Train';
-import Predict from '../Predict/Predict';
-import Track from '../Track/Track';
-import Data from '../Data/Data';
-import NotFound from '../NotFound/NotFound';
+import loadable from '@loadable/component';
 
-const styles = {
+const Footer = loadable(() => import('../Footer/Footer'));
+const NavBar = loadable(() => import('../NavBar/NavBar'));
+const Landing = loadable(() => import('../Landing/Landing'));
+const Predict = loadable(() => import('../Predict/Predict'));
+const Data = loadable(() => import('../Data/Data'));
+const NotFound = loadable(() => import('../NotFound/NotFound'));
+
+const styles = theme => ({
   root: {
-    flexGrow: 1
+    display: 'flex',
+    minHeight: '100vh',
+    flexDirection: 'column'
+  },
+  main: {
+    flexGrow: 1,
   }
-};
+});
 
 class Main extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <main className={classes.root}>
-        <Switch>
-          <Route exact path='/' component={Landing}/>
-          <Route path='/train' component={Train}/>
-          <Route path='/predict' component={Predict}/>
-          <Route path='/track' component={Track}/>
-          <Route path='/data' component={Data}/>
-          <Route component={NotFound} />
-        </Switch>
-      </main>
+      <div className={classes.root}>
+        <CssBaseline />
+        <NavBar />
+        <main className={classes.main}>
+          <Switch>
+            <Route exact path='/' component={Landing}/>
+            <Route path='/predict' component={Predict}/>
+            <Route path='/data' component={Data}/>
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+        <Footer />
+      </div>
     );
   }
 }
@@ -37,4 +48,4 @@ Main.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Main);
+export default withStyles(styles, { withTheme: true })(Main);

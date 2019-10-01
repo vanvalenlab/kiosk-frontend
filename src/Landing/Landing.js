@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,21 +8,15 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4
+    margin: theme.spacing(4)
   },
   heroContent: {
     maxWidth: 600,
     margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
   },
-  buttonHolder: {
-    justifyContent: 'center'
-  },
-  right: {
-    float: 'right'
-  },
-  left: {
-    float: 'left'
+  button: {
+    minWidth: '20vh',
   }
 });
 
@@ -34,47 +27,37 @@ class Landing extends React.Component {
     return(
       <div className={classes.root}>
         <div className={classes.heroContent}>
-          <Typography variant="display4" align="center" color="textPrimary" gutterBottom>
+          <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
             DeepCell
           </Typography>
-          <Typography variant="title" align="center" color="textSecondary" paragraph>
-            Use an existing model to segment images or train a new model.
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Use a deep learning model to segment images.
           </Typography>
         </div>
-        <div className={classes.buttonHolder}>
-          <Grid container justify="center" spacing={40}>
-            <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                className={classNames(classes.button, classes.left)}
-                href="/train">
-                Train
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="secondary"
-                className={classNames(classes.button)}
-                href="/predict">
-                Predict
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="green"
-                className={classNames(classes.button, classes.right)}
-                href="/track">
-                Track
-              </Button>
-            </Grid>
+        <Grid container justify="center" spacing={5}>
+          <Grid item>
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              href="/data">
+              Data
+            </Button>
           </Grid>
-        </div>
+          <Grid item>
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              href="/predict">
+              Predict
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   }

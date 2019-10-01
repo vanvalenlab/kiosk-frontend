@@ -2,7 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import loadable from '@loadable/component';
 
-const Container = loadable(() => import('../Container/Container'));
+const Main = loadable(() => import('../Main/Main'));
 
 //If the mode is NOT production, then notify that we are in dev mode.
 if (process.env.NODE_ENV !== 'production') {
@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 class App extends React.Component {
   render() {
     return(
-      <Container />
+      <Main />
     );
   }
 }
