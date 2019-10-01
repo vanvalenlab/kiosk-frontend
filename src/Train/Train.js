@@ -354,7 +354,7 @@ class Train extends React.Component {
                   this.setState({ fileName: fileName, imageURL: url })} />
             </Grid>
 
-            { this.state.showError ?
+            { this.state.showError &&
               <Typography
                 variant='subheading'
                 align='center'
@@ -362,10 +362,9 @@ class Train extends React.Component {
                 paragraph
                 style={{'paddingTop': '1em'}}>
                 {this.state.errorText}
-              </Typography>
-              : null }
+              </Typography> }
 
-            { !this.state.submitted ?
+            { !this.state.submitted &&
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <Button
                   variant='contained'
@@ -376,16 +375,14 @@ class Train extends React.Component {
                   color='primary'>
                   Submit
                 </Button>
-              </Grid>
-              : null }
+              </Grid> }
 
-            { this.state.submitted && !this.state.showError && this.state.tensorboardUrl === null ?
+            { this.state.submitted && !this.state.showError && this.state.tensorboardUrl === null &&
               <Grid item lg style={{'paddingTop': '2em'}}>
                 <LinearProgress className={classes.progress} />
-              </Grid>
-              : null }
+              </Grid> }
 
-            { this.state.tensorboardUrl !== null ?
+            { this.state.tensorboardUrl !== null &&
               <div>
                 <Grid item lg style={{'paddingTop': '2em'}}>
                   <Button
@@ -409,8 +406,7 @@ class Train extends React.Component {
                     Train another model
                   </Button>
                 </Grid>
-              </div>
-              : null }
+              </div> }
 
           </form>
         </Grid>
