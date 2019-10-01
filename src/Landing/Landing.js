@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -41,40 +40,30 @@ class Landing extends React.Component {
             Use a deep learning model to segment images.
           </Typography>
         </div>
-        <div className={classes.buttonHolder}>
-          <Grid container justify="center" spacing={40}>
-            <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="primary"
-                className={classNames(classes.button, classes.left)}
-                href="/data">
-                Data
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="secondary"
-                className={classNames(classes.button)}
-                href="/predict">
-                Predict
-              </Button>
-            </Grid>
-            {/* <Grid item>
-              <Button
-                size="large"
-                variant="contained"
-                color="green"
-                className={classNames(classes.button, classes.right)}
-                href="/track">
-                Track
-              </Button>
-            </Grid> */}
+        <Grid container justify="center" spacing={5}>
+          <Grid item>
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              color="primary"
+              className={classes.button, classes.left}
+              href="/data">
+              Data
+            </Button>
           </Grid>
-        </div>
+          <Grid item>
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              color="secondary"
+              className={classes.button, classes.right}
+              href="/predict">
+              Predict
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   }
