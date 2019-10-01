@@ -111,24 +111,31 @@ class DataCard extends React.Component {
         //   datatype: 'prediction'
         // },
         {
-          file: 'nuclei/examples/training_HeLa_S3.zip',
-          name: 'Training Data - HeLa S3 Nuclei',
-          description: 'Training data for the HeLa S3 nuclei',
-          thumbnail: 'thumbnails/HeLa_nuclear.png',
-          datatype: 'training'
-        },
-        {
-          file: 'nuclei/examples/tracked/HeLa_S3.trks',
+          file: 'nuclei/examples/tracked/HeLa_S3.zip',
           name: 'Tracked Training Data - HeLa S3 Nuclei',
           description: 'Tracked training data for the HeLa S3 nuclei',
           thumbnail: 'thumbnails/HeLa_nuclear.png',
           datatype: 'training'
         },
         {
-          file: 'nuclei/examples/tracked/3T3_NIH.trks',
+          file: 'nuclei/examples/tracked/3T3_NIH.zip',
           name: 'Tracked Training Data - NIH 3T3 Nuclei',
           description: 'Tracked training data for the NIH 3T3 nuclei',
           thumbnail: 'thumbnails/3T3_nuc_example_256.png',
+          datatype: 'training'
+        },
+        {
+          file: 'nuclei/examples/tracked/HEK293.zip',
+          name: 'Tracked Training Data - HEK 293 Nuclei',
+          description: 'Tracked training data for the HEK 293 nuclei',
+          thumbnail: 'thumbnails/HEK293.png',
+          datatype: 'training'
+        },
+        {
+          file: 'nuclei/examples/tracked/RAW264.7.zip',
+          name: 'Tracked Training Data - RAW 264.7 Nuclei',
+          description: 'Tracked training data for the RAW 264.7 nuclei',
+          thumbnail: 'thumbnails/RAW264.7.png',
           datatype: 'training'
         }
       ],
@@ -174,48 +181,42 @@ class DataCard extends React.Component {
     const { classes } = this.props;
 
     return(
-      // Outermost Div
-      <div>
-        {/* Bottom Data Card Display Area */}
-        <div className={classNames(classes.layout, classes.cardGrid)}>
-          {/* Grid A */}
-          <Grid container spacing={4}>
-            {this.state.cardsInUse.map(card => (
-              //Grid A1
-              <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={6} md={3}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={`${this.state.baseUrl}/${card.thumbnail}`}
-                    title={`${card.name}`}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5">
-                      { card.name }
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      { card.description }
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      target="_blank"
-                      href={`${this.state.baseUrl}/${card.file}`}>
-                      Download
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-              //Grid A1
-            ))}
-          </Grid>
-          {/* Grid A */}
-        </div>
-        {/* Bottom Data Card Display Area */}
+      <div className={classes.layout, classes.cardGrid}>
+        {/* Grid A */}
+        <Grid container spacing={4}>
+          {this.state.cardsInUse.map(card => (
+            //Grid A1
+            <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={6} md={3}>
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={`${this.state.baseUrl}/${card.thumbnail}`}
+                  title={`${card.name}`}
+                />
+                <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom variant="h5">
+                    { card.name }
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    { card.description }
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size="small"
+                    color="primary"
+                    target="_blank"
+                    href={`${this.state.baseUrl}/${card.file}`}>
+                    Download
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+            //Grid A1
+          ))}
+        </Grid>
+        {/* Grid A */}
       </div>
-      //END Outermost Div
     );
   }
 }
