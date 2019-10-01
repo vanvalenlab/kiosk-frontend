@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,7 +9,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-// Styles Object for MaterialUI styling
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -38,7 +36,6 @@ const styles = theme => ({
   }
 });
 
-//!!!!!!!!!!!Class Declaration for DataCard Component !!!!!!!!!!!!!!!!!!!!!!!!!!
 class DataCard extends React.Component {
   constructor(props) {
     super(props);
@@ -160,48 +157,38 @@ class DataCard extends React.Component {
     const { classes } = this.props;
 
     return(
-      // Outermost Div
-      <div>
-        {/* Bottom Data Card Display Area */}
-        <div className={classNames(classes.layout, classes.cardGrid)}>
-          {/* Grid A */}
-          <Grid container spacing={4}>
-            {this.state.cardsInUse.map(card => (
-              //Grid A1
-              <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={`${this.state.baseUrl}/${card.thumbnail}`}
-                    title={`${card.name}`}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5">
-                      { card.name }
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      { card.description }
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      target="_blank"
-                      href={`${this.state.baseUrl}/${card.file}`}>
-                      Download
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-              //Grid A1
-            ))}
-          </Grid>
-          {/* Grid A */}
-        </div>
-        {/* Bottom Data Card Display Area */}
+      <div className={classes.layout, classes.cardGrid}>
+        <Grid container spacing={4}>
+          {this.state.cardsInUse.map(card => (
+            <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={`${this.state.baseUrl}/${card.thumbnail}`}
+                  title={`${card.name}`}
+                />
+                <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom variant="h5">
+                    { card.name }
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    { card.description }
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button
+                    size="small"
+                    color="primary"
+                    target="_blank"
+                    href={`${this.state.baseUrl}/${card.file}`}>
+                    Download
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </div>
-      //END Outermost Div
     );
   }
 }
