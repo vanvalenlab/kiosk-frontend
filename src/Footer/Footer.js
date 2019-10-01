@@ -15,18 +15,19 @@ const styles = theme => ({
 class Footer extends React.Component {
 
   render() {
-    var fullDate = new Date();
-    var currYear = fullDate.getFullYear();
+    const fullDate = new Date();
+    const currYear = fullDate.getFullYear();
     const { classes } = this.props;
     return (
       <footer className={classes.footer}>
-        <Typography variant='subheading' align='center' color='textSecondary' component='p'>
+        <Typography variant='subtitle1' align='center' color='textSecondary' component='p'>
           © 2016-{currYear} The Van Valen Lab at the California Institute of Technology
           (Caltech). All rights reserved.
         </Typography>
       </footer>
     );
   }
+
 }
 
 Footer.propTypes = {

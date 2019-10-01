@@ -176,10 +176,10 @@ class DataCard extends React.Component {
                     title={`${card.name}`}
                   />
                   <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="headline" component="h2">
+                    <Typography gutterBottom variant="h5">
                       { card.name }
                     </Typography>
-                    <Typography>
+                    <Typography variant="subtitle1">
                       { card.description }
                     </Typography>
                   </CardContent>

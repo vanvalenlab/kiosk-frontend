@@ -88,10 +88,10 @@ class Data extends React.Component {
         {/* Start Top Banner Area */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
-            <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
+            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
               Example Image Data
             </Typography>
-            <Typography variant="title" align="center" color="textSecondary" paragraph>
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
               Here are some images that you can download and submit to the models
               to see how deepcell works!
             </Typography>

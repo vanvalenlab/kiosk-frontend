@@ -34,10 +34,10 @@ class Landing extends React.Component {
     return(
       <div className={classes.root}>
         <div className={classes.heroContent}>
-          <Typography variant="display4" align="center" color="textPrimary" gutterBottom>
+          <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
             DeepCell
           </Typography>
-          <Typography variant="title" align="center" color="textSecondary" paragraph>
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
             Use a deep learning model to segment images.
           </Typography>
         </div>

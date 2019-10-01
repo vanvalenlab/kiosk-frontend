@@ -101,7 +101,7 @@ class NavBar extends React.Component {
       <div className={classes.root}>
         <AppBar position='static'>
           <Toolbar>
-            <Typography variant='title' color='inherit' className={classes.grow}>
+            <Typography variant='subtitle1' color='inherit' className={classes.grow}>
               <IconButton color='inherit' href='/'>
                 DeepCell
               </IconButton>

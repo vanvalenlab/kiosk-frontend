@@ -239,7 +239,7 @@ class Track extends React.Component {
     return (
       <div className={classes.root}>
         <Typography
-          variant='title'
+          variant='h2'
           align='center'
           color='textSecondary'
           paragraph
