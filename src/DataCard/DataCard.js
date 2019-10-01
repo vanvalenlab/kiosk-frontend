@@ -165,7 +165,7 @@ class DataCard extends React.Component {
         {/* Bottom Data Card Display Area */}
         <div className={classNames(classes.layout, classes.cardGrid)}>
           {/* Grid A */}
-          <Grid container spacing={40}>
+          <Grid container spacing={4}>
             {this.state.cardsInUse.map(card => (
               //Grid A1
               <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
@@ -209,7 +209,7 @@ class DataCard extends React.Component {
 DataCard.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  cardType: PropTypes.object.isRequired
+  cardType: PropTypes.string.isRequired
 };
 
 export default withStyles(styles, { withTheme: true })(DataCard);
