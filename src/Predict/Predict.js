@@ -2,20 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import Container from '@material-ui/core/Container';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import FileUpload from '../FileUpload/FileUpload';
-import './Predict.css';
 
 const styles = theme => ({
   root: {
@@ -227,32 +227,28 @@ class Predict extends React.Component {
     return (
       <div className={classes.root}>
         <Typography
-          variant='title'
+          className={classes.title}
+          variant='h5'
           align='center'
-          color='textSecondary'
-          paragraph
-          style={{ 'paddingBottom': '1em' }}>
+          color='textPrimary'>
           Select Options | Upload your image | Download the results.
         </Typography>
 
-        <Grid container direction="row" justify="center" alignItems="center">
-          <form autoComplete='off'>
-            <Grid container direction="row" justify="center" alignItems="flex-start">
-              <Grid item xs={6}>
-                <Paper className='selection'>
-                  <Grid
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                  >
-                    <Grid item>
-                      {/* Cell Tracking Input Tag */}
+        <Container maxWidth="md">
+          <form autoComplete="off">
+            <Grid container direction="row" justify="center" spacing={6}>
+
+              {/* Job Options section */}
+              <Grid item xs={12} sm={6} md={6}>
+                <Paper className={classes.paper}>
+                  <Grid container direction="column" justify="center">
+
+                    {/* Job Type Dropdown */}
+                    <Grid item xs={12} sm={12} md={6}>
                       <Typography onClick={this.handleOpen}>
                         Job Type
                       </Typography>
-                      <FormControl className={classes.formControl}>
-                        {/* <InputLabel htmlFor="cellTrackingValue">Job Type</InputLabel> */}
+                      <FormControl>
                         <Select
                           open={this.state.setOpen}
                           onClose={this.handleClose}
@@ -269,66 +265,76 @@ class Predict extends React.Component {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item style={{paddingTop: '1em'}}>
-                      {/* Rescaling Number Input Tag */}
-                      <FormControl className={classes.formControl}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={this.state.rescalingDisabled === 'true'}
-                              onChange={this.handleChange}
-                              value={this.state.rescalingDisabled}
-                              inputProps={{
-                                name: 'rescalingDisabled'
-                              }}
-                            />
-                          }
-                          label="Rescale Automatically"
-                        />
-                        <TextField
-                          id="outlined-number"
-                          label="Rescaling Value"
-                          disabled={this.state.rescalingDisabled === 'true'}
-                          value={this.state.rescaling}
-                          onChange={this.handleChange}
-                          type="number"
-                          className={classes.textField, 'rescalingField'}
-                          margin="normal"
-                          variant="outlined"
-                          inputProps={{
-                            name: 'rescaling',
-                            id: 'rescalingValue',
-                          }}
-                        />
-                      </FormControl>
+
+                    {/* Image Rescaling Options */}
+                    <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
+                      <FormGroup row>
+                        <FormControl>
+
+                          <FormControlLabel
+                            control={
+                              <Checkbox checked={this.state.rescalingDisabled === 'true'}
+                                onChange={this.handleChange}
+                                value={this.state.rescalingDisabled}
+                                inputProps={{
+                                  name: 'rescalingDisabled'
+                                }}
+                              />
+                            }
+                            label="Rescale Automatically"
+                          />
+
+                          <TextField
+                            id="outlined-number"
+                            label="Rescaling Value"
+                            disabled={this.state.rescalingDisabled === 'true'}
+                            value={this.state.rescaling}
+                            onChange={this.handleChange}
+                            type="number"
+                            margin="dense"
+                            variant="standard"
+                            inputProps={{
+                              name: 'rescaling',
+                              id: 'rescalingValue',
+                            }}
+                          />
+                        </FormControl>
+                      </FormGroup>
                     </Grid>
+
                   </Grid>
                 </Paper>
               </Grid>
 
-              <Grid item xs={6} className='uploader'>
-                <FileUpload
-                  infoText='Upload Here to Begin Image Prediction.'
-                  onDroppedFile={(uploadedName, fileName, url) =>
-                    this.setState({
-                      uploadedFileName: uploadedName,
-                      fileName: fileName,
-                      imageUrl: url
-                    })} />
+              {/* File Upload section */}
+              <Grid item xs={12} sm={6} md={6}>
+                <Paper className={classes.paper}>
+                  <FileUpload
+                    infoText='Upload Here to Begin Image Prediction.'
+                    onDroppedFile={(uploadedName, fileName, url) =>
+                      this.setState({
+                        uploadedFileName: uploadedName,
+                        fileName: fileName,
+                        imageUrl: url
+                      })} />
+                </Paper>
               </Grid>
+
             </Grid>
-            { this.state.showError ?
+
+            {/* Display error to user */}
+            { this.state.showError &&
               <Typography
+                className={classes.paddedTop}
                 variant='subheading'
                 align='center'
-                color='error'
-                paragraph
-                style={{ 'paddingTop': '1em' }}>
+                color='error'>
                 {this.state.errorText}
-              </Typography>
-              : null }
+              </Typography> }
 
-            { !this.state.submitted ?
-              <Grid id='submitButtonWrapper' item lg style={{ 'paddingTop': '1em' }}>
+            {/* Submit button */}
+            { !this.state.submitted &&
+              <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
                 <Button
                   id='submitButton'
                   variant='contained'
@@ -339,12 +345,12 @@ class Predict extends React.Component {
                   color='primary'>
                   Submit
                 </Button>
-              </Grid>
-              : null }
+              </Grid> }
 
+            {/* Progress bar for submitted jobs */}
             { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
               this.state.progress === 0 || this.state.progress === null ?
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg className={classes.paddedTop}>
                   <LinearProgress
                     variant="buffer"
                     value={0}
@@ -353,7 +359,7 @@ class Predict extends React.Component {
                   />
                 </Grid>
                 :
-                <Grid item lg style={{'paddingTop': '2em'}}>
+                <Grid item lg className={classes.paddedTop}>
                   <LinearProgress
                     variant="determinate"
                     value={this.state.progress}
@@ -362,9 +368,10 @@ class Predict extends React.Component {
                 </Grid>
               : null }
 
-            { this.state.downloadURL !== null ?
+            {/* Download results and Retry buttons */}
+            { this.state.downloadURL !== null &&
               <div>
-                <Grid item lg style={{ 'paddingTop': '2em' }}>
+                <Grid item lg className={classes.paddedTop}>
                   <Button
                     href={this.state.downloadURL}
                     variant='contained'
@@ -375,7 +382,7 @@ class Predict extends React.Component {
                   </Button>
                 </Grid>
 
-                <Grid item lg style={{ 'paddingTop': '2em' }}>
+                <Grid item lg className={classes.paddedTop}>
                   <Button
                     href='/predict'
                     variant='contained'
@@ -385,11 +392,10 @@ class Predict extends React.Component {
                     Submit New Image
                   </Button>
                 </Grid>
-              </div>
-              : null }
+              </div> }
 
           </form>
-        </Grid>
+        </Container>
       </div>
     );
   }
