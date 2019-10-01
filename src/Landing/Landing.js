@@ -15,14 +15,8 @@ const styles = theme => ({
     margin: '0 auto',
     padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
   },
-  right: {
-    float: 'right'
-  },
-  left: {
-    float: 'left'
-  },
   button: {
-    width: '100%',
+    minWidth: '20vh',
   }
 });
 
@@ -47,7 +41,7 @@ class Landing extends React.Component {
               size="large"
               variant="contained"
               color="primary"
-              className={classes.button, classes.left}
+              className={classes.button}
               href="/data">
               Data
             </Button>
@@ -58,7 +52,7 @@ class Landing extends React.Component {
               size="large"
               variant="contained"
               color="secondary"
-              className={classes.button, classes.right}
+              className={classes.button}
               href="/predict">
               Predict
             </Button>
