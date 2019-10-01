@@ -181,7 +181,7 @@ class DataCard extends React.Component {
       <div className={classes.layout, classes.cardGrid}>
         <Grid container spacing={4}>
           {this.state.cardsInUse.map(card => (
-            <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={4}>
+            <Grid item key={this.state.allCards.indexOf(card)} xs={12} sm={6} md={3}>
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.cardMedia}
