@@ -9,21 +9,21 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4
+    margin: theme.spacing(4)
   },
   heroContent: {
     maxWidth: 600,
     margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-  },
-  buttonHolder: {
-    justifyContent: 'center'
+    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
   },
   right: {
     float: 'right'
   },
   left: {
     float: 'left'
+  },
+  button: {
+    width: '100%',
   }
 });
 

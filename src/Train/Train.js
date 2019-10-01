@@ -22,7 +22,7 @@ import './Train.css';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4
+    margin: theme.spacing(4)
   },
   form: {
     display: 'flex',
@@ -33,10 +33,10 @@ const styles = theme => ({
     minWidth: 120
   },
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
   selection: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
 });
 

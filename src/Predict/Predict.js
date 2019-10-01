@@ -20,18 +20,20 @@ import './Predict.css';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4,
-    paddingTop: theme.spacing.unit * 2
   },
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
-  button: {
-    display: 'block',
-    marginTop: theme.spacing * 2,
+  paddedTop: {
+    paddingTop: theme.spacing(4),
   },
-  formControl: {
-    minWidth: 220,
+  title: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(4),
+    height: '100%',
   },
 });
 

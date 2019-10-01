@@ -19,22 +19,22 @@ import './Track.css';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit * 4,
-    paddingTop: theme.spacing.unit * 2
+    margin: theme.spacing(4),
+    paddingTop: theme.spacing(2)
   },
   form: {
     display: 'flex',
     flexWrap: 'wrap',
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   progress: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
 });
 
