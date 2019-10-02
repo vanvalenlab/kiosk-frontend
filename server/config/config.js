@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import * as dotenv from 'dotenv';
 // require and configure dotenv, will load vars in .env in PROCESS.ENV
 
@@ -7,13 +7,13 @@ dotenv.config();
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
   NODE_ENV: Joi.string()
-    .allow(['development', 'production', 'test', 'provision'])
+    .valid('development', 'production', 'test', 'provision')
     .default('development'),
   PORT: Joi.number()
     .default(8080),
   CLOUD_PROVIDER: Joi.string()
     .description('The cloud platform to interact with.')
-    .allow(['gke', 'aws'])
+    .valid('gke', 'aws')
     .default('aws')
     .required(),
   MODEL_PREFIX: Joi.string()
@@ -44,10 +44,7 @@ const envVarsSchema = Joi.object({
     .default(true)
 }).unknown().required();
 
-const { error, value: envVars } = Joi.validate(process.env, envVarsSchema);
-if (error) {
-  throw new Error(`Config validation error: ${error.message}`);
-}
+const envVars = Joi.attempt(process.env, envVarsSchema);
 
 const config = {
   env: envVars.NODE_ENV,
