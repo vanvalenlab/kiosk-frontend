@@ -108,28 +108,28 @@ class DataCard extends React.Component {
         //   datatype: 'prediction'
         // },
         {
-          file: 'nuclei/examples/tracked/HeLa_S3.zip',
+          file: 'tracked/HeLa_S3.zip',
           name: 'Tracked Training Data - HeLa S3 Nuclei',
           description: 'Tracked training data for the HeLa S3 nuclei',
           thumbnail: 'thumbnails/HeLa_nuclear.png',
           datatype: 'training'
         },
         {
-          file: 'nuclei/examples/tracked/3T3_NIH.zip',
+          file: 'tracked/3T3_NIH.zip',
           name: 'Tracked Training Data - NIH 3T3 Nuclei',
           description: 'Tracked training data for the NIH 3T3 nuclei',
           thumbnail: 'thumbnails/3T3_nuc_example_256.png',
           datatype: 'training'
         },
         {
-          file: 'nuclei/examples/tracked/HEK293.zip',
+          file: 'tracked/HEK293.zip',
           name: 'Tracked Training Data - HEK 293 Nuclei',
           description: 'Tracked training data for the HEK 293 nuclei',
           thumbnail: 'thumbnails/HEK293.png',
           datatype: 'training'
         },
         {
-          file: 'nuclei/examples/tracked/RAW264.7.zip',
+          file: 'tracked/RAW264.7.zip',
           name: 'Tracked Training Data - RAW 264.7 Nuclei',
           description: 'Tracked training data for the RAW 264.7 nuclei',
           thumbnail: 'thumbnails/RAW264.7.png',
