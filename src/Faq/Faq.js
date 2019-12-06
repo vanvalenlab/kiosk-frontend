@@ -65,7 +65,7 @@ class Faq extends React.Component {
                   align="left"
                   color="textPrimary"
                   gutterBottom>
-                  The deployment comes with pre-trained models for a few common tasks, including Nuclear Segmentation and Nuclear Tracking.
+                  The deployment comes with pre-trained models for a few common tasks, including nuclear segmentation and nuclear tracking.
 
                   These models are hosted with <a href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</a> and are running on auto-scaling GPUs to minimize cost.
                 </Typography>
