@@ -62,8 +62,6 @@ class Faq extends React.Component {
                   These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
 
                   The servable model files can be found in our <Link href="https://console.cloud.google.com/storage/browser/deepcell-models" target="_blank" rel="noopener noreferrer">public bucket</Link>.
-
-                  Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/latest/" rel="noopener noreferrer" target="_blank">here</Link>.
                 </Typography>
               </Paper>
 
@@ -75,13 +73,6 @@ class Faq extends React.Component {
                   The DeepCell Kiosk is a turn-key cloud solution for large-scale image processing with deep learning models.
 
                   It is a public software and fully extensible for custom image processing tasks.
-                </Typography>
-                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  The deployment comes with pre-trained models for a few common tasks, including nuclear segmentation and nuclear tracking.
-
-                  These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
-
-                  The servable model files can be found in our <Link href="https://console.cloud.google.com/storage/browser/deepcell-models" target="_blank" rel="noopener noreferrer">public bucket</Link>.
 
                   Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/latest/" rel="noopener noreferrer" target="_blank">here</Link>.
                 </Typography>
