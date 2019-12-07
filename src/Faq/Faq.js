@@ -52,8 +52,6 @@ class Faq extends React.Component {
                   How do I get started using DeepCell?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  This website is an implementation of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
-
                   You can use the Predict tab to upload image files and segment them with our pre-trained models. There is example data for uploading on the Data tab.
 
                   Additionally, you can deploy your own DeepCell Kiosk by following the instructions on <Link href="https://github.com/vanvalenlab/kiosk" target="_blank" rel="noopener noreferrer">the GitHub</Link>.
