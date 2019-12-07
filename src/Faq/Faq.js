@@ -49,6 +49,28 @@ class Faq extends React.Component {
 
               <Paper className={classes.paper}>
                 <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
+                  How do I get started using DeepCell?
+                </Typography>
+                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                  This website is an implementation of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
+
+                  You can use the Predict tab to upload image files and segment them with our pre-trained models. There is example data for uploading on the Data tab.
+
+                  Additionally, you can deploy your own DeepCell Kiosk by following the instructions on <Link href="https://github.com/vanvalenlab/kiosk" target="_blank" rel="noopener noreferrer">the GitHub</Link>.
+                </Typography>
+                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                  The deployment comes with pre-trained models for a few common tasks, including nuclear segmentation and nuclear tracking.
+
+                  These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
+
+                  The servable model files can be found in our <Link href="https://console.cloud.google.com/storage/browser/deepcell-models" target="_blank" rel="noopener noreferrer">public bucket</Link>.
+
+                  Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/latest/" rel="noopener noreferrer" target="_blank">here</Link>.
+                </Typography>
+              </Paper>
+
+              <Paper className={classes.paper}>
+                <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                   What is the DeepCell Kiosk?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
@@ -66,7 +88,7 @@ class Faq extends React.Component {
                   Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/latest/" rel="noopener noreferrer" target="_blank">here</Link>.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  This website is an implementation of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
+                  This website is an implementation of the <Link href="https://github.com/vanvalenlab/kiosk/tree/production" target="_blank" rel="noopener noreferrer">production branch</Link> of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
                 </Typography>
               </Paper>
 
