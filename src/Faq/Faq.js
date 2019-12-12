@@ -52,12 +52,12 @@ class Faq extends React.Component {
                   How do I get started using DeepCell?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  You can use the Predict tab to upload image files and segment them with our pre-trained models. There is example data for uploading on the Data tab.
+                  You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models. There is example data for uploading on the Data tab.
 
                   Additionally, you can deploy your own DeepCell Kiosk by following the instructions on <Link href="https://github.com/vanvalenlab/kiosk" target="_blank" rel="noopener noreferrer">the GitHub</Link>.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  The deployment comes with pre-trained models for a few common tasks, including nuclear segmentation and nuclear tracking.
+                  The deployment comes with pre-trained models for a few common image processing tasks, including nuclear segmentation for 2D images and nuclear tracking for 3D tiff stacks.
 
                   These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
 
