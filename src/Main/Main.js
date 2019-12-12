@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import loadable from '@loadable/component';
 
+const Faq = loadable(() => import('../Faq/Faq'));
 const Footer = loadable(() => import('../Footer/Footer'));
 const NavBar = loadable(() => import('../NavBar/NavBar'));
 const Landing = loadable(() => import('../Landing/Landing'));
@@ -33,6 +34,7 @@ class Main extends React.Component {
         <main className={classes.main}>
           <Switch>
             <Route exact path='/' component={Landing}/>
+            <Route path='/faq' component={Faq}/>
             <Route path='/predict' component={Predict}/>
             <Route path='/data' component={Data}/>
             <Route component={NotFound} />
