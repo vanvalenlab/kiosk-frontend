@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -29,16 +29,19 @@ module.exports = {
     ]
   },
   optimization: {
-    minimizer: [new UglifyJsPlugin({
-      cache: true,
-      parallel: true,
-      uglifyOptions: {
-        mangle: true,
-        output: {
-          comments: false,
-        },
-      },
-    })],
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            mangle: true,
+          },
+          cache: true,
+          parallel: true,
+          extractComments: false,
+        }),
+      ],
+    },
   },
   resolve: { extensions: ['*', '.js', '.jsx'] },
   output: {
