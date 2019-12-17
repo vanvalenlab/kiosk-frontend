@@ -11,7 +11,7 @@ You can support new job types by making small changes to two files:
 * `/src/Predict/Predict.js` - Add a new element to the drop down (e.g. `<MenuItem value={'queueName'}>New Queue Name</MenuItem>`)
 * `/server/controllers/predict.controller.js` - Add a new conditional statement to the `predict` function for your new queue name.
 
-With these two changes, the frontend will add and monitor new Redis queues. See [this branch](https://github.com/vanvalenlab/kiosk-frontend/tree/mibi) for example implementation of two custom pipelines.
+With these two changes, the frontend will add and monitor new Redis queues. Please see [this branch](https://github.com/vanvalenlab/kiosk-frontend/tree/mibi) for example implementation of two custom pipelines.
 
 ## Front End React Hierarchy Diagram
 ![Alt text](./docs/kiosk-frontend-react.png)
