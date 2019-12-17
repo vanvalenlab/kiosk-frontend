@@ -6,12 +6,12 @@ DeepCell graphical user interface built using React, Babel, Webpack. Run with `n
 
 ## Adding new Job Types
 
-You can support new job types by making small changes to 2 files:
+You can support new job types by making small changes to two files:
 
 * `/src/Predict/Predict.js` - Add a new element to the drop down (e.g. `<MenuItem value={'queueName'}>New Queue Name</MenuItem>`)
 * `/server/controllers/predict.controller.js` - Add a new conditional statement to the `predict` function for your new queue name.
 
-With these 2 changes, the frontend will add and monitor new Redis queues. See [this branch](https://github.com/vanvalenlab/kiosk-frontend/tree/mibi) for example implementation of 2 custom pipelines.
+With these two changes, the frontend will add and monitor new Redis queues. See [this branch](https://github.com/vanvalenlab/kiosk-frontend/tree/mibi) for example implementation of two custom pipelines.
 
 ## Front End React Hierarchy Diagram
 ![Alt text](./docs/kiosk-frontend-react.png)
