@@ -48,7 +48,7 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
       progress: 0,
-      cellTracking: 'segmentation',
+      jobType: 'predict',
       rescalingDisabled: 'true',
       rescaling: 1,
       setOpen: false,
@@ -172,7 +172,7 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
-        'cellTracking' : this.state.cellTracking,
+        'jobType' : this.state.jobType,
         'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
       }
     }).then((response) => {
@@ -254,14 +254,15 @@ class Predict extends React.Component {
                           onClose={this.handleClose}
                           onOpen={this.handleOpen}
                           onChange={this.handleChange}
-                          value={this.state.cellTracking}
+                          value={this.state.jobType}
                           inputProps={{
-                            name: 'cellTracking',
-                            id: 'cellTrackingValue',
+                            name: 'jobType',
+                            id: 'jobTypeValue',
                           }}
                         >
-                          <MenuItem value={'segmentation'}>Segmentation</MenuItem>
-                          <MenuItem value={'tracking'}>Tracking</MenuItem>
+                          <MenuItem value={'predict'}>Segmentation</MenuItem>
+                          <MenuItem value={'track'}>Tracking</MenuItem>
+                          {/* Add more custom queue values here! */}
                         </Select>
                       </FormControl>
                     </Grid>
