@@ -171,7 +171,8 @@ class Predict extends React.Component {
       url: '/api/jobtypes'
     }).then((response) => {
       !this.isCancelled && this.setState({
-        allJobTypes: response.data.jobTypes
+        allJobTypes: response.data.jobTypes,
+        jobType: response.data.jobTypes[0]
       });
     }).catch(error => {
       let errMsg = `Failed to get job types due to error: ${error}`;
