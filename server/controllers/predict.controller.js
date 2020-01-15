@@ -72,6 +72,10 @@ async function batchAddKeys(client, job, arr) {
 }
 
 // route handlers
+async function getJobTypes(req, res) {
+  return res.status(httpStatus.OK).send({ jobTypes: config.jobTypes });
+}
+
 async function predict(req, res) {
   if (!isValidPredictdata(req.body)) {
     return res.sendStatus(httpStatus.BAD_REQUEST);
@@ -138,6 +142,7 @@ async function batchPredict(req, res) {
 }
 
 export default {
+  getJobTypes,
   predict,
   batchPredict
 };

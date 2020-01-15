@@ -52,6 +52,7 @@ class Predict extends React.Component {
       rescalingDisabled: 'true',
       rescaling: 1,
       setOpen: false,
+      allJobTypes: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -62,6 +63,7 @@ class Predict extends React.Component {
   }
 
   componentDidMount() {
+    this.getAllJobTypes();
   }
 
   componentWillUnmount() {
@@ -163,6 +165,20 @@ class Predict extends React.Component {
     }, interval);
   }
 
+  getAllJobTypes() {
+    axios({
+      method: 'get',
+      url: '/api/jobtypes'
+    }).then((response) => {
+      !this.isCancelled && this.setState({
+        allJobTypes: response.data.jobTypes
+      });
+    }).catch(error => {
+      let errMsg = `Failed to get job types due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
   predict() {
     axios({
       method: 'post',
@@ -255,14 +271,17 @@ class Predict extends React.Component {
                           onOpen={this.handleOpen}
                           onChange={this.handleChange}
                           value={this.state.jobType}
+                          style={{textTransform: 'capitalize'}}
                           inputProps={{
                             name: 'jobType',
                             id: 'jobTypeValue',
                           }}
                         >
-                          <MenuItem value={'predict'}>Segmentation</MenuItem>
-                          <MenuItem value={'track'}>Tracking</MenuItem>
-                          {/* Add more custom queue values here! */}
+                          {this.state.allJobTypes.map(job => (
+                            <MenuItem value={job} style={{textTransform: 'capitalize'}} key={this.state.allJobTypes.indexOf(job)}>
+                              {job}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Grid>
