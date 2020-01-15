@@ -29,19 +29,17 @@ module.exports = {
     ]
   },
   optimization: {
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            mangle: true,
-          },
-          cache: true,
-          parallel: true,
-          extractComments: false,
-        }),
-      ],
-    },
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          mangle: true,
+        },
+        cache: true,
+        parallel: true,
+        extractComments: false,
+      }),
+    ],
   },
   resolve: { extensions: ['*', '.js', '.jsx'] },
   output: {
