@@ -48,10 +48,11 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
       progress: 0,
-      cellTracking: 'segmentation',
+      jobType: '',
       rescalingDisabled: 'true',
       rescaling: 1,
       setOpen: false,
+      allJobTypes: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -62,6 +63,7 @@ class Predict extends React.Component {
   }
 
   componentDidMount() {
+    this.getAllJobTypes();
   }
 
   componentWillUnmount() {
@@ -163,6 +165,21 @@ class Predict extends React.Component {
     }, interval);
   }
 
+  getAllJobTypes() {
+    axios({
+      method: 'get',
+      url: '/api/jobtypes'
+    }).then((response) => {
+      !this.isCancelled && this.setState({
+        allJobTypes: response.data.jobTypes,
+        jobType: response.data.jobTypes[0]
+      });
+    }).catch(error => {
+      let errMsg = `Failed to get job types due to error: ${error}`;
+      this.showErrorMessage(errMsg);
+    });
+  }
+
   predict() {
     axios({
       method: 'post',
@@ -172,7 +189,7 @@ class Predict extends React.Component {
         'imageName': this.state.fileName,
         'uploadedName': this.state.uploadedFileName,
         'imageUrl': this.state.imageUrl,
-        'cellTracking' : this.state.cellTracking,
+        'jobType' : this.state.jobType,
         'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
       }
     }).then((response) => {
@@ -254,14 +271,18 @@ class Predict extends React.Component {
                           onClose={this.handleClose}
                           onOpen={this.handleOpen}
                           onChange={this.handleChange}
-                          value={this.state.cellTracking}
+                          value={this.state.jobType}
+                          style={{textTransform: 'capitalize'}}
                           inputProps={{
-                            name: 'cellTracking',
-                            id: 'cellTrackingValue',
+                            name: 'jobType',
+                            id: 'jobTypeValue',
                           }}
                         >
-                          <MenuItem value={'segmentation'}>Segmentation</MenuItem>
-                          <MenuItem value={'tracking'}>Tracking</MenuItem>
+                          {this.state.allJobTypes.map(job => (
+                            <MenuItem value={job} style={{textTransform: 'capitalize'}} key={this.state.allJobTypes.indexOf(job)}>
+                              {job}
+                            </MenuItem>
+                          ))}
                         </Select>
                       </FormControl>
                     </Grid>

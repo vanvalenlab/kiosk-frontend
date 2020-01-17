@@ -6,12 +6,7 @@ DeepCell graphical user interface built using React, Babel, Webpack. Run with `n
 
 ## Adding new Job Types
 
-You can support new job types by making small changes to two files:
-
-* `/src/Predict/Predict.js` - Add a new element to the drop down (e.g. `<MenuItem value={'queueName'}>New Queue Name</MenuItem>`)
-* `/server/controllers/predict.controller.js` - Add a new conditional statement to the `predict` function for your new queue name.
-
-With these two changes, the frontend will add and monitor new Redis queues. Please see [this branch](https://github.com/vanvalenlab/kiosk-frontend/tree/mibi) for example implementation of two custom pipelines.
+The job types are defined as an environment variable `JOB_TYPES`, which evaluates to `"segmentation,tracking"` by default. This can easily be extended by just adding to this string, for example, `"segmentation,tracking,spot detection"`. These values are parsed into a list and populated into the drop-down with the route `/jobtypes`. Each job type value is also the exact value of the Redis queue used by the corresponding consumer (e.g. `"segmentation"` is both the job type, and the queue used for the `segmentation-consumer`).
 
 ## Front End React Hierarchy Diagram
 ![Alt text](./docs/kiosk-frontend-react.png)
