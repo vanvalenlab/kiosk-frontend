@@ -6,7 +6,7 @@ DeepCell graphical user interface built using React, Babel, Webpack. Run with `n
 
 ## Adding new Job Types
 
-The job types are defined as an environment variable `JOB_TYPES`, which evaluates to `"segmentation,tracking"` by default. This can easily be extended by overriding the list with custom job type values, by just adding to this string, for example, `"segmentation,tracking,spot detection"`. These values are parsed into a list and populated into the drop-down with the route `/jobtypes`. Each job type value is also the exact value of the Redis queue used by the corresponding consumer (e.g. `"segmentation"` is both the job type, and the queue used for the `segmentation-consumer`).
+The job types are defined as an environment variable `JOB_TYPES`, which evaluates to `"segmentation,tracking"` by default. This can easily be extended by just adding to this string, for example, `"segmentation,tracking,spot detection"`. These values are parsed into a list and populated into the drop-down with the route `/jobtypes`. Each job type value is also the exact value of the Redis queue used by the corresponding consumer (e.g. `"segmentation"` is both the job type, and the queue used for the `segmentation-consumer`).
 
 ## Front End React Hierarchy Diagram
 ![Alt text](./docs/kiosk-frontend-react.png)
