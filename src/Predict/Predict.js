@@ -48,7 +48,7 @@ class Predict extends React.Component {
       showError: false,
       errorText: '',
       progress: 0,
-      jobType: 'predict',
+      jobType: '',
       rescalingDisabled: 'true',
       rescaling: 1,
       setOpen: false,
