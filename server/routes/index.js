@@ -44,6 +44,6 @@ router.route('/redis/expire')
   .post(controllers.redisController.expireHash);
 
 router.route('/jobtypes')
-  .get(controllers.predictController.getJobTypes)
+  .get(controllers.predictController.getJobTypes);
 
 export default router;
