@@ -41,7 +41,9 @@ const envVarsSchema = Joi.object({
   REDIS_PORT: Joi.number()
     .default(6379),
   REDIS_SENTINEL: Joi.boolean()
-    .default(true)
+    .default(true),
+  JOB_TYPES: Joi.string().default('predict,track')
+    .description('Comma-separated list of job types (Redis queue names).')
 }).unknown().required();
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
@@ -70,7 +72,8 @@ const config = {
   model: {
     prefix: envVars.MODEL_PREFIX
   },
-  uploadDirectory: envVars.UPLOAD_PREFIX
+  uploadDirectory: envVars.UPLOAD_PREFIX,
+  jobTypes: envVars.JOB_TYPES.split(','),
 };
 
 export default config;

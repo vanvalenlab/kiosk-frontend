@@ -43,4 +43,7 @@ router.route('/batch/status')
 router.route('/redis/expire')
   .post(controllers.redisController.expireHash);
 
+router.route('/jobtypes')
+  .get(controllers.predictController.getJobTypes);
+
 export default router;
