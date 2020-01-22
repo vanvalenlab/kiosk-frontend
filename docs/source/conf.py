@@ -40,10 +40,9 @@ release = ''
 on_rtd = os.environ.get("READTHEDOCS", None) == "True"
 
 # This is used for linking and such so we link to the thing we're building
-# rtd_version = os.environ.get("READTHEDOCS_VERSION", "latest")
-# if rtd_version not in ["stable", "latest"]:
-#     rtd_version = "stable"
-rtd_version = 'mrgn-docs'
+rtd_version = os.environ.get("READTHEDOCS_VERSION", "latest")
+if rtd_version not in ["stable", "latest", "mrgn-docs"]:
+    rtd_version = "stable"
 
 # -- General configuration ---------------------------------------------------
 
@@ -184,8 +183,9 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'deepcell': ('https://deepcell.readthedocs.io/en/{}/'.format('master'), None),
-    'kiosk-redis-consumer': ('https://deepcell-kiosk.readthedocs.io/projects/kiosk-redis-consumer/en/{}/'.format('mrgn-docs'), None)
+    'deepcell': ('https://deepcell.readthedocs.io/en/{}/'.format(rtd_version), None),
+    'kiosk-redis-consumer': ('https://deepcell-kiosk.readthedocs.io/projects/kiosk-redis-consumer/en/{}/'.format(rtd_version), None),
+    'kiosk': ('https://deepcell-kiosk.readthedocs.io/en/{}/'.format(rtd_version), None)
 }
 
 # -- Options for todo extension ----------------------------------------------
@@ -197,4 +197,4 @@ todo_include_todos = True
 
 import gensidebar
 
-gensidebar.generate_sidebar(globals(), "kiosk")
+gensidebar.generate_sidebar(globals(), "kiosk-frontend")
