@@ -8,16 +8,9 @@ DeepCell graphical user interface built using React, Babel, Webpack. Run with `n
 
 The job types are defined as an environment variable `JOB_TYPES`, which evaluates to `"segmentation,tracking"` by default. This can easily be extended by just adding to this string, for example, `"segmentation,tracking,spot detection"`. These values are parsed into a list and populated into the drop-down with the route `/jobtypes`. Each job type value is also the exact value of the Redis queue used by the corresponding consumer (e.g. `"segmentation"` is both the job type, and the queue used for the `segmentation-consumer`).
 
-## Front End React Hierarchy Diagram
-![Alt text](./docs/kiosk-frontend-react.png)
+## Front End React Hierarchy
 
 The `App` Component in `/src` folder is the first parent Component that contains all other components. The `App` Component is directly referenced by the `index.js` file inside the `./src` folder. The `index.js` file is the entry point for Webpack (see `webpack.config.js` to bundle the app's data and serve it via `public/index.html` using a plugin called `HtmlWebpackPlugin`. The app also uses Babel via `.babelrc`, which is accessed within Webpack (press `Command + Shift + .` to be able to view invisible files in Mac Finder).
-
-## Front End Express Hierarchy Diagram
-![Alt text](./docs/kiosk-frontend-express.png)
-
-## Front End Development/Production Commands Diagram
-![Alt text](./docs/kiosk-frontend-serving.png)
 
 `Webpack.dev.js` is used for local development. `Webpack.prod.js` is the webpack config file that is used for production.
 
