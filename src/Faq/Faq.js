@@ -26,7 +26,7 @@ class Faq extends React.Component {
   render() {
     const { classes } = this.props;
 
-    return(
+    return (
       <div className={classes.root}>
         <Typography variant="h2" align="center" color="textPrimary" gutterBottom className={classes.title}>
           Frequently Asked Qustions
@@ -133,6 +133,20 @@ class Faq extends React.Component {
                   We have uploaded some sample data both on the <Link href="/data">Data page</Link>.
                   The prediction data is meant to be used with the pre-trained models while
                   the training data is available for download for training new models.
+                </Typography>
+                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                  The training data is also available in <Link href="https://github.com/vanvalenlab/deepcell-tf/tree/master/deepcell/datasets" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
+                </Typography>
+              </Paper>
+
+              <Paper className={classes.paper}>
+                <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
+                  What types of data are supported?
+                </Typography>
+                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                  Standard image files are supported (ie. .png, .jpg) as well as .tiff files.
+                  Usually we expect around 1000 by 1000 pixel images with no more than 300 objects.
+                  Images should be 2D with the exception of data for tracking which should be a 3D stack.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   The training data is also available in <Link href="https://github.com/vanvalenlab/deepcell-tf/tree/master/deepcell/datasets" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
