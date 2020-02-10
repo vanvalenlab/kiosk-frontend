@@ -35,6 +35,7 @@ async function addRedisKey(client, redisKey, data) {
       'cuts', data.cuts || '0', // to split up very large images
       'url', data.imageUrl || '', // unused?
       'scale', data.dataRescale,
+      'label', data.dataLabel || '',
       'status', 'new',
       'created_at', now,
       'updated_at', now,
