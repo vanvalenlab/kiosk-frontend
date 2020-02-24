@@ -3,7 +3,7 @@
 Welcome to kiosk-frontend's documentation!
 ==========================================
 
-.. includemd:: ../../README.md
+.. mdinclude:: ../../README.md
     :end-before: include-end-marker
 
 .. include:: _sidebar.rst.inc
