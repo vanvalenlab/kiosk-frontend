@@ -21,8 +21,8 @@ The `kiosk-fronted` can be configured using environmental variables in a `.env` 
 | Name | Description | Default Value |
 | :--- | :--- | :--- |
 | `JOB_TYPES` | **REQUIRED**: Comma delimited list of job type names. | `"segmentation,tracking"` |
-| `PORT` | Port to run the NodeJS backend server. | `8080` |
 | `GCLOUD_STORAGE_BUCKET` | **REQUIRED**: Cloud storage bucket address (e.g. `"gs://bucket-name"`). | `"invalid_default"` |
+| `PORT` | Port to run the NodeJS backend server. | `8080` |
 | `REDIS_HOST` | The IP address or hostname of Redis. | `redis-master` |
 | `REDIS_PORT` | The port used to connect to Redis. | `6379` |
 | `REDIS_SENTINEL` | Whether Redis has Sentinel mode enabled. | `True` |
