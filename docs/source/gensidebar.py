@@ -22,7 +22,7 @@ def generate_sidebar(conf, conf_api):
 
     def toctree(name):
         lines.extend(
-            [".. toctree::", "    :caption: %s" % name, "    :maxdepth: 3", ""]
+            [".. toctree::", "    :caption: %s" % name, "    :maxdepth: 2", ""]
         )
 
     def endl():
@@ -73,8 +73,6 @@ def generate_sidebar(conf, conf_api):
     write('Getting Started', 'GETTING_STARTED')
     write('Troubleshooting', 'TROUBLESHOOTING')
     write('Tutorial: Custom Jobs', 'CUSTOM-JOB')
-    write('Advanced Documentation', 'ADVANCED_DOCUMENTATION')
-    write('Software Infrastructure', 'SOFTWARE_INFRASTRUCTURE')
     write('Developer Documentation', 'DEVELOPER')
     endl()
 
