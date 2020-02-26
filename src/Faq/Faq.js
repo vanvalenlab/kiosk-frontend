@@ -29,7 +29,7 @@ class Faq extends React.Component {
     return (
       <div className={classes.root}>
         <Typography variant="h2" align="center" color="textPrimary" gutterBottom className={classes.title}>
-          Frequently Asked Qustions
+          Frequently Asked Questions
         </Typography>
 
         <Container maxWidth="md">
@@ -43,7 +43,7 @@ class Faq extends React.Component {
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   DeepCell is a software ecosystem that enables deep learning based biological image analysis in the cloud.
 
-                  It consists of several software packages, including the deep learning library <i>deepcell-tf</i>, and a Kubernetes cloud deployment platform, the <i>DeepCell Kiosk</i>.
+                  It consists of several software packages, including the deep learning library <i>deepcell-tf</i>, and a Kubernetes cloud deployment platform, the DeepCell Kiosk.
                 </Typography>
               </Paper>
 
@@ -54,7 +54,7 @@ class Faq extends React.Component {
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models. There is example data for uploading on the Data tab.
 
-                  Additionally, you can deploy your own DeepCell Kiosk by following the instructions on <Link href="https://github.com/vanvalenlab/kiosk" target="_blank" rel="noopener noreferrer">the GitHub</Link>.
+                  Additionally, you can deploy your own DeepCell Kiosk by following the instructions on the <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" target="_blank" rel="noopener noreferrer">Kiosk Documentation</Link>.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   The deployment comes with pre-trained models for a few common image processing tasks, including nuclear segmentation for 2D images and nuclear tracking for 3D tiff stacks.
@@ -74,7 +74,7 @@ class Faq extends React.Component {
 
                   It is a public software and fully extensible for custom image processing tasks.
 
-                  Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/latest/" rel="noopener noreferrer" target="_blank">here</Link>.
+                  Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" rel="noopener noreferrer" target="_blank">here</Link>.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   This website is an implementation of the <Link href="https://github.com/vanvalenlab/kiosk/tree/production" target="_blank" rel="noopener noreferrer">production branch</Link> of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
@@ -83,13 +83,13 @@ class Faq extends React.Component {
 
               <Paper className={classes.paper}>
                 <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                  What is deepcell-tf?
+                  What is <i>deepcell-tf</i>?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   <Link href="https://github.com/vanvalenlab/deepcell-tf" rel="noopener noreferrer" target="_blank">deepcell-tf</Link> is a TensorFlow/Keras based Python library for training deep learning models for biological image analysis.
                   All models hosted on DeepCell.org have been trained using this library.
 
-                  Documentation for the library can be found <Link href="https://deepcell.readthedocs.io/en/documentation/readme_link.html" rel="noopener noreferrer" target="_blank">here</Link>.
+                  Documentation for the library can be found <Link href="https://deepcell.readthedocs.io/en/master" rel="noopener noreferrer" target="_blank">here</Link>.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
 
@@ -117,7 +117,7 @@ class Faq extends React.Component {
                   Can I add a custom job type?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  This is a bit more involved and requires forked changes to both the <Link href="https://github.com/vanvalenlab/kiosk-frontend" rel="noopener noreferrer" target="_blank">frontend</Link> as well as the <Link href="https://github.com/vanvalenlab/kiosk-redis-consumer" rel="noopener noreferrer" target="_blank">consumers</Link>.
+                  This is a bit more involved and requires forked changes to the <Link href="https://github.com/vanvalenlab/kiosk-redis-consumer" rel="noopener noreferrer" target="_blank">consumers</Link>. Check out our <Link href="https://deepcell-kiosk.readthedocs.io/en/master/CUSTOM-JOB.html" rel="noopener noreferrer" target="_blank">tutorial</Link> on building a custom job pipeline.
 
                   The frontend places jobs in a Redis queue, and the consumers will perform all the work. New jobs will require a new job queue, which are listed in the dropdown list on the <Link href="/predict">Predict page</Link>.
 
@@ -135,7 +135,7 @@ class Faq extends React.Component {
                   the training data is available for download for training new models.
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  The training data is also available in <Link href="https://github.com/vanvalenlab/deepcell-tf/tree/master/deepcell/datasets" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
+                  The training data is also available in <Link href="https://deepcell.readthedocs.io/en/master/API/deepcell.datasets.html" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
                 </Typography>
               </Paper>
 
@@ -150,6 +150,15 @@ class Faq extends React.Component {
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                   The training data is also available in <Link href="https://github.com/vanvalenlab/deepcell-tf/tree/master/deepcell/datasets" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
+                </Typography>
+              </Paper>
+
+              <Paper className={classes.paper}>
+                <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
+                  Where can I get help?
+                </Typography>
+                <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                  Support for DeepCell Kiosk is available through our <Link href="https://deepcell-kiosk.readthedocs.io/en/master" target="_blank" rel="noopener noreferrer">documentation</Link> and <Link href="https://github.com/vanvalenlab/kiosk/issues" target="_blank" rel="noopener noreferrer">issues on Github</Link>
                 </Typography>
               </Paper>
 
