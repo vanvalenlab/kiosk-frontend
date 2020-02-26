@@ -16,7 +16,7 @@ The `App` Component in `/src` folder is the first parent Component that contains
 
 ## Environmental Variables
 
-The `kiosk-fronted` can be configured using environmental variables in a `.env` file.
+The `kiosk-frontend` can be configured using environmental variables in a `.env` file.
 
 | Name | Description | Default Value |
 | :--- | :--- | :--- |
