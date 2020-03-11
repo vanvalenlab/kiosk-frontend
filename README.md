@@ -1,7 +1,7 @@
 # kiosk-frontend
 
 [![Build Status](https://travis-ci.com/vanvalenlab/kiosk-frontend.svg?branch=master)](https://travis-ci.com/vanvalenlab/kiosk-frontend)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/vanvalenlab/kiosk-frontend/blob/master/LICENSE)
 
 The `kiosk-frontend` serves as the main interaction point for users of the DeepCell Kiosk. The NodeJS backend API and the React frontend allows users to easily create jobs through their web browser.
 
