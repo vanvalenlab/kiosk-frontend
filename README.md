@@ -1,8 +1,11 @@
 # kiosk-frontend
 
 [![Build Status](https://travis-ci.com/vanvalenlab/kiosk-frontend.svg?branch=master)](https://travis-ci.com/vanvalenlab/kiosk-frontend)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](/LICENSE)
 
 The `kiosk-frontend` serves as the main interaction point for users of the DeepCell Kiosk. The NodeJS backend API and the React frontend allows users to easily create jobs through their web browser.
+
+This repository is part of the [DeepCell Kiosk](https://github.com/vanvalenlab/kiosk-console). More information about the Kiosk project is available through [Read the Docs](https://deepcell-kiosk.readthedocs.io/en/master) and our [FAQ](http://www.deepcell.org/faq) page.
 
 ## Adding new Job Types
 
@@ -14,7 +17,7 @@ The `App` Component in `/src` folder is the first parent Component that contains
 
 `Webpack.dev.js` is used for local development. `Webpack.prod.js` is the webpack config file that is used for production.
 
-## Environmental Variables
+## Configuration
 
 The `kiosk-frontend` can be configured using environmental variables in a `.env` file.
 
@@ -29,3 +32,16 @@ The `kiosk-frontend` can be configured using environmental variables in a `.env`
 | `MODEL_PREFIX` | Prefix of model directory in the cloud storage bucket. | `"/models"` |
 | `UPLOAD_PREFIX` | Prefix of upload directory in the cloud storage bucket. | `"/uploads"` |
 | `CLOUD_PROVIDER` | The cloud provider hosting the DeepCell Kiosk. | `"gke"` |
+
+## Contribute
+
+We welcome contributions to the [kiosk-console](https://github.com/vanvalenlab/kiosk-console) and its associated projects. If you are interested, please refer to our [Developer Documentation](https://deepcell-kiosk.readthedocs.io/en/master/DEVELOPER.html), [Code of Conduct](https://github.com/vanvalenlab/kiosk-console/blob/master/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/vanvalenlab/kiosk-console/blob/master/CONTRIBUTING.md).
+
+## License
+
+This software is license under a modified Apache-2.0 license. See [LICENSE](/LICENSE) for full  details.
+
+## Copyright
+
+Copyright © 2018-2020 [The Van Valen Lab](http://www.vanvalen.caltech.edu/) at the California Institute of Technology (Caltech), with support from the Paul Allen Family Foundation, Google, & National Institutes of Health (NIH) under Grant U24CA224309-01.
+All rights reserved.
