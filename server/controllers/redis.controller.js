@@ -89,6 +89,4 @@ export default {
   getKey,
   expireHash,
   getJobStatus,
-  batchGetKeys,
-  batchGetJobStatus
 };
