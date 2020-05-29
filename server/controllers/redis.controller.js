@@ -32,6 +32,16 @@ async function getRedisValues(client, key, field, arr) {
   // get the same field from many keys
   const value = await getRedisValue(client, key, field);
   Array.prototype.push.apply(arr, [value]);
+async function expire(client, key, expireTime) {
+  const expireAsync = promisify(client.expire).bind(client);
+  try {
+    const value = await expireAsync(key, expireTime);
+    logger.debug(`EXPIRE ${key} ${expireTime} got result: ${value}.`);
+    return value;
+  } catch (err) {
+    logger.error(`Encountered error during "EXPIRE ${key} ${expireTime}": ${err}`);
+    throw err;
+  }
 }
 
 // route handlers
@@ -87,19 +97,18 @@ async function batchGetJobStatus(req, res) {
 async function expireHash(req, res) {
   const redisHash = req.body.hash;
   const expireTime = req.body.expireIn || 3600;
-
-  client.expire(redisHash, expireTime, (err, value) => {
-    if (err) {
-      logger.error(`Could not expire hash ${redisHash} with ${expireTime} seconds: ${err}`);
-      return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
-    }
+  try {
+    const value = await expire(client, redisHash, expireTime);
     if (parseInt(value) == 0) {
       logger.warning(`Hash "${redisHash}" not found`);
       return res.status(httpStatus.NOT_FOUND).send({ value });
     }
     logger.debug(`Expiring hash ${redisHash} in ${expireTime} seconds: ${value}`);
     return res.status(httpStatus.OK).send({ value });
-  });
+  } catch (err) {
+    logger.error(`Error during EXPIRE ${redisHash} ${expireTime}: ${err}`);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
 }
 
 export default {
