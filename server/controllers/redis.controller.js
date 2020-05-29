@@ -28,10 +28,6 @@ async function getRedisValue(client, key, field) {
   }
 }
 
-async function getRedisValues(client, key, field, arr) {
-  // get the same field from many keys
-  const value = await getRedisValue(client, key, field);
-  Array.prototype.push.apply(arr, [value]);
 async function expire(client, key, expireTime) {
   const expireAsync = promisify(client.expire).bind(client);
   try {
@@ -53,7 +49,7 @@ async function getKey(req, res) {
     return res.status(httpStatus.OK).send({ value: value });
   } catch (err) {
     logger.error(`Could not get hash ${redisHash} key ${redisKey} values: ${err}`);
-    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
   }
 }
 
@@ -64,33 +60,7 @@ async function getJobStatus(req, res) {
     return res.status(httpStatus.OK).send({ status: value });
   } catch (err) {
     logger.error(`Could not get hash ${redisHash} status: ${err}`);
-    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
-
-async function batchGetKeys(req, res) {
-  const hashes = req.body.hashes;
-  const key = req.body.key;
-  const values = [];
-  try {
-    await Promise.all(hashes.map(h => getRedisValues(client, h, key, values)));
-    return res.status(httpStatus.OK).send({ values: values });
-  } catch (err) {
-    logger.error(`Error finding ${key} for hashes ${hashes}: ${err}`);
-    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
-
-async function batchGetJobStatus(req, res) {
-  const hashes = req.body.hashes;
-  const statuses = [];
-
-  try {
-    await Promise.all(hashes.map(h => getRedisValues(client, h, 'status', statuses)));
-    return res.status(httpStatus.OK).send({ statuses: statuses });
-  } catch (err) {
-    logger.error(`Error waiting for status checks for ${hashes}: ${err}`);
-    return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
   }
 }
 
