@@ -4,11 +4,28 @@ import client from '../config/redis';
 import logger from '../config/winston';
 
 // helper functions
+function isArray(a) {
+  return (!!a) && (a.constructor === Array);
+}
+
 async function getRedisValue(client, key, field) {
-  const hgetAsync = promisify(client.hget).bind(client);
-  const value = await hgetAsync(key, field);
-  logger.debug(`Hash ${key} has ${field} = ${value}`);
-  return value;
+  let getAsync;
+  let cmd;
+  if (isArray(field)) {
+    getAsync = promisify(client.hget).bind(client);
+    cmd = 'HGET';
+  } else {
+    getAsync = promisify(client.hmget).bind(client);
+    cmd = 'HMGET';
+  }
+  try {
+    const value = await getAsync(key, field);
+    logger.debug(`Hash ${key} has ${field} = ${value}`);
+    return value;
+  } catch (err) {
+    logger.error(`Encountered error during "${cmd} ${key} ${field}": ${err}`);
+    throw err;
+  }
 }
 
 async function getRedisValues(client, key, field, arr) {
