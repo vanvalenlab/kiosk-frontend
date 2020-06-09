@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -21,6 +22,7 @@ const styles = theme => ({
 });
 
 class Landing extends React.Component {
+
   render() {
     const { classes } = this.props;
 
