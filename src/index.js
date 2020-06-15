@@ -7,7 +7,9 @@ import App from './App/App';
 
 const history = createBrowserHistory();
 
-ReactGA.initialize('UA-169034632-1');
+ReactGA.initialize('UA-169034632-1', {
+  debug: process.env.NODE_ENV !== 'production',
+});
 
 // Initialize google analytics page view tracking
 history.listen(location => {
