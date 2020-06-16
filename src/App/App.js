@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-ReactGA.initialize('UA-169034632-1', {
+ReactGA.initialize(process.env.GA_TRACKING_ID || 'UA-000000000-0', {
   debug: process.env.NODE_ENV !== 'production',
 });
 
