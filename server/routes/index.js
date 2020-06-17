@@ -1,6 +1,7 @@
 import express from 'express';
 import httpStatus from 'http-status';
 import multer from '../config/multer';
+import swaggerSpec from '../config/swagger';
 import controllers from '../controllers';
 
 const router = express.Router();
