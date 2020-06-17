@@ -99,7 +99,7 @@ async function predict(req, res) {
   const now = new Date().toISOString();
 
   try {
-    const response = redis.hmset(redisKey, [
+    await redis.hmset(redisKey, [
       'original_name', data.imageName, // to save results with the same name
       'input_file_name', data.uploadedName || data.imageName, // used for unique files
       'model_name', data.modelName || '',
@@ -115,7 +115,6 @@ async function predict(req, res) {
       'updated_at', now,
       'identity_upload', config.hostname,
     ]);
-    logger.info(`Added key ${redisKey} with response ${response}`);
     await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
   } catch (err) {
