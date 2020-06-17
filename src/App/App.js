@@ -3,6 +3,8 @@ import ReactGA from 'react-ga';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
+import SwaggerUI from 'swagger-ui-react';
+import 'swagger-ui-react/swagger-ui.css';
 import { withStyles } from '@material-ui/core/styles';
 import { hot } from 'react-hot-loader';
 import loadable from '@loadable/component';
@@ -66,6 +68,7 @@ class App extends React.Component {
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
             <Route path='/data' component={withTracker(Data)}/>
+            <SwaggerUI url="/api/swagger.json" />
             <Route component={withTracker(NotFound)} />
           </Switch>
         </main>

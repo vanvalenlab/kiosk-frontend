@@ -10,6 +10,7 @@ parserOptions:
     jsx: true
   ecmaVersion: 2018
   sourceType: module
+parser: babel-eslint
 plugins:
   - react
 rules:
@@ -27,5 +28,3 @@ rules:
     - always
   no-console:
     - warn
-  jsx-uses-vars:
-    - true
