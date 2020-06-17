@@ -49,7 +49,7 @@ async function addRedisKey(client, redisKey, data) {
   }
 }
 
-async function pushRedisKey(client, queueName, redisKey) {
+async function lpush(client, queueName, redisKey) {
   const lpushAsync = promisify(client.lpush).bind(client);
   try {
     let response;
@@ -94,7 +94,7 @@ async function predict(req, res) {
 
   try {
     await addRedisKey(client, redisKey, req.body);
-    await pushRedisKey(client, queueName, redisKey);
+    await lpush(client, queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
   } catch (err) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
