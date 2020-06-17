@@ -77,23 +77,6 @@ class Predict extends React.Component {
     });
   }
 
-  getErrorReason(redisHash) {
-    axios({
-      method: 'post',
-      url: '/api/redis',
-      data: {
-        'hash': redisHash,
-        'key': 'reason'
-      }
-    }).then((response) => {
-      let errMsg = `Job Failed: ${response.data.value}`;
-      this.showErrorMessage(errMsg);
-    }).catch(error => {
-      let errMsg = `Failed to get failure reason due to error: ${error}`;
-      this.showErrorMessage(errMsg);
-    });
-  }
-
   expireRedisHash(redisHash, expireIn) {
     axios({
       method: 'post',
@@ -116,47 +99,25 @@ class Predict extends React.Component {
     this.statusCheck = setInterval(() => {
       axios({
         method: 'post',
-        url: '/api/status',
-        data: { 'hash': redisHash }
+        url: '/api/redis',
+        data: {
+          'hash': redisHash,
+          'key': ['status', 'progress', 'output_url', 'reason']
+        }
       }).then((response) => {
-        if (response.data.status === 'failed') {
+        if (response.data.value[0] === 'failed') {
           clearInterval(this.statusCheck);
-          this.getErrorReason(redisHash);
+          this.showErrorMessage(`Job Failed: ${response.data.value[3]}`);
           this.expireRedisHash(redisHash, 3600);
-        } else if (response.data.status === 'done') {
+        } else if (response.data.value[0] === 'done') {
           clearInterval(this.statusCheck);
-          axios({
-            method: 'post',
-            url: '/api/redis',
-            data: {
-              'hash': redisHash,
-              'key': 'output_url'
-            }
-          }).then((response) => {
-            this.setState({
-              downloadURL: response.data.value
-            });
-            this.expireRedisHash(redisHash, 3600);
-          }).catch(error => {
-            let errMsg = `Job finished. Error fetching output URL: ${error}`;
-            this.showErrorMessage(errMsg);
-          });
+          this.setState({ downloadURL: response.data.value[2] });
+          this.expireRedisHash(redisHash, 3600);
         } else {
-          axios({
-            method: 'post',
-            url: '/api/redis',
-            data: {
-              'hash': redisHash,
-              'key': 'progress'
-            }
-          }).then((response) => {
-            let maybe_num = parseInt(response.data.value, 10);
-            if (!isNaN(maybe_num)) {
-              this.setState({
-                progress: maybe_num
-              });
-            }
-          });
+          let maybe_num = parseInt(response.data.value[1], 10);
+          if (!isNaN(maybe_num)) {
+            this.setState({ progress: maybe_num });
+          }
         }
       }).catch(error => {
         let errMsg = `Trouble communicating with Redis due to error: ${error}`;
