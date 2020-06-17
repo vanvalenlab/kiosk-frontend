@@ -20,13 +20,13 @@ router.route('/models')
   .get(controllers.modelController.getModels);
 
 router.route('/redis')
-  .post(controllers.redisController.getKey);
+  .post(controllers.predictController.getKey);
 
 router.route('/status')
-  .post(controllers.redisController.getJobStatus);
+  .post(controllers.predictController.getJobStatus);
 
 router.route('/redis/expire')
-  .post(controllers.redisController.expireHash);
+  .post(controllers.predictController.expireHash);
 
 router.route('/jobtypes')
   .get(controllers.predictController.getJobTypes);
