@@ -8,22 +8,26 @@ function isArray(a) {
   return (!!a) && (a.constructor === Array);
 }
 
-async function getRedisValue(client, key, field) {
-  let getAsync;
-  let cmd;
-  if (isArray(field)) {
-    getAsync = promisify(client.hget).bind(client);
-    cmd = 'HGET';
-  } else {
-    getAsync = promisify(client.hmget).bind(client);
-    cmd = 'HMGET';
-  }
+async function hget(client, key, field) {
+  const hgetAsync = promisify(client.hget).bind(client);
   try {
-    const value = await getAsync(key, field);
+    const value = await hgetAsync(key, field);
     logger.debug(`Hash ${key} has ${field} = ${value}`);
     return value;
   } catch (err) {
-    logger.error(`Encountered error during "${cmd} ${key} ${field}": ${err}`);
+    logger.error(`Encountered error during "HGET ${key} ${field}": ${err}`);
+    throw err;
+  }
+}
+
+async function hmget(client, key, fields) {
+  const hmgetAsync = promisify(client.hmget).bind(client);
+  try {
+    const value = await hmgetAsync(key, fields);
+    logger.debug(`Hash ${key} has ${fields} = ${value}`);
+    return value;
+  } catch (err) {
+    logger.error(`Encountered error during "HMGET ${key} ${fields}": ${err}`);
     throw err;
   }
 }
@@ -45,7 +49,12 @@ async function getKey(req, res) {
   const redisHash = req.body.hash;
   const redisKey = req.body.key;
   try {
-    const value = await getRedisValue(client, redisHash, redisKey);
+    let value;
+    if (isArray(redisKey)) {
+      value = await hmget(client, redisHash, redisKey);
+    } else {
+      value = await hget(client, redisHash, redisKey);
+    }
     return res.status(httpStatus.OK).send({ value: value });
   } catch (err) {
     logger.error(`Could not get hash ${redisHash} key ${redisKey} values: ${err}`);
