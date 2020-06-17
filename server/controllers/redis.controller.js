@@ -64,8 +64,9 @@ async function getKey(req, res) {
 
 async function getJobStatus(req, res) {
   const redisHash = req.body.hash;
+  const redisKey = 'status';
   try {
-    const value = await getRedisValue(client, redisHash, 'status');
+    const value = await hget(client, redisHash, redisKey);
     return res.status(httpStatus.OK).send({ status: value });
   } catch (err) {
     logger.error(`Could not get hash ${redisHash} status: ${err}`);
