@@ -16,9 +16,6 @@ router.route('/upload')
 router.route('/predict')
   .post(controllers.predictController.predict);
 
-// router.route('/train')
-//   .post(controllers.trainController.train);
-
 router.route('/models')
   .get(controllers.modelController.getModels);
 
