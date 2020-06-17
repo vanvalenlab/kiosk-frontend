@@ -1,11 +1,14 @@
 import httpStatus from 'http-status';
 import uuidv4 from 'uuid/v4';
-import { promisify } from 'util';
-import client from '../config/redis';
+import redis from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
 
 // helper functions
+function isArray(a) {
+  return (!!a) && (a.constructor === Array);
+}
+
 function isValidPredictdata(data) {
   const requiredKeys = [
     // 'modelName',
@@ -20,12 +23,83 @@ function isValidPredictdata(data) {
   return true;
 }
 
-async function addRedisKey(client, redisKey, data) {
-  const hmsetAsync = promisify(client.hmset).bind(client);
-  const now = new Date().toISOString();
+// route handlers
+async function getJobTypes(req, res) {
+  return res.status(httpStatus.OK).send({ jobTypes: config.jobTypes });
+}
+
+async function getKey(req, res) {
+  const redisHash = req.body.hash;
+  const redisKey = req.body.key;
   try {
-    const response = await hmsetAsync([
-      redisKey,
+    let value;
+    if (isArray(redisKey)) {
+      value = await redis.hmget(redisHash, redisKey);
+    } else {
+      value = await redis.hget(redisHash, redisKey);
+    }
+    return res.status(httpStatus.OK).send({ value });
+
+  } catch (err) {
+    logger.error(`Could not get hash ${redisHash} key ${redisKey} values: ${err}`);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
+}
+
+async function getJobStatus(req, res) {
+  const redisHash = req.body.hash;
+  const redisKey = 'status';
+  try {
+    const value = await redis.hget(redisHash, redisKey);
+    return res.status(httpStatus.OK).send({ status: value });
+  } catch (err) {
+    logger.error(`Could not get hash ${redisHash} status: ${err}`);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
+}
+
+async function expireHash(req, res) {
+  const redisHash = req.body.hash;
+  const expireTime = req.body.expireIn || 3600;
+  try {
+    const value = await redis.expire(redisHash, expireTime);
+    if (parseInt(value) == 0) {
+      logger.warning(`Hash "${redisHash}" not found`);
+      return res.status(httpStatus.NOT_FOUND).send({ value });
+    }
+    logger.debug(`Expiring hash ${redisHash} in ${expireTime} seconds: ${value}`);
+    return res.status(httpStatus.OK).send({ value });
+  } catch (err) {
+    logger.error(`Error during EXPIRE ${redisHash} ${expireTime}: ${err}`);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
+  }
+}
+
+async function predict(req, res) {
+  if (!isValidPredictdata(req.body)) {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: 'Invalid prediction request body.'
+    });
+  }
+
+  let queueName = req.body.jobType;
+
+  if (config.jobTypes.indexOf(queueName) == -1) {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: `Invalid Job Type: ${req.body.jobType}.`
+    });
+  }
+
+  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
+    queueName = `${queueName}-zip`;
+  }
+
+  const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
+  const data = req.body;
+  const now = new Date().toISOString();
+
+  try {
+    await redis.hmset(redisKey, [
       'original_name', data.imageName, // to save results with the same name
       'input_file_name', data.uploadedName || data.imageName, // used for unique files
       'model_name', data.modelName || '',
@@ -41,109 +115,17 @@ async function addRedisKey(client, redisKey, data) {
       'updated_at', now,
       'identity_upload', config.hostname,
     ]);
-    logger.debug(`"HMSET ${redisKey}" response: ${response}`);
-    return response;
-  } catch (err) {
-    logger.error(`Encountered error during "HMSET ${redisKey}": ${err}`);
-    throw err;
-  }
-}
-
-async function pushRedisKey(client, queueName, redisKey) {
-  const lpushAsync = promisify(client.lpush).bind(client);
-  try {
-    let response;
-    if (Array.isArray(redisKey)) {
-      response = await lpushAsync(queueName, ...redisKey);
-    } else {
-      response = await lpushAsync(queueName, redisKey);
-    }
-    logger.debug(`"LPUSH ${redisKey}" response: ${response}`);
-    return response;
-  } catch (err) {
-    logger.error(`Encountered error during "LPUSH ${queueName} ${redisKey}": ${err}`);
-    throw err;
-  }
-}
-
-async function batchAddKeys(client, job, arr) {
-  let redisKey = `predict:${job.imageName}:${uuidv4()}`;
-  await addRedisKey(client, redisKey, job);
-  Array.prototype.push.apply(arr, [redisKey]);
-}
-
-// route handlers
-async function getJobTypes(req, res) {
-  return res.status(httpStatus.OK).send({ jobTypes: config.jobTypes });
-}
-
-async function predict(req, res) {
-  if (!isValidPredictdata(req.body)) {
-    return res.sendStatus(httpStatus.BAD_REQUEST);
-  }
-
-  let queueName = req.body.jobType;
-
-  if (config.jobTypes.indexOf(queueName) == -1) {
-    return res.status(httpStatus.BAD_REQUEST).send({
-      message: `Invalid Job Type: ${req.body.jobType}.`});
-  }
-
-  if (req.body.imageName.toLowerCase().endsWith('.zip')) {
-    queueName = `${queueName}-zip`;
-  }
-
-  const redisKey = `${queueName}:${req.body.imageName}:${uuidv4()}`;
-
-  try {
-    await addRedisKey(client, redisKey, req.body);
-    await pushRedisKey(client, queueName, redisKey);
+    await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
   } catch (err) {
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
   }
 }
 
-async function batchPredict(req, res) {
-  const maxJobs = 100;
-  // check that the `jobs` key exists in the request
-  if (!req.body.hasOwnProperty('jobs')) {
-    return res.status(httpStatus.BAD_REQUEST).send({
-      message: 'Missing required field `jobs`, the list of batch jobs.'
-    });
-  }
-
-  // check that the number of jobs does not exceed maxJobs
-  if (req.body.jobs.length > maxJobs) {
-    return res.status(httpStatus.REQUEST_ENTITY_TOO_LARGE).send({
-      message: `A maximum of ${maxJobs} can be processed in one request.`
-    });
-  }
-
-  // check that each job is well formatted
-  for (let j = 0; j < req.body.jobs.length; ++j) {
-    if (!isValidPredictdata(req.body.jobs[j])) {
-      return res.status(httpStatus.BAD_REQUEST).send({
-        message: `Not all required fields exist in job ${req.body.jobs[j]}.`
-      });
-    }
-  }
-
-  const hashes = [];
-
-  try {
-    await Promise.all(req.body.jobs.map(j => batchAddKeys(client, j, hashes)));
-    logger.info(`hashes after waiting for all promises: ${hashes}`);
-    await pushRedisKey(client, hashes);
-    return res.status(httpStatus.OK).send({ hashes: hashes });
-  } catch (err) {
-    logger.error(`Encountered error: ${err}`);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
-  }
-}
-
 export default {
   getJobTypes,
-  predict,
-  batchPredict
+  getKey,
+  expireHash,
+  getJobStatus,
+  predict
 };
