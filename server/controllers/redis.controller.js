@@ -23,7 +23,7 @@ async function hget(client, key, field) {
 async function hmget(client, key, fields) {
   const hmgetAsync = promisify(client.hmget).bind(client);
   try {
-    const value = await hmgetAsync(key, fields);
+    const value = await hmgetAsync(key, ...fields);
     logger.debug(`Hash ${key} has ${fields} = ${value}`);
     return value;
   } catch (err) {
