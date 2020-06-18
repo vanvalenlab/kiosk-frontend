@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import redis from '../config/redis';
 import config from '../config/config';
 import logger from '../config/winston';
