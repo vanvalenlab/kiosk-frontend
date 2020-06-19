@@ -1,4 +1,12 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import config from './config';
+
+let apis;
+if (config.env === 'production') {
+  apis = ['dist/server/routes/*.js'];
+} else {
+  apis = ['server/routes/*.js'];
+}
 
 const options = {
   definition: {
@@ -10,8 +18,8 @@ const options = {
     },
   },
   // Path to the API docs
-  apis: ['server/routes/*.js'],
-  basePath: '/api',
+  apis: apis,
+  basePath: '/',
 };
 
 const swaggerSpec = swaggerJSDoc(options);
