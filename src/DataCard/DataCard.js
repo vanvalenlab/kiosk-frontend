@@ -53,7 +53,11 @@ class DataCard extends React.Component {
         },
         {
           file: 'tiff_stack_examples/multiplex_example.tiff',
-          name: 'MIBI Nuclear and Membrane Channels',
+          name: 'Multiplex Nuclear and Membrane Channels',
+          description: '2 channel nuclear and membrane data from MIBI',
+          thumbnail: 'thumbnails/multiplex_example.png',
+          datatype: 'prediction'
+        },
           description: '2 channel nuclear and membrane data from MIBI',
           thumbnail: 'thumbnails/mibi_nuclear.png',
           datatype: 'prediction'
