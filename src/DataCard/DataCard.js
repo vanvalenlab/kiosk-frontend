@@ -51,17 +51,10 @@ class DataCard extends React.Component {
           thumbnail: 'thumbnails/HeLa_nuclear.png',
           datatype: 'prediction'
         },
-        // {
-        //   file: 'nuclei/examples/mibi_nuclear.png',
-        //   name: 'MIBI Nuclei',
-        //   description: 'Double-stranded DNA data from MIBI',
-        //   thumbnail: 'thumbnails/mibi_nuclear.png',
-        //   datatype: 'prediction'
-        // },
         {
-          file: 'tiff_stack_examples/mibi_5channels.tif',
-          name: 'MIBI Whole Cell',
-          description: '5 channel cellular marker data from MIBI',
+          file: 'tiff_stack_examples/multiplex_example.tiff',
+          name: 'MIBI Nuclear and Membrane Channels',
+          description: '2 channel nuclear and membrane data from MIBI',
           thumbnail: 'thumbnails/mibi_nuclear.png',
           datatype: 'prediction'
         },
