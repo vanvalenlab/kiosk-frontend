@@ -52,17 +52,17 @@ class DataCard extends React.Component {
           datatype: 'prediction'
         },
         {
-          file: 'tiff_stack_examples/multiplex_example.tif',
-          name: 'Multiplex 1',
-          description: '2 channel nuclear and membrane data from MIBI',
-          thumbnail: 'thumbnails/multiplex_example.png',
+          file: 'tiff_stack_examples/multiplex_mibi.tif',
+          name: 'Esophagus, MIBI platform',
+          description: 'Multiplex esophagus image data from MIBI platform.',
+          thumbnail: 'thumbnails/multiplex_mibi.png',
           datatype: 'prediction'
         },
         {
-          file: 'tiff_stack_examples/multiplex_example2.tif',
-          name: 'Multiplex 2',
-          description: '2 channel nuclear and membrane data from MIBI',
-          thumbnail: 'thumbnails/multiplex_example2.png',
+          file: 'tiff_stack_examples/multiplex_vectra.tif',
+          name: 'Hodgkin\'s Lymphoma, Vectra platform',
+          description: 'Multiplex Hodgkin\'s Lymphoma image data from Vectra platform.',
+          thumbnail: 'thumbnails/multiplex_vectra.png',
           datatype: 'prediction'
         },
         // {
