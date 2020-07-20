@@ -46,22 +46,22 @@ class DataCard extends React.Component {
       allCards :[
         {
           file: 'nuclei/examples/HeLa_nuclear.png',
-          name: 'HeLa Nuclei',
-          description: 'Nuclear stains of HeLa S3',
+          name: 'Fluorescent Nuclei',
+          description: 'Nikon Ti2 - Static images of fluorescent nuclei from HeLa S3 cells',
           thumbnail: 'thumbnails/HeLa_nuclear.png',
           datatype: 'prediction'
         },
         {
           file: 'tiff_stack_examples/multiplex_mibi.tif',
-          name: 'Esophagus, MIBI platform',
-          description: 'Multiplex esophagus image data from MIBI platform.',
+          name: 'Esophagus',
+          description: 'MIBI - Nuclear and membrane stain of esophageal tissue.',
           thumbnail: 'thumbnails/multiplex_mibi.png',
           datatype: 'prediction'
         },
         {
           file: 'tiff_stack_examples/multiplex_vectra.tif',
-          name: 'Hodgkin\'s Lymphoma, Vectra platform',
-          description: 'Multiplex Hodgkin\'s Lymphoma image data from Vectra platform.',
+          name: 'Hodgkin\'s Lymphoma',
+          description: 'Vectra - Nuclear and membrane stain of Hodgkin\'s lymphoma',
           thumbnail: 'thumbnails/multiplex_vectra.png',
           datatype: 'prediction'
         },
@@ -81,8 +81,8 @@ class DataCard extends React.Component {
         // },
         {
           file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
-          name: '3T3 Nuclear Movie',
-          description: 'Sample 3T3 nuclear movie for automated segmentation and tracking.',
+          name: 'Fluorescent Nuclei',
+          description: 'Nikon Ti2 - Dynamic movie of fluorescent nuclei from 3T3 cells.',
           thumbnail: 'thumbnails/3T3_nuc_example_256.png',
           datatype: 'prediction'
         },
