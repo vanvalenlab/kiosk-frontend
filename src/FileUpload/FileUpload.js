@@ -48,21 +48,27 @@ class FileUpload extends React.Component {
   // This function will run upon file upload completion.
   onDrop(droppedFiles) {
     const { onDroppedFile } = this.props;
-    droppedFiles.map((f) => {
-      let formData = new FormData();
-      formData.append('file', f);
-      axios.post('/api/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-        .then((response) => {
-          this.setState({ uploadedFileLocation: response.data.imageURL});
-          onDroppedFile(response.data.uploadedName, f.name, response.data.imageURL);
+
+    if (droppedFiles.length > 1) {
+      this.setState({ showError: true });
+      this.setState({ errorText: 'Only single file uploads are supported.' });
+    } else {
+      droppedFiles.map((f) => {
+        let formData = new FormData();
+        formData.append('file', f);
+        axios.post('/api/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
         })
-        .catch((error) => {
-          this.setState({ showError: true });
-          this.setState({ errorText: `${error}` });
-        });
-    });
+          .then((response) => {
+            this.setState({ uploadedFileLocation: response.data.imageURL});
+            onDroppedFile(response.data.uploadedName, f.name, response.data.imageURL);
+          })
+          .catch((error) => {
+            this.setState({ showError: true });
+            this.setState({ errorText: `${error}` });
+          });
+      });
+    }
   }
 
   render() {
@@ -85,9 +91,9 @@ class FileUpload extends React.Component {
 
               {/* Display error to user */}
               { this.state.showError &&
-                <Typography className={classes.paddedTop} variant='caption' align='center' color='error'>
-                  {this.state.errorText}
-                </Typography>}
+                <Typography className={classes.paddedTop} variant='caption' display='block' align='center' color='error'>
+                  { this.state.errorText }
+                </Typography> }
 
               {/* Display preview of uploaded image */}
               { this.state.uploadedFileLocation !== null ?
