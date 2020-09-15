@@ -16,7 +16,7 @@ function isValidPredictdata(data) {
     'imageName'
   ];
   for (let key of requiredKeys) {
-    if (!data.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(data, key)) {
       return false;
     }
   }
