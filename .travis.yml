@@ -21,6 +21,7 @@ install: true
 
 script:
   - yarn test
+  - yarn coveralls
 
 jobs:
   include:
