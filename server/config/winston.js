@@ -34,8 +34,6 @@ const logger = winston.createLogger({
 });
  
 // eslint-disable-next-line no-unused-vars
-logger.stream.write = (message, encoding) => {
-  logger.info(message);
-};
+logger.stream.write = (message, encoding) => logger.info(message);
 
 export default logger;
