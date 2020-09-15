@@ -107,6 +107,14 @@ async function getGcpModels(req, res) {
   }
 }
 
-const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
+async function getModels(req, res) {
+  let response;
+  if (config.cloud === 'aws') {
+    response = await getAwsModels(req, res);
+  } else {
+    response = await getGcpModels(req, res);
+  }
+  return response;
+}
 
 export default { getModels };
