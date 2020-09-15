@@ -13,7 +13,8 @@ function isValidPredictdata(data) {
   const requiredKeys = [
     // 'modelName',
     // 'modelVersion',
-    'imageName'
+    'imageName',
+    'jobType'
   ];
   for (let key of requiredKeys) {
     if (!Object.prototype.hasOwnProperty.call(data, key)) {
