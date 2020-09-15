@@ -65,7 +65,7 @@ async function expireHash(req, res) {
   try {
     const value = await redis.expire(redisHash, expireTime);
     if (parseInt(value) == 0) {
-      logger.warning(`Hash "${redisHash}" not found`);
+      logger.warn(`Hash "${redisHash}" not found`);
       return res.status(httpStatus.NOT_FOUND).send({ value });
     }
     logger.debug(`Expiring hash ${redisHash} in ${expireTime} seconds: ${value}`);
