@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "test:client": "echo \"No tests specified\" && exit 0",
-    "test:server": "NODE_ENV=test CLOUD_PROVIDER=aws REDIS_HOST=localhost jest server --detectOpenHandles",
+    "test:server": "NODE_ENV=test jest server --detectOpenHandles",
     "test": "yarn test:client && yarn test:server",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "clean": "rm -rf ./dist",
