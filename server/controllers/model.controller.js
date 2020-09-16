@@ -24,7 +24,7 @@ function getModelObject(allModels) {
   const cleanModels = {};
   for (let i = 0; i < allModels.length; ++i) {
     let modelVersion = allModels[i].replace(modelPrefix, '').split('/', 2);
-    if (cleanModels.hasOwnProperty(modelVersion[0])) {
+    if (Object.prototype.hasOwnProperty.call(cleanModels, modelVersion[0])) {
       cleanModels[modelVersion[0]].push(modelVersion[1]);
     } else {
       cleanModels[modelVersion[0]] = [modelVersion[1]];
@@ -107,6 +107,14 @@ async function getGcpModels(req, res) {
   }
 }
 
-const getModels = config.cloud == 'aws' ? getAwsModels : getGcpModels;
+async function getModels(req, res) {
+  let response;
+  if (config.cloud === 'aws') {
+    response = await getAwsModels(req, res);
+  } else {
+    response = await getGcpModels(req, res);
+  }
+  return response;
+}
 
 export default { getModels };

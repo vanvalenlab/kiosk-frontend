@@ -24,6 +24,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 ReactGA.initialize(process.env.GA_TRACKING_ID || 'UA-000000000-0', {
   debug: process.env.NODE_ENV !== 'production',
+  testMode: process.env.NODE_ENV === 'test',
 });
 
 const withTracker = (WrappedComponent, options = {}) => {

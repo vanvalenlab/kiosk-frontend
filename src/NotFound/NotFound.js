@@ -18,11 +18,11 @@ class NotFound extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Typography variant='display1' color='inherit' className={classes.grow} gutterBottom align='center'>
+        <Typography variant='h2' color='inherit' className={classes.grow} gutterBottom align='center'>
           404 page not found
         </Typography>
 
-        <Typography variant='subheading' color='inherit' className={classes.grow} gutterBottom align='center'>
+        <Typography variant='h5' color='inherit' className={classes.grow} gutterBottom align='center'>
           We are sorry but the page you are looking for does not exist.
         </Typography>
       </div>
