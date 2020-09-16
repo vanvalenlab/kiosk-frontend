@@ -29,13 +29,12 @@ function getClient() {
   return createBasicClient();
 }
 
-const client = getClient();
-
 function isArray(a) {
   return (!!a) && (a.constructor === Array);
 }
 
 async function hget(key, field) {
+  const client = getClient();
   const hgetAsync = promisify(client.hget).bind(client);
   try {
     const value = await hgetAsync(key, field);
@@ -48,6 +47,7 @@ async function hget(key, field) {
 }
 
 async function hmget(key, fields) {
+  const client = getClient();
   const hmgetAsync = promisify(client.hmget).bind(client);
   try {
     const value = await hmgetAsync(key, ...fields);
@@ -60,6 +60,7 @@ async function hmget(key, fields) {
 }
 
 async function expire(key, expireTime) {
+  const client = getClient();
   const expireAsync = promisify(client.expire).bind(client);
   try {
     const value = await expireAsync(key, expireTime);
@@ -72,6 +73,7 @@ async function expire(key, expireTime) {
 }
 
 async function lpush(queueName, redisKey) {
+  const client = getClient();
   const lpushAsync = promisify(client.lpush).bind(client);
   try {
     let response;
@@ -89,6 +91,7 @@ async function lpush(queueName, redisKey) {
 }
 
 async function hmset(redisHash, values) {
+  const client = getClient();
   const hmsetAsync = promisify(client.hmset).bind(client);
   try {
     const response = await hmsetAsync([redisHash, ...values]);

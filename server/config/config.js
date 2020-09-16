@@ -14,8 +14,7 @@ const envVarsSchema = Joi.object({
   CLOUD_PROVIDER: Joi.string()
     .description('The cloud platform to interact with.')
     .valid('gke', 'aws')
-    .default('aws')
-    .required(),
+    .default('aws'),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
     .default('models'),
@@ -36,7 +35,7 @@ const envVarsSchema = Joi.object({
     .default('deepcell-output'),
   HOSTNAME: Joi.string()
     .description('Kubernetes pod name'),
-  REDIS_HOST: Joi.string().required()
+  REDIS_HOST: Joi.string().default('localhost')
     .description('Redis DB host url'),
   REDIS_PORT: Joi.number()
     .default(6379),
