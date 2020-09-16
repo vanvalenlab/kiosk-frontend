@@ -1,4 +1,3 @@
-// Import the dependencies for te
 import MockRedis from 'ioredis-mock';
 import supertest from 'supertest';
 
