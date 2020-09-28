@@ -118,7 +118,7 @@ class Predict extends React.Component {
           // Some jobs may fail while other jobs can succeed.
           if (response.data.value[4].length > 0) {
             const parsed = queryString.parse(response.data.value[4]);
-            let errorText = 'Not all jobs completed!\n';
+            let errorText = 'Not all jobs completed!\n\n';
             for (const key in parsed) {
               errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
