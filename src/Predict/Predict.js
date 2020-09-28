@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
+import queryString from 'query-string';
 import FileUpload from '../FileUpload/FileUpload';
 
 const styles = theme => ({
@@ -102,7 +103,7 @@ class Predict extends React.Component {
         url: '/api/redis',
         data: {
           'hash': redisHash,
-          'key': ['status', 'progress', 'output_url', 'reason']
+          'key': ['status', 'progress', 'output_url', 'reason', 'failures']
         }
       }).then((response) => {
         if (response.data.value[0] === 'failed') {
@@ -113,6 +114,16 @@ class Predict extends React.Component {
           clearInterval(this.statusCheck);
           this.setState({ downloadURL: response.data.value[2] });
           this.expireRedisHash(redisHash, 3600);
+          // This is only used during zip uploads.
+          // Some jobs may fail while other jobs can succeed.
+          if (response.data.value[4].length > 0) {
+            const parsed = queryString.parse(response.data.value[4]);
+            let errorText = 'Not all jobs completed!\n';
+            for (const key in parsed) {
+              errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
+            }
+            this.showErrorMessage(errorText);
+          }
         } else {
           let maybe_num = parseInt(response.data.value[1], 10);
           if (!isNaN(maybe_num)) {
@@ -308,7 +319,8 @@ class Predict extends React.Component {
             { this.state.showError &&
               <Typography
                 className={classes.paddedTop}
-                variant='subheading'
+                variant='body2'
+                style={{whiteSpace: 'pre-line'}}
                 align='center'
                 color='error'>
                 {this.state.errorText}
