@@ -116,8 +116,9 @@ class Predict extends React.Component {
           this.expireRedisHash(redisHash, 3600);
           // This is only used during zip uploads.
           // Some jobs may fail while other jobs can succeed.
-          if (response.data.value[4].length > 0) {
-            const parsed = queryString.parse(response.data.value[4]);
+          const failures = response.data.value[4];
+          if (failures != null && failures.length > 0) {
+            const parsed = queryString.parse(failures);
             let errorText = 'Not all jobs completed!\n\n';
             for (const key in parsed) {
               errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
