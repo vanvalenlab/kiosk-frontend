@@ -32,3 +32,6 @@ for how to get started
 Caliban is our tool curating training data. It provides an inutitive GUI for users to create annotations from scratch, or to correct model predictions, 
 to faciliate the creation of large, high-quality datasets. Caliban can be deployed locally, or to the cloud. The [Readme](https://github.com/vanvalenlab/caliban/blob/master/README.md)
 has more instructions for how to get started
+
+## ark-analysis
+The ark repository is our integrated multiplex image analysis pipeline. The input is multiplexed image data from any platform. It runs the data through deepcell, extracts the counts of each marker in each cell, normalizes the data, and then creates a summary table with morphological information and marker intensity for every cell in each image. It also provides an easy way to run some standard spatial analysis functions on your data. 
