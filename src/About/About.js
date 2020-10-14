@@ -64,10 +64,9 @@ class About extends React.Component {
         </div>
 
         <Grid
-          container="true"
+          container
           alignItems="stretch"
           justify="space-evenly"
-          zeroMinWidth="true"
         >
           <Grid item xs={10}>
             <Typography variant="h4" className={classes.sectionHeader}>
@@ -136,12 +135,12 @@ class About extends React.Component {
                 {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
+                <Typography component={'span'}>
                   The deepcell.org websites provides a web interface to access trained deep learning models.
                   With an easy drag-and-drop interface, it has the lowest barrier to entry for getting high-quality predictions back from a variety of deep learning models.
                   All predictions are made using our cloud-based deployment, meaning no local installation is required.
                   Image data can be uploaded <a href="https://deepcell.org/predict">here</a>.
-                  <br/>
+                  <br /><br />
                   Currently, there are three distinct model types.
                   <ol>
                     <li>Segmentation: This is our nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
