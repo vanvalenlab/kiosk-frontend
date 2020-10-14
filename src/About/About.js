@@ -45,7 +45,7 @@ class About extends React.Component {
       <div className={classes.root}>
         <div className={classes.heroContent}>
           <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
-            About
+            About DeepCell
           </Typography>
           <Grid
             container
