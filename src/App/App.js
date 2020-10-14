@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { hot } from 'react-hot-loader';
 import loadable from '@loadable/component';
 
+const About = loadable(() => import('../About/About'));
 const Faq = loadable(() => import('../Faq/Faq'));
 const Footer = loadable(() => import('../Footer/Footer'));
 const NavBar = loadable(() => import('../NavBar/NavBar'));
@@ -66,6 +67,7 @@ class App extends React.Component {
         <main className={classes.main}>
           <Switch>
             <Route exact path='/' component={withTracker(Landing)}/>
+            <Route path='/about' component={withTracker(About)}/>
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
             <Route path='/data' component={withTracker(Data)}/>
