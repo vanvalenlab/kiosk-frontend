@@ -126,8 +126,8 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  DeepCell-tf is the core deep learning library.
-                  Based on TensorFlow, it contains a suite of models and tools for training deep learning models.
+                  DeepCell-tf is our core deep learning library.
+                  Based on TensorFlow, it contains a suite of tools for building and training deep learning models.
                   The library has been constructed in a modular fashion to make it easy to mix and match different model architectures, prediction tasks, and post-processing functions.
                   The <a href="https://github.com/vanvalenlab/deepcell-tf/blob/master/README.md">README</a> has instructions for getting started.
                   For more information, check out the <a href="https://deepcell.readthedocs.io/en/master/">documentation</a>.
@@ -162,8 +162,26 @@ class About extends React.Component {
                   <ol>
                     <li>Segmentation: A nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
                     <li>Tracking: A live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
-                    <li>Multiplex: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the cell-segmentation of each cell in the image.</li>
+                    <li>Multiplex: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the whole-cell segmentation of each cell in the image.</li>
                   </ol>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel-deployment-3-content"
+                id="panel-deployment-3-header"
+              >
+                <Typography className={classes.heading}>kiosk-console</Typography>
+                {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  The kiosk console is a turn-key Kubernetes solution for deploying an instance of deepcell.org.
+                  It handles all the resource management to quickly and affordably scale up model inference to millions of images.
+                  The <a href="https://github.com/vanvalenlab/kiosk-console/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
             </Accordion>
@@ -180,26 +198,8 @@ class About extends React.Component {
               <AccordionDetails>
                 <Typography>
                   DeepCell-Applications contains a variety of trained deep learning models and post-processing functions for instance segmentation.
-                  Each model can be imported and run from a Docker image, Jupyter notebook, or custom pipeline.
+                  Each model can be imported and run locally from a Docker image, Jupyter notebook, or custom script.
                   The <a href="https://github.com/vanvalenlab/deepcell-applications/blob/master/README.md">README</a> has more instructions for how to get started.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel-deployment-3-content"
-                id="panel-deployment-3-header"
-              >
-                <Typography className={classes.heading}>kiosk-console</Typography>
-                {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  The kiosk console is a turn-key Kubernetes solution for deploying a cloud based deep learning inference platform.
-                  It handles all the resource management to quickly and affordably scale up model inference to millions of images.
-                  The <a href="https://github.com/vanvalenlab/kiosk-console/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
             </Accordion>
