@@ -152,32 +152,6 @@ class About extends React.Component {
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel-deployment-1-content"
-                id="panel-deployment-1-header"
-              >
-                <Typography className={classes.heading}>deepcell.org</Typography>
-                {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography component={'span'}>
-                  The deepcell.org websites provides a web interface to access trained deep learning models.
-                  With an easy drag-and-drop interface, it has the lowest barrier to entry for getting high-quality predictions back from a variety of deep learning models.
-                  All predictions are made using our cloud-based deployment, meaning no local installation is required.
-                  Image data can be uploaded <a href="https://deepcell.org/predict">here</a>.
-                  <br /><br />
-                  Currently, there are three distinct model types.
-                  <ol>
-                    <li>Segmentation: A nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
-                    <li>Tracking: A live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
-                    <li>Multiplex: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the whole-cell segmentation of each cell in the image.</li>
-                  </ol>
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel-deployment-3-content"
                 id="panel-deployment-3-header"
               >
