@@ -76,7 +76,7 @@ class About extends React.Component {
 
         <Typography variant="h5" align="center" color="textSecondary" className={classes.heroContent}>
           DeepCell is a collection of machine learning resources that facilitate the development and application of new deep learning methods to biology by addressing 3 needs:
-          (2) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
+          (1) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
         </Typography>
 
         <Grid
