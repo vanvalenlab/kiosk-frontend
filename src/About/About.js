@@ -101,9 +101,9 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  Caliban is our tool curating training data.
-                  It provides an inutitive GUI for users to create annotations from scratch, or to correct model predictions, to faciliate the creation of large, high-quality datasets.
-                  Caliban can be deployed locally, or to the cloud. The <a href="https://github.com/vanvalenlab/caliban/blob/master/README.md">README</a> has more instructions for how to get started.
+                  Caliban is our training data curation tool.
+                  It provides an inutitive UI for users to create annotations from scratch or to correct model predictions, to faciliate the creation of large, high-quality datasets.
+                  Caliban can be deployed locally or on the cloud. The <a href="https://github.com/vanvalenlab/caliban/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
             </Accordion>
@@ -126,8 +126,8 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  This is the core deepcell library.
-                  DeepCell-tf contains the necessary functions to train new deep learning models.
+                  DeepCell-tf is the core deep learning library.
+                  Based on TensorFlow, it contains a suite of models and tools for training deep learning models.
                   The library has been constructed in a modular fashion to make it easy to mix and match different model architectures, prediction tasks, and post-processing functions.
                   The <a href="https://github.com/vanvalenlab/deepcell-tf/blob/master/README.md">README</a> has instructions for getting started.
                   For more information, check out the <a href="https://deepcell.readthedocs.io/en/master/">documentation</a>.
@@ -160,9 +160,9 @@ class About extends React.Component {
                   <br /><br />
                   Currently, there are three distinct model types.
                   <ol>
-                    <li>Segmentation: This is our nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
-                    <li>Tracking: This our live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
-                    <li>Multiplex: This is our multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the cell-segmentation of each cell in the image.</li>
+                    <li>Segmentation: A nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
+                    <li>Tracking: A live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
+                    <li>Multiplex: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the cell-segmentation of each cell in the image.</li>
                   </ol>
                 </Typography>
               </AccordionDetails>
@@ -179,10 +179,8 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  The applications repository contains a variety of trained deep learning models.
-                  This repository allows you to run trained deep learning models.
-                  It does not provide a cloud-based environment to run these models.
-                  Instead, there are jupyter notebooks and docker images for users who want more fine-grained control over the parameters of the model, or who need a local deployment.
+                  DeepCell-Applications contains a variety of trained deep learning models and post-processing functions for instance segmentation.
+                  Each model can be imported and run from a Docker image, Jupyter notebook, or custom pipeline.
                   The <a href="https://github.com/vanvalenlab/deepcell-applications/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
@@ -199,8 +197,8 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  The kiosk console allows users to spin up their own cloud-based deployment of pretrained models.
-                  It automatically handles resource management and scaling to  quickly generate high-quality deep learning predictions.
+                  The kiosk console is a turn-key Kubernetes solution for deploying a cloud based deep learning inference platform.
+                  It handles all the resource management to quickly and affordably scale up model inference to millions of images.
                   The <a href="https://github.com/vanvalenlab/kiosk-console/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
