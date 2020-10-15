@@ -19,12 +19,9 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   heroContent: {
-    maxWidth: 600,
+    maxWidth: 800,
     margin: '0 auto',
     padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(2),
@@ -55,40 +52,32 @@ class About extends React.Component {
     return(
       <div className={classes.root}>
         {/* Start Top Banner Area */}
-        <div className={classes.heroUnit}>
-          <div className={classes.heroContent}>
-            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              What is DeepCell?
-            </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              DeepCell is a collection of machine learning resources that facilitate the development and application of new deep learning methods to biology by addressing 3 needs:
-              <ol>
-                <li>Data Annotation and Management</li>
-                <li>Model Development</li>
-                <li>Deployment and Inference</li>
-              </ol>
-            </Typography>
-          </div>
-        </div>
+        <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+          What is DeepCell?
+        </Typography>
         {/* Top Banner Area - END */}
 
-        <div className={classes.heroContent}>
-          
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            justify="center"
-          >
+        {/* Start SVG Image */}
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justify="center"
+        >
 
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <AboutImage />
-              </Paper>
-            </Grid>
-          
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <AboutImage />
+            </Paper>
           </Grid>
-        </div>
+        
+        </Grid>
+        {/* SVG Image - END */}
+
+        <Typography variant="h5" align="center" color="textSecondary" className={classes.heroContent}>
+          DeepCell is a collection of machine learning resources that facilitate the development and application of new deep learning methods to biology by addressing 3 needs:
+          (2) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
+        </Typography>
 
         <Grid
           container
