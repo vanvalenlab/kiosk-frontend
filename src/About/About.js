@@ -78,7 +78,7 @@ class About extends React.Component {
               </Container>
             </Paper>
           </Grid>
-        
+
         </Grid>
         {/* SVG Image - END */}
 
@@ -181,12 +181,12 @@ class About extends React.Component {
                 aria-controls="panel-deployment-3-content"
                 id="panel-deployment-3-header"
               >
-                <Typography className={classes.heading}>kiosk-imageJ-plugin</Typography>
+                <Typography className={classes.heading}>kiosk-imagej-plugin</Typography>
                 {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  The <a href="https://github.com/vanvalenlab/kiosk-imagej-plugin" target="_blank" rel="noreferrer">kiosk-imageJ-plugin</a> enables ImageJ to segment images with a deployed DeepCell Kiosk model without leaving the application.
+                  The <a href="https://github.com/vanvalenlab/kiosk-imagej-plugin" target="_blank" rel="noreferrer">kiosk-imagej-plugin</a> enables ImageJ to segment images with a deployed DeepCell Kiosk model without leaving the application.
                 </Typography>
               </AccordionDetails>
             </Accordion>
@@ -202,7 +202,7 @@ class About extends React.Component {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  <a href="https://github.com/vanvalenlab/deepcell-applications" target="_blank" rel="noreferrer">deepCell-applications</a> contains a variety of trained deep learning models and post-processing functions for instance segmentation.
+                  <a href="https://github.com/vanvalenlab/deepcell-applications" target="_blank" rel="noreferrer">deepcell-applications</a> contains a variety of trained deep learning models and post-processing functions for instance segmentation.
                   Each model can be imported and run locally from a Docker image, Jupyter notebook, or custom script.
                 </Typography>
               </AccordionDetails>
