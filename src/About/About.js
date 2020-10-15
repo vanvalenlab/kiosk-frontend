@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -44,7 +45,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
   img: {
-    maxWidth: 800
+    maxWidth: '100%'
   }
 });
 
@@ -71,8 +72,10 @@ class About extends React.Component {
 
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              {/* <AboutImage /> */}
-              <img className={classes.img} src={AboutImage}/>
+              <Container  maxWidth="sm">
+                {/* <AboutImage /> */}
+                <img className={classes.img} src={AboutImage}/>
+              </Container>
             </Paper>
           </Grid>
         
