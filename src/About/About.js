@@ -8,7 +8,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AboutImage from '../../public/images/VirtuousCycle.svg';
+// import AboutImage from '../../public/images/VirtuousCycle.svg';
+import AboutImage from '../../public/images/VirtuousCycle.png';
 
 const styles = theme => ({
   root: {
@@ -42,6 +43,9 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
+  img: {
+    maxWidth: 800
+  }
 });
 
 class About extends React.Component {
@@ -67,7 +71,8 @@ class About extends React.Component {
 
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <AboutImage />
+              {/* <AboutImage /> */}
+              <img className={classes.img} src={AboutImage}/>
             </Paper>
           </Grid>
         
