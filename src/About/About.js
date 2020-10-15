@@ -15,6 +15,17 @@ const styles = theme => ({
     flexGrow: 1,
     margin: theme.spacing(4)
   },
+  heroUnit: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  heroContent: {
+    maxWidth: 600,
+    margin: '0 auto',
+    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4),
+  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
@@ -43,10 +54,26 @@ class About extends React.Component {
 
     return(
       <div className={classes.root}>
+        {/* Start Top Banner Area */}
+        <div className={classes.heroUnit}>
+          <div className={classes.heroContent}>
+            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+              What is DeepCell?
+            </Typography>
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              DeepCell is a collection of machine learning resources that facilitate the development and application of new deep learning methods to biology by addressing 3 needs:
+              <ol>
+                <li>Data Annotation and Management</li>
+                <li>Model Development</li>
+                <li>Deployment and Inference</li>
+              </ol>
+            </Typography>
+          </div>
+        </div>
+        {/* Top Banner Area - END */}
+
         <div className={classes.heroContent}>
-          <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
-            About DeepCell
-          </Typography>
+          
           <Grid
             container
             direction="column"
@@ -68,6 +95,32 @@ class About extends React.Component {
           alignItems="stretch"
           justify="space-evenly"
         >
+
+          <Grid item xs={10}>
+            <Typography variant="h4" className={classes.sectionHeader}>
+              Data Annotation and Management
+            </Typography>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel-data-1-content"
+                id="panel-data-1-header"
+              >
+                <Typography className={classes.heading}>caliban</Typography>
+                {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Caliban is our tool curating training data.
+                  It provides an inutitive GUI for users to create annotations from scratch, or to correct model predictions, to faciliate the creation of large, high-quality datasets.
+                  Caliban can be deployed locally, or to the cloud. The <a href="https://github.com/vanvalenlab/caliban/blob/master/README.md">README</a> has more instructions for how to get started.
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
+          </Grid>
+
           <Grid item xs={10}>
             <Typography variant="h4" className={classes.sectionHeader}>
               Model Development
@@ -89,31 +142,6 @@ class About extends React.Component {
                   The library has been constructed in a modular fashion to make it easy to mix and match different model architectures, prediction tasks, and post-processing functions.
                   The <a href="https://github.com/vanvalenlab/deepcell-tf/blob/master/README.md">README</a> has instructions for getting started.
                   For more information, check out the <a href="https://deepcell.readthedocs.io/en/master/">documentation</a>.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-
-          </Grid>
-
-          <Grid item xs={10}>
-            <Typography variant="h4" className={classes.sectionHeader}>
-              Data
-            </Typography>
-
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel-data-1-content"
-                id="panel-data-1-header"
-              >
-                <Typography className={classes.heading}>caliban</Typography>
-                {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Caliban is our tool curating training data.
-                  It provides an inutitive GUI for users to create annotations from scratch, or to correct model predictions, to faciliate the creation of large, high-quality datasets.
-                  Caliban can be deployed locally, or to the cloud. The <a href="https://github.com/vanvalenlab/caliban/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
             </Accordion>
