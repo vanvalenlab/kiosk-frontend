@@ -221,6 +221,7 @@ class About extends React.Component {
                 The input is multiplexed image data from any platform.
                 It runs the data through deepcell, extracts the counts of each marker in each cell, normalizes the data, and then creates a summary table with morphological information and marker intensity for every cell in each image.
                 It also provides an easy way to run some standard spatial analysis functions on your data.
+                The <a href="https://github.com/angelolab/ark-analysis/blob/master/README.md">README</a> has more instructions for how to get started.
                 </Typography>
               </AccordionDetails>
             </Accordion>
