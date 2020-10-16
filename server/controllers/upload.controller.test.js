@@ -70,7 +70,7 @@ describe('Upload Controller Tests', () => {
       const tmpobj = tmp.fileSync({postfix: '.png'});
       const request = supertest(app);
 
-      const response = request.post('/api/upload')
+      const response = await request.post('/api/upload')
         .attach('file', tmpobj.name);
 
       setTimeout(() => {
