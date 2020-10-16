@@ -24,9 +24,9 @@
   "dependencies": {
     "@google-cloud/storage": "5.1.0",
     "@loadable/component": "^5.10.3",
-    "@material-ui/core": "^4.4.3",
-    "@material-ui/icons": "^4.4.3",
-    "@material-ui/lab": "^4.0.0-alpha.27",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "aws-sdk": "2.699.0",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
@@ -67,6 +67,7 @@
     "@babel/polyfill": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
+    "@svgr/webpack": "^5.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
     "axios": "^0.19.0",
@@ -88,6 +89,7 @@
     "style-loader": "1.2.1",
     "supertest": "^4.0.2",
     "tmp": "^0.2.1",
+    "url-loader": "^4.1.1",
     "webpack": "4.43.0",
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.11.0"
