@@ -1,6 +1,6 @@
 {
   "name": "kiosk-frontend",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Web application to interact with the rest of the kiosk",
   "repository": {
     "type": "git",
@@ -8,7 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --detectOpenHandles  --no-cache",
+    "test": "NODE_ENV=test jest --detectOpenHandles --coverage --no-cache",
     "coveralls": "NODE_ENV=test jest --coverage && cat ./coverage/lcov.info | coveralls",
     "clean": "rm -rf ./dist",
     "build:client": "webpack --mode production --config webpack.prod.js",
