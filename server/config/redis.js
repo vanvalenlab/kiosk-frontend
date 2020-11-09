@@ -43,6 +43,8 @@ async function hget(key, field) {
   } catch (err) {
     logger.error(`Encountered error during "HGET ${key} ${field}": ${err}`);
     throw err;
+  } finally {
+    client.disconnect();
   }
 }
 
@@ -56,6 +58,8 @@ async function hmget(key, fields) {
   } catch (err) {
     logger.error(`Encountered error during "HMGET ${key} ${fields}": ${err}`);
     throw err;
+  } finally {
+    client.disconnect();
   }
 }
 
@@ -69,6 +73,8 @@ async function expire(key, expireTime) {
   } catch (err) {
     logger.error(`Encountered error during "EXPIRE ${key} ${expireTime}": ${err}`);
     throw err;
+  } finally {
+    client.disconnect();
   }
 }
 
@@ -87,6 +93,8 @@ async function lpush(queueName, redisKey) {
   } catch (err) {
     logger.error(`Encountered error during "LPUSH ${queueName} ${redisKey}": ${err}`);
     throw err;
+  } finally {
+    client.disconnect();
   }
 }
 
@@ -100,6 +108,8 @@ async function hmset(redisHash, values) {
   } catch (err) {
     logger.error(`Encountered error during "HMSET ${redisHash}": ${err}`);
     throw err;
+  } finally {
+    client.disconnect();
   }
 }
 
