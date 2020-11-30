@@ -104,14 +104,14 @@ class About extends React.Component {
                 aria-controls="panel-data-1-content"
                 id="panel-data-1-header"
               >
-                <Typography className={classes.heading}>caliban</Typography>
+                <Typography className={classes.heading}>DeepCell Label</Typography>
                 {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  <a href="https://github.com/vanvalenlab/caliban" target="_blank" rel="noreferrer">Caliban</a> is our training data curation tool.
+                  <a href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noreferrer">DeepCell Label</a> is our training data curation tool.
                   It provides an inutitive UI for users to create annotations from scratch or to correct model predictions, to faciliate the creation of large, high-quality datasets.
-                  Caliban can be deployed locally or on the cloud.
+                  DeepCell Label can be deployed locally or on the cloud.
                 </Typography>
               </AccordionDetails>
             </Accordion>

@@ -167,8 +167,8 @@ class Faq extends React.Component {
                   Can you help me annotate my data?
                 </Typography>
                 <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                  Yes! Our training data was created using <Link href="https://github.com/vanvalenlab/Caliban" target="_blank" rel="noopener noreferrer">Caliban</Link>, a tool for creating segmentation masks for images.
-                  Caliban is an open-source web application that can integrate with crowd-sourcing platforms like <Link href="https://www.figure-eight.com" target="_blank" rel="noopener noreferrer">Figure Eight</Link>.
+                  Yes! Our training data was created using <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">DeepCell Label</Link>, a tool for creating segmentation masks for images.
+                  DeepCell Label is an open-source web application that can integrate with crowd-sourcing platforms like <Link href="https://www.figure-eight.com" target="_blank" rel="noopener noreferrer">Figure Eight</Link>.
                 </Typography>
               </Paper>
 
