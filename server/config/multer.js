@@ -23,7 +23,7 @@ const multer = Multer({
   storage: config.cloud === 'aws' ?
     multerS3({
       s3: s3,
-      bucket: config.aws.bucketName,
+      bucket: config.bucketName,
       key: (req, file, cb) => {
         cb(null, `${prefix}/${file.originalname}`);
       }

@@ -50,7 +50,7 @@ async function getAwsModels(req, res) {
   }
   try {
     let params = {
-      Bucket: config.aws.bucketName,
+      Bucket: config.bucketName,
       Delimiter: '/',
       Prefix: modelPrefix,
       MaxKeys: 2147483647, // Maximum allowed by S3 API
@@ -60,7 +60,7 @@ async function getAwsModels(req, res) {
     // array of params for each listObjectsV2 call
     let arrayOfParams = models.map((prefix) => {
       return {
-        Bucket: config.aws.bucketName,
+        Bucket: config.bucketName,
         Prefix: `${prefix}`,
         Delimiter: '/',
         MaxKeys: 2147483647, // Maximum allowed by S3 API
@@ -93,7 +93,7 @@ async function getGcpModels(req, res) {
     prefix = prefix.slice(0, prefix.length - 1);
   }
   try {
-    let bucket = gcs.bucket(config.gcp.bucketName);
+    let bucket = gcs.bucket(config.bucketName);
     let allModels = [];
     let models = [];
     await getGcpKeys(bucket, config.model.prefix, models);

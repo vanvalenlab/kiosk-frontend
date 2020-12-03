@@ -40,14 +40,14 @@ const envVarsSchema = Joi.object({
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
 
-const parseCloudProvider = (bucketName) => {
-  const name = bucketName.toString().toLowerCase();
+const parseCloudProvider = (bucket) => {
+  const name = bucket.toString().toLowerCase();
   if (name.startsWith('s3://')) {
     return 'aws';
   } else if (name.startsWith('gs://')) {
     return 'gcp';
   }
-  throw new Error(`Invalid storage bucket ${bucketName}.`);
+  throw new Error(`Invalid storage bucket ${bucket}.`);
 };
 
 const config = {
@@ -55,7 +55,7 @@ const config = {
   cloud: parseCloudProvider(envVars.STORAGE_BUCKET),
   hostname: envVars.HOSTNAME,
   port: envVars.PORT,
-  bucket: envVars.STORAGE_BUCKET,
+  bucketName: envVars.STORAGE_BUCKET.toString().split('://')[1],
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,
     secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
