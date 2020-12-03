@@ -11,10 +11,6 @@ const envVarsSchema = Joi.object({
     .default('development'),
   PORT: Joi.number()
     .default(8080),
-  CLOUD_PROVIDER: Joi.string()
-    .description('The cloud platform to interact with.')
-    .valid('gke', 'aws')
-    .default('aws'),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
     .default('models'),
@@ -25,14 +21,11 @@ const envVarsSchema = Joi.object({
     .default('us-east-1'),
   AWS_ACCESS_KEY_ID: Joi.string().default('invalid_value'),
   AWS_SECRET_ACCESS_KEY: Joi.string().default('invalid_value'),
-  AWS_S3_BUCKET: Joi.string()
-    .description('S3 Bucket where data is uploaded and models are saved.')
-    .default('deepcell-output'),
   GCLOUD_KEY_FILE: Joi.string().default('invalid_value'),
   GCLOUD_PROJECT_ID: Joi.string().default('invalid_value'),
-  GCLOUD_STORAGE_BUCKET: Joi.string()
-    .description('Google Cloud bucket where data is uploaded and models are saved.')
-    .default('deepcell-output'),
+  STORAGE_BUCKET: Joi.string()
+    .description('Cloud storage bucket where data is uploaded and models are saved.')
+    .default('gs://deepcell-output'),
   HOSTNAME: Joi.string()
     .description('Kubernetes pod name'),
   REDIS_HOST: Joi.string().default('localhost')
@@ -47,20 +40,29 @@ const envVarsSchema = Joi.object({
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
 
+const parseCloudProvider = (bucket) => {
+  const name = bucket.toString().toLowerCase();
+  if (name.startsWith('s3://')) {
+    return 'aws';
+  } else if (name.startsWith('gs://')) {
+    return 'gcp';
+  }
+  throw new Error(`Invalid storage bucket ${bucket}.`);
+};
+
 const config = {
   env: envVars.NODE_ENV,
-  cloud: envVars.CLOUD_PROVIDER,
+  cloud: parseCloudProvider(envVars.STORAGE_BUCKET),
   hostname: envVars.HOSTNAME,
   port: envVars.PORT,
+  bucketName: envVars.STORAGE_BUCKET.toString().split('://')[1],
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,
     secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
-    bucketName: envVars.AWS_S3_BUCKET,
     region: envVars.AWS_REGION
   },
   gcp: {
     keyFile: envVars.GCLOUD_KEY_FILE,
-    bucketName: envVars.GCLOUD_STORAGE_BUCKET,
     projectId: envVars.GCLOUD_PROJECT_ID
   },
   redis: {

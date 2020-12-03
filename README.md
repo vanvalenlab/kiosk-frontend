@@ -25,14 +25,13 @@ The `kiosk-frontend` can be configured using environmental variables in a `.env`
 | Name | Description | Default Value |
 | :--- | :--- | :--- |
 | `JOB_TYPES` | **REQUIRED**: Comma delimited list of job type names. | `"segmentation,tracking"` |
-| `GCLOUD_STORAGE_BUCKET` | **REQUIRED**: Cloud storage bucket address (e.g. `"gs://bucket-name"`). | `"invalid_default"` |
+| `STORAGE_BUCKET` | **REQUIRED**: Cloud storage bucket address (e.g. `"gs://bucket-name"`). | `""` |
 | `PORT` | Port to run the NodeJS backend server. | `8080` |
 | `REDIS_HOST` | The IP address or hostname of Redis. | `redis-master` |
 | `REDIS_PORT` | The port used to connect to Redis. | `6379` |
 | `REDIS_SENTINEL` | Whether Redis has Sentinel mode enabled. | `True` |
 | `MODEL_PREFIX` | Prefix of model directory in the cloud storage bucket. | `"/models"` |
 | `UPLOAD_PREFIX` | Prefix of upload directory in the cloud storage bucket. | `"/uploads"` |
-| `CLOUD_PROVIDER` | The cloud provider hosting the DeepCell Kiosk. | `"gke"` |
 
 ## Contribute
 
