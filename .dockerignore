@@ -1,6 +1,8 @@
 .git
 node_modules/
 dist/
+build/
+.github/
 .env
 *.log
 docs/

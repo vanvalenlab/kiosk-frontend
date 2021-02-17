@@ -44,7 +44,7 @@ app.set('view engine', 'html');
 // static files served differenlty in PROD or DEV modes
 let DIST_DIR = path.join(__dirname, '..', '..', 'public');
 if (config.env === 'production') {
-  DIST_DIR = path.join(__dirname, '..', '..', '..', 'dist', 'client');
+  DIST_DIR = path.join(__dirname, '..', '..', '..', 'build');
 }
 // serving the files on the dist folder
 app.use(express.static(DIST_DIR));
