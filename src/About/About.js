@@ -9,8 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// import AboutImage from '../../public/images/VirtuousCycle.svg';
-import AboutImage from '../../public/images/VirtuousCycle.png';
+// import AboutImage from '.VirtuousCycle.svg';
+import AboutImage from './VirtuousCycle.png';
 
 const styles = theme => ({
   root: {
