@@ -49,8 +49,8 @@ export default function Predict() {
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [jobType, setJobType] = useState('');
-  const [rescalingDisabled, setRescalingDisabled] = useState('true');
-  const [rescaling, setRescaling] = useState(1);
+  const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState('true');
+  const [scale, setScale] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [allJobTypes, setAllJobTypes] = useState([]);
 
@@ -101,11 +101,11 @@ export default function Predict() {
           const failures = response.data.value[4];
           if (failures != null && failures.length > 0) {
             const parsed = queryString.parse(failures);
-            let errorText = 'Not all jobs completed!\n\n';
+            let errText = 'Not all jobs completed!\n\n';
             for (const key in parsed) {
-              errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
+              errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
-            showErrorMessage(errorText);
+            showErrorMessage(errText);
           }
         } else {
           let maybeNum = parseInt(response.data.value[1], 10);
@@ -130,7 +130,7 @@ export default function Predict() {
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
         jobType : jobType,
-        dataRescale: rescalingDisabled === 'true' ? '' : rescaling
+        dataRescale: isAutoRescaleEnabled ? '' : scale
       }
     }).then((response) => {
       checkJobStatus(response.data.hash, 3000);
@@ -220,9 +220,9 @@ export default function Predict() {
 
                         <FormControlLabel
                           control={
-                            <Checkbox checked={rescalingDisabled === 'true'}
-                              onChange={e => setRescalingDisabled(e.target.checked.toString())}
-                              value={rescalingDisabled}
+                            <Checkbox checked={isAutoRescaleEnabled}
+                              onChange={e => setIsAutoRescaleEnabled(e.target.checked)}
+                              value={isAutoRescaleEnabled.toString()}
                             />
                           }
                           label="Rescale Automatically"
@@ -231,9 +231,9 @@ export default function Predict() {
                         <TextField
                           id="outlined-number"
                           label="Rescaling Value"
-                          disabled={rescalingDisabled === 'true'}
-                          value={rescaling}
-                          onChange={e => setRescaling(e.target.value)}
+                          disabled={isAutoRescaleEnabled}
+                          value={scale}
+                          onChange={e => setScale(e.target.value)}
                           type="number"
                           margin="dense"
                           variant="standard"
