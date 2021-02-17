@@ -214,4 +214,13 @@ router.route('/swagger.json')
     res.status(httpStatus.OK).send(swaggerSpec);
   });
 
+// 404 for all other routes
+router.route('/*')
+  .get((req, res) => {
+    res.status(httpStatus.NOT_FOUND).send({});
+  })
+  .post((req, res) => {
+    res.status(httpStatus.NOT_FOUND).send({});
+  });
+
 export default router;
