@@ -16,7 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import queryString from 'query-string';
-import FileUpload from '../FileUpload/FileUpload';
+import FileUpload from './FileUpload';
 
 const useStyles = makeStyles(theme => ({
   root: {
