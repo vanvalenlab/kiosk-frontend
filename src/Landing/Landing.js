@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactGA from 'react-ga';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     margin: theme.spacing(4)
@@ -19,54 +17,46 @@ const styles = theme => ({
   button: {
     minWidth: '20vh',
   }
-});
+}));
 
-class Landing extends React.Component {
+export default function Landing() {
 
-  render() {
-    const { classes } = this.props;
+  const classes = useStyles();
 
-    return(
-      <div className={classes.root}>
-        <div className={classes.heroContent}>
-          <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
-            DeepCell
-          </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Use a deep learning model to segment images.
-          </Typography>
-        </div>
-        <Grid container justify="center" spacing={5}>
-          <Grid item>
-            <Button
-              fullWidth
-              size="large"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              href="/data">
-              Data
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              fullWidth
-              size="large"
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              href="/predict">
-              Predict
-            </Button>
-          </Grid>
-        </Grid>
+  return(
+    <div className={classes.root}>
+      <div className={classes.heroContent}>
+        <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
+          DeepCell
+        </Typography>
+        <Typography variant="h5" align="center" color="textSecondary" paragraph>
+          Use a deep learning model to segment images.
+        </Typography>
       </div>
-    );
-  }
+      <Grid container justify="center" spacing={5}>
+        <Grid item>
+          <Button
+            fullWidth
+            size="large"
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            href="/data">
+            Data
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            fullWidth
+            size="large"
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            href="/predict">
+            Predict
+          </Button>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
-
-Landing.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Landing);

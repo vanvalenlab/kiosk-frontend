@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import ReactGA from 'react-ga';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import SwaggerUI from 'swagger-ui-react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import 'swagger-ui-react/swagger-ui.css';
-import { withStyles } from '@material-ui/core/styles';
-import { hot } from 'react-hot-loader';
-import loadable from '@loadable/component';
 
-const About = loadable(() => import('../About/About'));
-const Faq = loadable(() => import('../Faq/Faq'));
-const Footer = loadable(() => import('../Footer/Footer'));
-const NavBar = loadable(() => import('../NavBar/NavBar'));
-const Landing = loadable(() => import('../Landing/Landing'));
-const Predict = loadable(() => import('../Predict/Predict'));
-const Data = loadable(() => import('../Data/Data'));
-const NotFound = loadable(() => import('../NotFound/NotFound'));
+const About = lazy(() => import('../About/About'));
+const Faq = lazy(() => import('../Faq/Faq'));
+const Footer = lazy(() => import('../Footer/Footer'));
+const NavBar = lazy(() => import('../NavBar/NavBar'));
+const Landing = lazy(() => import('../Landing/Landing'));
+const Predict = lazy(() => import('../Predict/Predict'));
+const Data = lazy(() => import('../Data/Data'));
+const NotFound = lazy(() => import('../NotFound/NotFound'));
 
-//If the mode is NOT production, then notify that we are in dev mode.
+// If the mode is NOT production, then notify that we are in dev mode.
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
@@ -36,6 +35,7 @@ const withTracker = (WrappedComponent, options = {}) => {
   };
 
   const HOC = props => {
+
     useEffect(() => trackPage(props.location.pathname), [
       props.location.pathname
     ]);
@@ -43,10 +43,16 @@ const withTracker = (WrappedComponent, options = {}) => {
     return <WrappedComponent {...props} />;
   };
 
+  HOC.propTypes = {
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+    }),
+  };
+
   return HOC;
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
   root: {
     display: 'flex',
     minHeight: '100vh',
@@ -55,13 +61,13 @@ const styles = theme => ({
   main: {
     flexGrow: 1,
   }
-});
+}));
 
-class App extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
+export default function App() {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <Suspense fallback={<CircularProgress />}>
         <CssBaseline />
         <NavBar />
         <main className={classes.main}>
@@ -71,18 +77,12 @@ class App extends React.Component {
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
             <Route path='/data' component={withTracker(Data)}/>
-            <SwaggerUI url="/api/swagger.json" />
+            <SwaggerUI url='/api/swagger.json' />
             <Route component={withTracker(NotFound)} />
           </Switch>
         </main>
         <Footer />
-      </div>
-    );
-  }
+      </Suspense>
+    </div>
+  );
 }
-
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default hot(module)(withStyles(styles, { withTheme: true })(App));

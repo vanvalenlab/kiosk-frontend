@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { loadCSS } from 'fg-loadcss/src/loadCSS';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloudUpload from '@material-ui/icons/CloudUpload';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     height: '100%',
@@ -23,35 +22,23 @@ const styles = theme => ({
     paddingBottom: theme.spacing(4),
     height: '100%'
   }
-});
+}));
 
-class FileUpload extends React.Component {
+export default function FileUpload(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: [],
-      downloadURL: null,
-      uploadedFileLocation: null,
-      showError: false,
-      errorText: '',
-    };
-  }
+  const [uploadedFileLocation, setUploadedFileLocation] = useState(null);
+  const [showError, setShowError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
-  componentDidMount() {
-    loadCSS(
-      'https://use.fontawesome.com/releases/v5.1.0/css/all.css',
-      document.querySelector('#insertion-point-css'),
-    );
-  }
+  const { infoText, onDroppedFile } = props;
+
+  const classes = useStyles();
 
   // This function will run upon file upload completion.
-  onDrop(droppedFiles) {
-    const { onDroppedFile } = this.props;
-
+  const onDrop = useCallback((droppedFiles) => {
     if (droppedFiles.length > 1) {
-      this.setState({ showError: true });
-      this.setState({ errorText: 'Only single file uploads are supported.' });
+      setShowError(true);
+      setErrorText('Only single file uploads are supported.');
     } else {
       droppedFiles.map((f) => {
         let formData = new FormData();
@@ -60,66 +47,61 @@ class FileUpload extends React.Component {
           headers: { 'Content-Type': 'multipart/form-data' }
         })
           .then((response) => {
-            this.setState({ uploadedFileLocation: response.data.imageURL});
+            setUploadedFileLocation(response.data.imageURL);
             onDroppedFile(response.data.uploadedName, f.name, response.data.imageURL);
           })
           .catch((error) => {
-            this.setState({ showError: true });
-            this.setState({ errorText: `${error}` });
+            setShowError(true);
+            setErrorText(`${error}`);
           });
       });
     }
-  }
+  });
 
-  render() {
-    const { classes } = this.props;
+  // const { getRootProps, getInputProps, isDragActive } = useDropzone({onDrop});
 
-    return (
-      <Dropzone name='imageUploadInput' onDrop={this.onDrop.bind(this)}>
-        {({getRootProps, getInputProps}) => (
-          <section>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
+  return (
+    <Dropzone name='imageUploadInput' onDrop={onDrop}>
+      {({getRootProps, getInputProps}) => (
+        <section>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
 
-              <Typography variant='subtitle1' display='block' align='center' color='textPrimary' paragraph>
-                { this.props.infoText }
-              </Typography>
+            <Typography variant='subtitle1' display='block' align='center' color='textPrimary' paragraph>
+              { infoText }
+            </Typography>
 
-              <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
-                Drag and Drop your files here or click to browse.
-              </Typography>
+            <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
+              Drag and Drop your files here or click to browse.
+            </Typography>
 
-              {/* Display error to user */}
-              { this.state.showError &&
-                <Typography className={classes.paddedTop} variant='caption' display='block' align='center' color='error'>
-                  { this.state.errorText }
-                </Typography> }
+            {/* Display error to user */}
+            { showError &&
+              <Typography className={classes.paddedTop} variant='caption' display='block' align='center' color='error'>
+                { errorText }
+              </Typography> }
 
-              {/* Display preview of uploaded image */}
-              { this.state.uploadedFileLocation !== null ?
-                <div align='center' display='block'>
-                  <Typography variant='caption' align='center' color='textSecondary' paragraph={true}>
-                    Successfully uploaded file!
-                  </Typography>
-                  <img className={classes.preview} src={this.state.uploadedFileLocation} />
-                </div>
-                :
-                <div align='center' display='block'>
-                  <CloudUpload color='disabled' fontSize='large' className={classes.uploadIcon} />
-                </div> }
+            {/* Display preview of uploaded image */}
+            { uploadedFileLocation !== null ?
+              <div align='center' display='block'>
+                <Typography variant='caption' align='center' color='textSecondary' paragraph={true}>
+                  Successfully uploaded file!
+                </Typography>
+                <img className={classes.preview} src={uploadedFileLocation} />
+              </div>
+              :
+              <div align='center' display='block'>
+                <CloudUpload color='disabled' fontSize='large' className={classes.uploadIcon} />
+              </div> }
 
-            </div>
-          </section>
-        )}
-      </Dropzone>
-    );
-  }
+          </div>
+        </section>
+      )}
+    </Dropzone>
+  );
 }
 
 FileUpload.propTypes = {
-  classes: PropTypes.object.isRequired,
   infoText: PropTypes.string,
   onDroppedFile: PropTypes.func
 };
-
-export default withStyles(styles)(FileUpload);

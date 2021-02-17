@@ -13,5 +13,9 @@ module.exports = {
     'src/**/*.{js,jsx}',
     '!**/node_modules/**',
     '!**/vendor/**'
+  ],
+  modulePathIgnorePatterns: [
+    'build/',
+    'dist/'
   ]
 };

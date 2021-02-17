@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+/* eslint no-unused-vars: 0 */
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
@@ -18,7 +18,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from '../FileUpload/FileUpload';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
@@ -36,68 +36,50 @@ const styles = theme => ({
     padding: theme.spacing(4),
     height: '100%',
   },
-});
+}));
 
-class Predict extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileName: '',
-      imageUrl: '',
-      downloadURL: null,
-      submitted: false,
-      showError: false,
-      errorText: '',
-      progress: 0,
-      jobType: '',
-      rescalingDisabled: 'true',
-      rescaling: 1,
-      setOpen: false,
-      allJobTypes: [],
-    };
+export default function Predict() {
 
-    this.handleChange = this.handleChange.bind(this);
-    this.canBeSubmitted = this.canBeSubmitted.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
-  }
+  const [fileName, setFileName] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [downloadURL, setDownloadURL] = useState(null);
+  const [uploadedFileName, setUploadedFileName] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [jobType, setJobType] = useState('');
+  const [rescalingDisabled, setRescalingDisabled] = useState('true');
+  const [rescaling, setRescaling] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+  const [allJobTypes, setAllJobTypes] = useState([]);
 
-  componentDidMount() {
-    this.getAllJobTypes();
-  }
+  const classes = useStyles();
 
-  componentWillUnmount() {
-    this.isCancelled = true;
-  }
+  const showErrorMessage = (errText) => {
+    setErrorText(errText);
+    setShowError(true);
+  };
 
-  showErrorMessage(errorText) {
-    this.setState({
-      showError: true,
-      errorText: errorText
-    });
-  }
-
-  expireRedisHash(redisHash, expireIn) {
+  const expireRedisHash = (redisHash, expireIn) => {
     axios({
       method: 'post',
       url: '/api/redis/expire',
       data: {
-        'hash': redisHash,
-        'expireIn': expireIn
+        hash: redisHash,
+        expireIn: expireIn
       }
     }).then((response) => {
       if (parseInt(response.data.value) !== 1) {
-        this.showErrorMessage('Hash not expired');
+        showErrorMessage('Hash not expired');
       }
     }).catch(error => {
-      let errMsg = `Failed to expire redis hash due to error: ${error}`;
-      this.showErrorMessage(errMsg);
+      showErrorMessage(`Failed to expire redis hash due to error: ${error}`);
     });
-  }
+  };
 
-  checkJobStatus(redisHash, interval) {
-    this.statusCheck = setInterval(() => {
+  const checkJobStatus = (redisHash, interval) => {
+    let statusCheck = setInterval(() => {
       axios({
         method: 'post',
         url: '/api/redis',
@@ -107,13 +89,13 @@ class Predict extends React.Component {
         }
       }).then((response) => {
         if (response.data.value[0] === 'failed') {
-          clearInterval(this.statusCheck);
-          this.showErrorMessage(`Job Failed: ${response.data.value[3]}`);
-          this.expireRedisHash(redisHash, 3600);
+          clearInterval(statusCheck);
+          showErrorMessage(`Job Failed: ${response.data.value[3]}`);
+          expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
-          clearInterval(this.statusCheck);
-          this.setState({ downloadURL: response.data.value[2] });
-          this.expireRedisHash(redisHash, 3600);
+          clearInterval(statusCheck);
+          setDownloadURL(response.data.value[2]);
+          expireRedisHash(redisHash, 3600);
           // This is only used during zip uploads.
           // Some jobs may fail while other jobs can succeed.
           const failures = response.data.value[4];
@@ -123,281 +105,237 @@ class Predict extends React.Component {
             for (const key in parsed) {
               errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
-            this.showErrorMessage(errorText);
+            showErrorMessage(errorText);
           }
         } else {
-          let maybe_num = parseInt(response.data.value[1], 10);
-          if (!isNaN(maybe_num)) {
-            this.setState({ progress: maybe_num });
+          let maybeNum = parseInt(response.data.value[1], 10);
+          if (!isNaN(maybeNum)) {
+            setProgress(maybeNum);
           }
         }
       }).catch(error => {
         let errMsg = `Trouble communicating with Redis due to error: ${error}`;
-        this.showErrorMessage(errMsg);
+        showErrorMessage(errMsg);
       });
     }, interval);
-  }
+  };
 
-  getAllJobTypes() {
-    axios({
-      method: 'get',
-      url: '/api/jobtypes'
-    }).then((response) => {
-      !this.isCancelled && this.setState({
-        allJobTypes: response.data.jobTypes,
-        jobType: response.data.jobTypes[0]
-      });
-    }).catch(error => {
-      let errMsg = `Failed to get job types due to error: ${error}`;
-      this.showErrorMessage(errMsg);
-    });
-  }
-
-  predict() {
+  const predict = () => {
     axios({
       method: 'post',
       url: '/api/predict',
       timeout: 60 * 4 * 1000, // 4 minutes
       data: {
-        'imageName': this.state.fileName,
-        'uploadedName': this.state.uploadedFileName,
-        'imageUrl': this.state.imageUrl,
-        'jobType' : this.state.jobType,
-        'dataRescale': this.state.rescalingDisabled === 'true' ? '' : this.state.rescaling
+        imageName: fileName,
+        uploadedName: uploadedFileName,
+        imageUrl: imageUrl,
+        jobType : jobType,
+        dataRescale: rescalingDisabled === 'true' ? '' : rescaling
       }
     }).then((response) => {
-      this.checkJobStatus(response.data.hash, 3000);
+      checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
       let errMsg = `Failed to create job due to error: ${error}.`;
-      this.showErrorMessage(errMsg);
+      showErrorMessage(errMsg);
     });
-  }
+  };
 
-  canBeSubmitted() {
-    return (
-      this.state.fileName.length > 0 &&
-      this.state.imageUrl.length > 0
-    );
-  }
+  const canBeSubmitted = () => {
+    return fileName.length > 0 && imageUrl.length > 0;
+  };
 
-  handleSubmit(event) {
-    if (!this.canBeSubmitted()) {
+  const handleSubmit = (event) => {
+    if (!canBeSubmitted()) {
       event.preventDefault();
       return;
     }
-    this.setState({ submitted: true });
-    this.predict();
-  }
+    setSubmitted(true);
+    predict();
+  };
 
-  handleChange(event) {
-    if (!this.isCancelled) {
-      this.setState({
-        [event.target.name]: event.target.value
-      });
-      //if event is checkbox-animation related
-      if(event.target.name === 'rescalingDisabled'){
-        this.setState({
-          [event.target.name]: event.target.checked.toString()
-        });
-      }
-    }
-  }
+  const getAllJobTypes = () => {
+    axios({
+      method: 'get',
+      url: '/api/jobtypes'
+    }).then((response) => {
+      setAllJobTypes(response.data.jobTypes);
+      setJobType(response.data.jobTypes[0]);
+    }).catch(error => {
+      showErrorMessage(`Failed to get job types due to error: ${error}`);
+    });
+  };
 
-  handleClose() {
-    this.setState({setOpen : false});
-  }
+  useEffect(() => getAllJobTypes(), [0]);
 
-  handleOpen() {
-    this.setState({setOpen : true});
-  }
+  return (
+    <div className={classes.root}>
+      <Typography
+        className={classes.title}
+        variant='h5'
+        align='center'
+        color='textPrimary'>
+        Select Options | Upload your image | Download the results.
+      </Typography>
 
-  render() {
-    const { classes } = this.props;
+      <Container maxWidth="md">
+        <form autoComplete="off">
+          <Grid container direction="row" justify="center" spacing={6}>
 
-    return (
-      <div className={classes.root}>
-        <Typography
-          className={classes.title}
-          variant='h5'
-          align='center'
-          color='textPrimary'>
-          Select Options | Upload your image | Download the results.
-        </Typography>
+            {/* Job Options section */}
+            <Grid item xs={12} sm={6} md={6}>
+              <Paper className={classes.paper}>
+                <Grid container direction="column" justify="center">
 
-        <Container maxWidth="md">
-          <form autoComplete="off">
-            <Grid container direction="row" justify="center" spacing={6}>
-
-              {/* Job Options section */}
-              <Grid item xs={12} sm={6} md={6}>
-                <Paper className={classes.paper}>
-                  <Grid container direction="column" justify="center">
-
-                    {/* Job Type Dropdown */}
-                    <Grid item xs={12} sm={12} md={6}>
-                      <Typography onClick={this.handleOpen}>
-                        Job Type
-                      </Typography>
-                      <FormControl>
-                        <Select
-                          open={this.state.setOpen}
-                          onClose={this.handleClose}
-                          onOpen={this.handleOpen}
-                          onChange={this.handleChange}
-                          value={this.state.jobType}
-                          style={{textTransform: 'capitalize'}}
-                          inputProps={{
-                            name: 'jobType',
-                            id: 'jobTypeValue',
-                          }}
-                        >
-                          {this.state.allJobTypes.map(job => (
-                            <MenuItem value={job} style={{textTransform: 'capitalize'}} key={this.state.allJobTypes.indexOf(job)}>
-                              {job}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-
-                    {/* Image Rescaling Options */}
-                    <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
-                      <FormGroup row>
-                        <FormControl>
-
-                          <FormControlLabel
-                            control={
-                              <Checkbox checked={this.state.rescalingDisabled === 'true'}
-                                onChange={this.handleChange}
-                                value={this.state.rescalingDisabled}
-                                inputProps={{
-                                  name: 'rescalingDisabled'
-                                }}
-                              />
-                            }
-                            label="Rescale Automatically"
-                          />
-
-                          <TextField
-                            id="outlined-number"
-                            label="Rescaling Value"
-                            disabled={this.state.rescalingDisabled === 'true'}
-                            value={this.state.rescaling}
-                            onChange={this.handleChange}
-                            type="number"
-                            margin="dense"
-                            variant="standard"
-                            inputProps={{
-                              name: 'rescaling',
-                              id: 'rescalingValue',
-                            }}
-                          />
-                        </FormControl>
-                      </FormGroup>
-                    </Grid>
-
+                  {/* Job Type Dropdown */}
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Typography onClick={() => setIsOpen(true)}>
+                      Job Type
+                    </Typography>
+                    <FormControl>
+                      <Select
+                        open={isOpen}
+                        onClose={() => setIsOpen(false)}
+                        onOpen={() => setIsOpen(true)}
+                        onChange={e => setJobType(e.target.value)}
+                        value={jobType}
+                        style={{textTransform: 'capitalize'}}
+                        inputProps={{
+                          name: 'jobType',
+                          id: 'jobTypeValue',
+                        }}
+                      >
+                        {allJobTypes.map(job => (
+                          <MenuItem value={job} style={{textTransform: 'capitalize'}} key={allJobTypes.indexOf(job)}>
+                            {job}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Grid>
-                </Paper>
-              </Grid>
 
-              {/* File Upload section */}
-              <Grid item xs={12} sm={6} md={6}>
-                <Paper className={classes.paper}>
-                  <FileUpload
-                    infoText='Upload Here to Begin Image Prediction.'
-                    onDroppedFile={(uploadedName, fileName, url) =>
-                      this.setState({
-                        uploadedFileName: uploadedName,
-                        fileName: fileName,
-                        imageUrl: url
-                      })} />
-                </Paper>
-              </Grid>
+                  {/* Image Rescaling Options */}
+                  <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
+                    <FormGroup row>
+                      <FormControl>
 
+                        <FormControlLabel
+                          control={
+                            <Checkbox checked={rescalingDisabled === 'true'}
+                              onChange={e => setRescalingDisabled(e.target.checked.toString())}
+                              value={rescalingDisabled}
+                            />
+                          }
+                          label="Rescale Automatically"
+                        />
+
+                        <TextField
+                          id="outlined-number"
+                          label="Rescaling Value"
+                          disabled={rescalingDisabled === 'true'}
+                          value={rescaling}
+                          onChange={e => setRescaling(e.target.value)}
+                          type="number"
+                          margin="dense"
+                          variant="standard"
+                        />
+                      </FormControl>
+                    </FormGroup>
+                  </Grid>
+
+                </Grid>
+              </Paper>
             </Grid>
 
-            {/* Display error to user */}
-            { this.state.showError &&
-              <Typography
-                className={classes.paddedTop}
-                variant='body2'
-                style={{whiteSpace: 'pre-line'}}
-                align='center'
-                color='error'>
-                {this.state.errorText}
-              </Typography> }
+            {/* File Upload section */}
+            <Grid item xs={12} sm={6} md={6}>
+              <Paper className={classes.paper}>
+                <FileUpload
+                  infoText='Upload Here to Begin Image Prediction.'
+                  onDroppedFile={(uploadedName, fileName, url) => {
+                    setUploadedFileName(uploadedName);
+                    setFileName(fileName);
+                    setImageUrl(url);
+                  }} />
+              </Paper>
+            </Grid>
 
-            {/* Submit button */}
-            { !this.state.submitted &&
-              <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
+          </Grid>
+
+          {/* Display error to user */}
+          { showError &&
+            <Typography
+              className={classes.paddedTop}
+              variant='body2'
+              style={{whiteSpace: 'pre-line'}}
+              align='center'
+              color='error'>
+              {errorText}
+            </Typography> }
+
+          {/* Submit button */}
+          { !submitted &&
+            <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
+              <Button
+                id='submitButton'
+                variant='contained'
+                onClick={handleSubmit}
+                size='large'
+                fullWidth
+                disabled={!canBeSubmitted()}
+                color='primary'>
+                Submit
+              </Button>
+            </Grid> }
+
+          {/* Progress bar for submitted jobs */}
+          { submitted && !showError && downloadURL === null ?
+            progress === 0 || progress === null ?
+              <Grid item lg className={classes.paddedTop}>
+                <LinearProgress
+                  variant="buffer"
+                  value={0}
+                  valueBuffer={0}
+                  className={classes.progress}
+                />
+              </Grid>
+              :
+              <Grid item lg className={classes.paddedTop}>
+                <LinearProgress
+                  variant="determinate"
+                  value={progress}
+                  className={classes.progress}
+                />
+              </Grid>
+            : null }
+
+          {/* Download results and Retry buttons */}
+          { downloadURL !== null &&
+            <div>
+              <Grid item lg className={classes.paddedTop}>
                 <Button
-                  id='submitButton'
+                  href={downloadURL}
                   variant='contained'
-                  onClick={this.handleSubmit}
                   size='large'
                   fullWidth
-                  disabled={!this.canBeSubmitted()}
-                  color='primary'>
-                  Submit
+                  color='secondary'>
+                  Download Results
                 </Button>
-              </Grid> }
+              </Grid>
 
-            {/* Progress bar for submitted jobs */}
-            { this.state.submitted && !this.state.showError && this.state.downloadURL === null ?
-              this.state.progress === 0 || this.state.progress === null ?
-                <Grid item lg className={classes.paddedTop}>
-                  <LinearProgress
-                    variant="buffer"
-                    value={0}
-                    valueBuffer={0}
-                    className={classes.progress}
-                  />
-                </Grid>
-                :
-                <Grid item lg className={classes.paddedTop}>
-                  <LinearProgress
-                    variant="determinate"
-                    value={this.state.progress}
-                    className={classes.progress}
-                  />
-                </Grid>
-              : null }
+              <Grid item lg className={classes.paddedTop}>
+                <Button
+                  href='/predict'
+                  variant='contained'
+                  size='large'
+                  fullWidth
+                  color='primary'>
+                  Submit New Image
+                </Button>
+              </Grid>
+            </div> }
 
-            {/* Download results and Retry buttons */}
-            { this.state.downloadURL !== null &&
-              <div>
-                <Grid item lg className={classes.paddedTop}>
-                  <Button
-                    href={this.state.downloadURL}
-                    variant='contained'
-                    size='large'
-                    fullWidth
-                    color='secondary'>
-                    Download Results
-                  </Button>
-                </Grid>
-
-                <Grid item lg className={classes.paddedTop}>
-                  <Button
-                    href='/predict'
-                    variant='contained'
-                    size='large'
-                    fullWidth
-                    color='primary'>
-                    Submit New Image
-                  </Button>
-                </Grid>
-              </div> }
-
-          </form>
-        </Container>
-      </div>
-    );
-  }
+        </form>
+      </Container>
+    </div>
+  );
 }
-
-Predict.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Predict);

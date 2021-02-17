@@ -5,6 +5,7 @@ node_modules
 #ignore the react .env file
 .env
 
+build/
 dist/
 *.log
 coverage/
