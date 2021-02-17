@@ -1,22 +1,16 @@
-/* eslint no-unused-vars: 0 */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from './FileUpload';
+import ModelDropdown from './ModelDropdown';
+import ScaleForm from './ScaleForm';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,11 +42,9 @@ export default function Predict() {
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
-  const [jobType, setJobType] = useState('');
-  const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState('true');
+  const [selectedJobType, setSelectedJobType] = useState('');
+  const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
   const [scale, setScale] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [allJobTypes, setAllJobTypes] = useState([]);
 
   const classes = useStyles();
 
@@ -129,7 +121,7 @@ export default function Predict() {
         imageName: fileName,
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
-        jobType : jobType,
+        jobType : selectedJobType,
         dataRescale: isAutoRescaleEnabled ? '' : scale
       }
     }).then((response) => {
@@ -153,20 +145,6 @@ export default function Predict() {
     predict();
   };
 
-  const getAllJobTypes = () => {
-    axios({
-      method: 'get',
-      url: '/api/jobtypes'
-    }).then((response) => {
-      setAllJobTypes(response.data.jobTypes);
-      setJobType(response.data.jobTypes[0]);
-    }).catch(error => {
-      showErrorMessage(`Failed to get job types due to error: ${error}`);
-    });
-  };
-
-  useEffect(() => getAllJobTypes(), [0]);
-
   return (
     <div className={classes.root}>
       <Typography
@@ -188,58 +166,23 @@ export default function Predict() {
 
                   {/* Job Type Dropdown */}
                   <Grid item xs={12} sm={12} md={6}>
-                    <Typography onClick={() => setIsOpen(true)}>
+                    <Typography>
                       Job Type
                     </Typography>
-                    <FormControl>
-                      <Select
-                        open={isOpen}
-                        onClose={() => setIsOpen(false)}
-                        onOpen={() => setIsOpen(true)}
-                        onChange={e => setJobType(e.target.value)}
-                        value={jobType}
-                        style={{textTransform: 'capitalize'}}
-                        inputProps={{
-                          name: 'jobType',
-                          id: 'jobTypeValue',
-                        }}
-                      >
-                        {allJobTypes.map(job => (
-                          <MenuItem value={job} style={{textTransform: 'capitalize'}} key={allJobTypes.indexOf(job)}>
-                            {job}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
+                    <ModelDropdown
+                      value={selectedJobType}
+                      onChange={setSelectedJobType}
+                    />
                   </Grid>
 
                   {/* Image Rescaling Options */}
                   <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
-                    <FormGroup row>
-                      <FormControl>
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={isAutoRescaleEnabled}
-                              onChange={e => setIsAutoRescaleEnabled(e.target.checked)}
-                              value={isAutoRescaleEnabled.toString()}
-                            />
-                          }
-                          label="Rescale Automatically"
-                        />
-
-                        <TextField
-                          id="outlined-number"
-                          label="Rescaling Value"
-                          disabled={isAutoRescaleEnabled}
-                          value={scale}
-                          onChange={e => setScale(e.target.value)}
-                          type="number"
-                          margin="dense"
-                          variant="standard"
-                        />
-                      </FormControl>
-                    </FormGroup>
+                    <ScaleForm
+                      checked={isAutoRescaleEnabled}
+                      scale={scale}
+                      onCheckboxChange={e => setIsAutoRescaleEnabled(Boolean(e.target.checked))}
+                      onScaleChange={e => setScale(Number(e.target.value))}
+                    />
                   </Grid>
 
                 </Grid>
@@ -262,7 +205,7 @@ export default function Predict() {
           </Grid>
 
           {/* Display error to user */}
-          { showError &&
+          { errorText.length > 0 &&
             <Typography
               className={classes.paddedTop}
               variant='body2'
