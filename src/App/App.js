@@ -1,9 +1,11 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import ReactGA from 'react-ga';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import SwaggerUI from 'swagger-ui-react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import 'swagger-ui-react/swagger-ui.css';
 
 const About = lazy(() => import('../About/About'));
@@ -33,6 +35,7 @@ const withTracker = (WrappedComponent, options = {}) => {
   };
 
   const HOC = props => {
+
     useEffect(() => trackPage(props.location.pathname), [
       props.location.pathname
     ]);
@@ -40,10 +43,16 @@ const withTracker = (WrappedComponent, options = {}) => {
     return <WrappedComponent {...props} />;
   };
 
+  HOC.propTypes = {
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired,
+    }),
+  };
+
   return HOC;
 };
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
   root: {
     display: 'flex',
     minHeight: '100vh',
@@ -52,13 +61,12 @@ const styles = theme => ({
   main: {
     flexGrow: 1,
   }
-});
+}));
 
-class App extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
+export default function App() {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
       <Suspense fallback={<CircularProgress />}>
         <CssBaseline />
         <NavBar />
@@ -75,13 +83,6 @@ class App extends React.Component {
         </main>
         <Footer />
       </Suspense>
-      </div>
-    );
-  }
+    </div>
+  );
 }
-
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default hot(module)(withStyles(styles, { withTheme: true })(App));
