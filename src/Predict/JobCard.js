@@ -13,7 +13,6 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    // boxShadow: 'none',
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
@@ -23,8 +22,13 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function JobCard(props) {
-  const card = props;
+export default function JobCard({
+  file = 'dummyfile.png',
+  name = 'Model',
+  description = 'The Model takes in single-channeled images.',
+  thumbnail = 'https://bit.ly/2ZxBrQ1',
+}) {
+
   const classes = useStyles();
   const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
   const moreInfoUrl = 'https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models';
@@ -33,15 +37,15 @@ export default function JobCard(props) {
     <Card className={classes.card}>
       <CardMedia
         className={classes.cardMedia}
-        image={`${baseUrl}/${card.thumbnail}`}
-        title={`${card.name}`}
+        image={`${baseUrl}/${thumbnail}`}
+        title={`${name}`}
       />
       <CardContent className={classes.cardContent}>
         <Typography gutterBottom variant="h5">
-          { card.name }
+          { name }
         </Typography>
         <Typography variant="subtitle1">
-          { card.description }
+          { description }
         </Typography>
       </CardContent>
       <CardActions>
@@ -49,7 +53,7 @@ export default function JobCard(props) {
           size="small"
           color="primary"
           target="_blank"
-          href={`${baseUrl}/${card.file}`}>
+          href={`${baseUrl}/${file}`}>
           Download
         </Button>
         <Button

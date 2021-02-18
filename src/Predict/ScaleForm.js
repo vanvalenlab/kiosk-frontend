@@ -6,9 +6,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
 
-export default function ScaleForm(props) {
-
-  const { checked, scale, onCheckboxChange, onScaleChange } = props;
+export default function ScaleForm({
+  checked = true,
+  scale = 1,
+  onCheckboxChange = () => {},
+  onScaleChange = () => {},
+}) {
 
   return (
     <FormGroup row>
