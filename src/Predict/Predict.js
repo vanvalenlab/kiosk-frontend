@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from './FileUpload';
+import JobCard from './JobCard';
 import ModelDropdown from './ModelDropdown';
 import ScaleForm from './ScaleForm';
+import jobData from './jobData';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,6 +31,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(4),
     height: '100%',
+    width: '100%',
   },
 }));
 
@@ -159,24 +162,30 @@ export default function Predict() {
         <form autoComplete="off">
           <Grid container direction="row" justify="center" spacing={6}>
 
-            {/* Job Options section */}
-            <Grid item xs={12} sm={6} md={6}>
-              <Paper className={classes.paper}>
-                <Grid container direction="column" justify="center">
+            {/* Job info display on left column */}
+            <Grid item xs={12} sm={6}>
+              { selectedJobType.length > 0 &&
+              <JobCard {...jobData[selectedJobType]} />
+              }
+            </Grid>
 
-                  {/* Job Type Dropdown */}
-                  <Grid item xs={12} sm={12} md={6}>
+            {/* Job configuration for user on right column */}
+            <Grid item xs={12} sm={6}>
+
+              {/* Job Options section */}
+              <Grid container direction="row" justify="center">
+                <Paper className={classes.paper}>
+                  <Grid item lg>
                     <Typography>
                       Job Type
                     </Typography>
                     <ModelDropdown
                       value={selectedJobType}
                       onChange={setSelectedJobType}
+                      onError={showErrorMessage}
                     />
                   </Grid>
-
-                  {/* Image Rescaling Options */}
-                  <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
+                  <Grid item lg>
                     <ScaleForm
                       checked={isAutoRescaleEnabled}
                       scale={scale}
@@ -184,22 +193,24 @@ export default function Predict() {
                       onScaleChange={e => setScale(Number(e.target.value))}
                     />
                   </Grid>
+                </Paper>
+              </Grid>
 
-                </Grid>
-              </Paper>
-            </Grid>
+              {/* File Upload section */}
+              <Grid container direction="row" justify="center" className={classes.paddedTop}>
+                <Paper className={classes.paper}>
+                  <Grid item lg>
+                    <FileUpload
+                      infoText='Upload Here to Begin Image Prediction.'
+                      onDroppedFile={(uploadedName, fileName, url) => {
+                        setUploadedFileName(uploadedName);
+                        setFileName(fileName);
+                        setImageUrl(url);
+                      }} />
+                  </Grid>
+                </Paper>
+              </Grid>
 
-            {/* File Upload section */}
-            <Grid item xs={12} sm={6} md={6}>
-              <Paper className={classes.paper}>
-                <FileUpload
-                  infoText='Upload Here to Begin Image Prediction.'
-                  onDroppedFile={(uploadedName, fileName, url) => {
-                    setUploadedFileName(uploadedName);
-                    setFileName(fileName);
-                    setImageUrl(url);
-                  }} />
-              </Paper>
             </Grid>
 
           </Grid>
