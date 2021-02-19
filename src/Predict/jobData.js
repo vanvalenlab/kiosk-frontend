@@ -4,7 +4,7 @@ const jobCards = {
     file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'Nuclear Segmentation',
     description: 'The nuclear model performs nuclear segmentation of cell culture data. The inputs are a nuclear channel.',
-    thumbnail: 'thumbnails/HeLa_nuclear.png',
+    thumbnail: 'thumbnails/HeLa_nuclear_color.png',
   },
   multiplex: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',
