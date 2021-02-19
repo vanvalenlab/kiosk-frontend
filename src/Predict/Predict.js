@@ -150,15 +150,8 @@ export default function Predict() {
 
   return (
     <div className={classes.root}>
-      <Typography
-        className={classes.title}
-        variant='h5'
-        align='center'
-        color='textPrimary'>
-        Select Options | Upload your image | Download the results.
-      </Typography>
 
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={classes.paddedTop}>
         <form autoComplete="off">
           <Grid container direction="row" justify="center" spacing={6}>
 
