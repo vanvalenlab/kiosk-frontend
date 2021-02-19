@@ -7,7 +7,7 @@ const jobCards = {
     thumbnail: 'thumbnails/HeLa_nuclear.png',
   },
   multiplex: {
-    file: 'tiff_stack_examples/multiplex_vectra.tif',
+    file: 'tiff_stack_examples/vectra_breast_cancer.tif',
     name: 'Mesmer',
     description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The input is a 2 channel TIFF where the first channel is a nuclear marker and the second channel is a membrane marker.',
     thumbnail: 'thumbnails/breast_vectra.png',
@@ -20,7 +20,7 @@ const jobCards = {
   },
   // TODO: this is a stop gap to support both multiplex and mesmer names
   mesmer: {
-    file: 'tiff_stack_examples/multiplex_vectra.tif',
+    file: 'tiff_stack_examples/vectra_breast_cancer.tif',
     name: 'Mesmer',
     description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The input is a 2 channel TIFF where the first channel is a nuclear marker and the second channel is a membrane marker.',
     thumbnail: 'thumbnails/breast_vectra.png',
