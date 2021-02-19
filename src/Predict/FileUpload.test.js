@@ -22,7 +22,7 @@ describe('<FileUpload/> component tests', () => {
   it('<FileUpload/> renders with Dropzone component', () => {
     const infoText = 'expected text';
     const { getByText } = render(<FileUpload infoText={infoText} />);
-    const element = getByText(/Drag and Drop/i);
+    const element = getByText(/Drag and drop/i);
     expect(element).toBeInTheDocument();
     const infoTextElement = getByText(infoText);
     expect(infoTextElement).toBeInTheDocument();

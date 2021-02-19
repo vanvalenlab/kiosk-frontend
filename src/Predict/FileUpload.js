@@ -72,7 +72,7 @@ export default function FileUpload(props) {
             </Typography>
 
             <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
-              Drag and Drop your files here or click to browse.
+              Drag and drop your files here or click to browse
             </Typography>
 
             {/* Display error to user */}
