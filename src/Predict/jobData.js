@@ -9,7 +9,7 @@ const jobCards = {
   multiplex: {
     file: 'tiff_stack_examples/multiplex_vectra.tif',
     name: 'Mesmer',
-    description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The inputs are a nuclear channel and a membrane channel.',
+    description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The input is a 2 channel TIFF where the first channel is a nuclear marker and the second channel is a membrane marker.',
     thumbnail: 'thumbnails/multiplex_vectra.png',
   },
   tracking: {
@@ -22,7 +22,7 @@ const jobCards = {
   mesmer: {
     file: 'tiff_stack_examples/multiplex_vectra.tif',
     name: 'Mesmer',
-    description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The inputs are a nuclear channel and a membrane channel.',
+    description: 'Mesmer performs whole-cell segmentation of multiplex tissue data. The input is a 2 channel TIFF where the first channel is a nuclear marker and the second channel is a membrane marker.',
     thumbnail: 'thumbnails/multiplex_vectra.png',
   },
 };
