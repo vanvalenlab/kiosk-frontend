@@ -54,7 +54,7 @@ export default function JobCard({
           color="primary"
           target="_blank"
           href={`${baseUrl}/${file}`}>
-          Download
+          Download Image
         </Button>
         <Button
           size="small"
