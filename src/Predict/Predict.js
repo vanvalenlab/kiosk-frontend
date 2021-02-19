@@ -194,7 +194,7 @@ export default function Predict() {
                 <Paper className={classes.paper}>
                   <Grid item lg>
                     <FileUpload
-                      infoText='Upload Here to Begin Image Prediction.'
+                      infoText='Upload Here to Begin Image Prediction'
                       onDroppedFile={(uploadedName, fileName, url) => {
                         setUploadedFileName(uploadedName);
                         setFileName(fileName);
