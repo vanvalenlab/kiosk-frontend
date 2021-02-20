@@ -156,6 +156,8 @@ export default function Faq() {
                 Where can I get help?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                For an overview of the DeepCell ecocystem, please see our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
+                <br />
                 Support for DeepCell Kiosk is available through our <Link href="https://deepcell-kiosk.readthedocs.io/en/master" target="_blank" rel="noopener noreferrer">documentation</Link> and <Link href="https://github.com/vanvalenlab/kiosk/issues" target="_blank" rel="noopener noreferrer">issues on Github</Link>
               </Typography>
             </Paper>
