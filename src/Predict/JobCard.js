@@ -33,6 +33,8 @@ export default function JobCard({
   const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
   const moreInfoUrl = 'https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models';
 
+  const imageSizeWarning = 'Image files should be no larger than 2048x2048.';
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -46,6 +48,10 @@ export default function JobCard({
         </Typography>
         <Typography variant="subtitle1">
           { description }
+        </Typography>
+        <br />
+        <Typography variant="subtitle1">
+          { imageSizeWarning }
         </Typography>
       </CardContent>
       <CardActions>
