@@ -71,13 +71,17 @@ export default function FileUpload(props) {
               { infoText }
             </Typography>
 
-            <Typography variant='caption' display='block' align='center' color='textSecondary'>
-              Drag and drop your files here or click to browse
-            </Typography>
+            { uploadedFileLocation === null ?
+              <>
+                <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
+                  Drag and drop your files here or click to browse
+                </Typography>
 
-            <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
-              Image files should be no larger than 2048x2048
-            </Typography>
+                <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
+                  Max image size is 2048x2048
+                </Typography>
+              </>
+              : null }
 
             {/* Display error to user */}
             { showError &&
