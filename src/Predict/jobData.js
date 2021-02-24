@@ -15,7 +15,7 @@ const jobCards = {
   tracking: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
     name: 'Cell Tracking',
-    description: 'The cell tracking model tracks objects through several frames and creates a cell lineage file. The inputs are a single-channeled image with more than 1 frame.',
+    description: 'The cell tracking model segments and tracks objects over time and creates a lineage file for division information. The input is an single-channel image stack (3D TIFF).',
     thumbnail: 'thumbnails/3T3_nuc_example_256.png',
   },
   // TODO: this is a stop gap to support both multiplex and mesmer names
