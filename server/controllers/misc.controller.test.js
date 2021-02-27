@@ -32,4 +32,24 @@ describe('Miscellaneous Controller Tests', () => {
 
   });
 
+  describe('GET /api/invalid-route', () => {
+
+    it('should return 404 NOT_FOUND', async done => {
+      const request = supertest(app);
+      const response = await request.get('/api/invalid-route');
+      expect(response.status).toBe(404);
+      done();
+    });
+  });
+
+  describe('POST /api/invalid-route', () => {
+
+    it('should return 404 NOT_FOUND', async done => {
+      const request = supertest(app);
+      const response = await request.post('/api/invalid-route');
+      expect(response.status).toBe(404);
+      done();
+    });
+  });
+
 });

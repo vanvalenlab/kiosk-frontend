@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CloudUpload from '@material-ui/icons/CloudUpload';
@@ -71,9 +71,17 @@ export default function FileUpload(props) {
               { infoText }
             </Typography>
 
-            <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
-              Drag and Drop your files here or click to browse.
-            </Typography>
+            { uploadedFileLocation === null ?
+              <>
+                <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
+                  Drag and drop your files here or click to browse
+                </Typography>
+
+                <Typography variant='caption' display='block' align='center' color='textSecondary' gutterBottom>
+                  Max image size is 2048x2048
+                </Typography>
+              </>
+              : null }
 
             {/* Display error to user */}
             { showError &&

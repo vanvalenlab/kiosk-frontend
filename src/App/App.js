@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import ReactGA from 'react-ga';
-import PropTypes from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import SwaggerUI from 'swagger-ui-react';
 import CssBaseline from '@material-ui/core/CssBaseline';

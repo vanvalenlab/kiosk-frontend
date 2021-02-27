@@ -1,22 +1,18 @@
-/* eslint no-unused-vars: 0 */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import queryString from 'query-string';
-import FileUpload from '../FileUpload/FileUpload';
+import FileUpload from './FileUpload';
+import JobCard from './JobCard';
+import ModelDropdown from './ModelDropdown';
+import ScaleForm from './ScaleForm';
+import jobData from './jobData';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +31,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(4),
     height: '100%',
+    width: '100%',
   },
 }));
 
@@ -48,11 +45,9 @@ export default function Predict() {
   const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
-  const [jobType, setJobType] = useState('');
-  const [rescalingDisabled, setRescalingDisabled] = useState('true');
-  const [rescaling, setRescaling] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
-  const [allJobTypes, setAllJobTypes] = useState([]);
+  const [selectedJobType, setSelectedJobType] = useState('');
+  const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
+  const [scale, setScale] = useState(1);
 
   const classes = useStyles();
 
@@ -101,11 +96,11 @@ export default function Predict() {
           const failures = response.data.value[4];
           if (failures != null && failures.length > 0) {
             const parsed = queryString.parse(failures);
-            let errorText = 'Not all jobs completed!\n\n';
+            let errText = 'Not all jobs completed!\n\n';
             for (const key in parsed) {
-              errorText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
+              errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
-            showErrorMessage(errorText);
+            showErrorMessage(errText);
           }
         } else {
           let maybeNum = parseInt(response.data.value[1], 10);
@@ -129,8 +124,8 @@ export default function Predict() {
         imageName: fileName,
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
-        jobType : jobType,
-        dataRescale: rescalingDisabled === 'true' ? '' : rescaling
+        jobType : selectedJobType,
+        dataRescale: isAutoRescaleEnabled ? '' : scale
       }
     }).then((response) => {
       checkJobStatus(response.data.hash, 3000);
@@ -153,116 +148,68 @@ export default function Predict() {
     predict();
   };
 
-  const getAllJobTypes = () => {
-    axios({
-      method: 'get',
-      url: '/api/jobtypes'
-    }).then((response) => {
-      setAllJobTypes(response.data.jobTypes);
-      setJobType(response.data.jobTypes[0]);
-    }).catch(error => {
-      showErrorMessage(`Failed to get job types due to error: ${error}`);
-    });
-  };
-
-  useEffect(() => getAllJobTypes(), [0]);
-
   return (
     <div className={classes.root}>
-      <Typography
-        className={classes.title}
-        variant='h5'
-        align='center'
-        color='textPrimary'>
-        Select Options | Upload your image | Download the results.
-      </Typography>
 
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={classes.paddedTop}>
         <form autoComplete="off">
           <Grid container direction="row" justify="center" spacing={6}>
 
-            {/* Job Options section */}
-            <Grid item xs={12} sm={6} md={6}>
-              <Paper className={classes.paper}>
-                <Grid container direction="column" justify="center">
-
-                  {/* Job Type Dropdown */}
-                  <Grid item xs={12} sm={12} md={6}>
-                    <Typography onClick={() => setIsOpen(true)}>
-                      Job Type
-                    </Typography>
-                    <FormControl>
-                      <Select
-                        open={isOpen}
-                        onClose={() => setIsOpen(false)}
-                        onOpen={() => setIsOpen(true)}
-                        onChange={e => setJobType(e.target.value)}
-                        value={jobType}
-                        style={{textTransform: 'capitalize'}}
-                        inputProps={{
-                          name: 'jobType',
-                          id: 'jobTypeValue',
-                        }}
-                      >
-                        {allJobTypes.map(job => (
-                          <MenuItem value={job} style={{textTransform: 'capitalize'}} key={allJobTypes.indexOf(job)}>
-                            {job}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-
-                  {/* Image Rescaling Options */}
-                  <Grid item xs={12} sm={12} md={6} className={classes.paddedTop}>
-                    <FormGroup row>
-                      <FormControl>
-
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={rescalingDisabled === 'true'}
-                              onChange={e => setRescalingDisabled(e.target.checked.toString())}
-                              value={rescalingDisabled}
-                            />
-                          }
-                          label="Rescale Automatically"
-                        />
-
-                        <TextField
-                          id="outlined-number"
-                          label="Rescaling Value"
-                          disabled={rescalingDisabled === 'true'}
-                          value={rescaling}
-                          onChange={e => setRescaling(e.target.value)}
-                          type="number"
-                          margin="dense"
-                          variant="standard"
-                        />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-
-                </Grid>
-              </Paper>
+            {/* Job info display on left column */}
+            <Grid item xs={12} sm={6}>
+              { selectedJobType.length > 0 &&
+              <JobCard {...jobData[selectedJobType]} />
+              }
             </Grid>
 
-            {/* File Upload section */}
-            <Grid item xs={12} sm={6} md={6}>
-              <Paper className={classes.paper}>
-                <FileUpload
-                  infoText='Upload Here to Begin Image Prediction.'
-                  onDroppedFile={(uploadedName, fileName, url) => {
-                    setUploadedFileName(uploadedName);
-                    setFileName(fileName);
-                    setImageUrl(url);
-                  }} />
-              </Paper>
+            {/* Job configuration for user on right column */}
+            <Grid item xs={12} sm={6}>
+
+              {/* Job Options section */}
+              <Grid container direction="row" justify="center">
+                <Paper className={classes.paper}>
+                  <Grid item lg>
+                    <Typography>
+                      Prediction Type
+                    </Typography>
+                    <ModelDropdown
+                      value={selectedJobType}
+                      onChange={setSelectedJobType}
+                      onError={showErrorMessage}
+                    />
+                  </Grid>
+                  <Grid item lg>
+                    <ScaleForm
+                      checked={isAutoRescaleEnabled}
+                      scale={scale}
+                      onCheckboxChange={e => setIsAutoRescaleEnabled(Boolean(e.target.checked))}
+                      onScaleChange={e => setScale(Number(e.target.value))}
+                    />
+                  </Grid>
+                </Paper>
+              </Grid>
+
+              {/* File Upload section */}
+              <Grid container direction="row" justify="center" className={classes.paddedTop}>
+                <Paper className={classes.paper}>
+                  <Grid item lg>
+                    <FileUpload
+                      infoText='Upload Here to Begin Image Prediction'
+                      onDroppedFile={(uploadedName, fileName, url) => {
+                        setUploadedFileName(uploadedName);
+                        setFileName(fileName);
+                        setImageUrl(url);
+                      }} />
+                  </Grid>
+                </Paper>
+              </Grid>
+
             </Grid>
 
           </Grid>
 
           {/* Display error to user */}
-          { showError &&
+          { errorText.length > 0 &&
             <Typography
               className={classes.paddedTop}
               variant='body2'
