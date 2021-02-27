@@ -170,7 +170,7 @@ export default function Predict() {
                 <Paper className={classes.paper}>
                   <Grid item lg>
                     <Typography>
-                      Job Type
+                      Prediction Type
                     </Typography>
                     <ModelDropdown
                       value={selectedJobType}
