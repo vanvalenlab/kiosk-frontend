@@ -46,10 +46,10 @@ export default function JobCard({
           { name }
         </Typography>
         <Typography gutterBottom variant="subtitle1">
-          Model: { model }
+          <strong>Model:</strong> { model }
         </Typography>
         <Typography variant="subtitle1">
-          Inputs: { inputs }
+          <strong>Inputs:</strong> { inputs }
         </Typography>
       </CardContent>
       <CardActions>
