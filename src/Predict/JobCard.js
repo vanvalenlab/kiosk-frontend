@@ -25,7 +25,8 @@ const useStyles = makeStyles(() => ({
 export default function JobCard({
   file = 'dummyfile.png',
   name = 'Model',
-  description = 'The Model takes in single-channeled images.',
+  model = 'The Model takes in single-channeled images.',
+  inputs = 'An image file.',
   thumbnail = 'https://bit.ly/2ZxBrQ1',
 }) {
 
@@ -44,8 +45,11 @@ export default function JobCard({
         <Typography gutterBottom variant="h5">
           { name }
         </Typography>
+        <Typography gutterBottom variant="subtitle1">
+          <strong>Model:</strong> { model }
+        </Typography>
         <Typography variant="subtitle1">
-          { description }
+          <strong>Inputs:</strong> { inputs }
         </Typography>
       </CardContent>
       <CardActions>
@@ -71,6 +75,7 @@ export default function JobCard({
 JobCard.propTypes = {
   file: PropTypes.string,
   name: PropTypes.string,
-  description: PropTypes.string,
+  model: PropTypes.string,
+  inputs: PropTypes.string,
   thumbnail: PropTypes.string,
 };
