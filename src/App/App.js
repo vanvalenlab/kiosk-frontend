@@ -19,6 +19,7 @@ const NotFound = lazy(() => import('../NotFound/NotFound'));
 
 // If the mode is NOT production, then notify that we are in dev mode.
 if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line no-console
   console.log('Looks like we are in development mode!');
 }
 
