@@ -161,7 +161,8 @@ export default function Predict() {
         imageUrl: imageUrl,
         jobType: selectedJobType,
         dataRescale: isAutoRescaleEnabled ? (displayRescaleForm ? '' : '1') : scale,
-        channels: (jobData[selectedJobType].requiredChannels).map(c => channelValues[targetChannels[c]]).join(','),
+        channels: (jobData[selectedJobType].requiredChannels).map(
+          c => channelValues[targetChannels[c]]).join(','),
       }
     }).then((response) => {
       checkJobStatus(response.data.hash, 3000);
