@@ -115,6 +115,7 @@ async function predict(req, res) {
       'created_at', now,
       'updated_at', now,
       'identity_upload', config.hostname,
+      'channels', data.channels || '',
     ]);
     await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
