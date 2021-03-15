@@ -41,7 +41,7 @@ function ChannelDropdown(props) {
       >
         {channels.map((c, i) => (
           <MenuItem value={c} key={i} className={classes.capitalize}>
-            {c}
+            Channel {i+1} ({c})
           </MenuItem>
         ))}
       </Select>

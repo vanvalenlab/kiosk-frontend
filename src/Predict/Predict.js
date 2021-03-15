@@ -55,13 +55,9 @@ export default function Predict() {
    * Select a channel for each target
    */
   const [targetChannels, setTargetChannels] = useState({});
-  const channels = ['gray', 'red', 'green', 'blue'];
-  const channelValues = {
-    gray: 0,
-    red: 1,
-    green: 2,
-    blue: 3,
-  };
+  const channels = ['red', 'green', 'blue'];
+  const channelValues =  Object.keys(channels).reduce((r, c) =>
+    Object.assign(r, { [channels[c]]: parseInt((r[channels[c]] || '').concat(c)) }), {});
 
   const updateTargetChannels = (value, target) => {
     setTargetChannels({ ...targetChannels,  [target]: value });
@@ -73,16 +69,10 @@ export default function Predict() {
     if (selectedJobType) {
       setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
       const jobTargets = jobData[selectedJobType].requiredChannels;
-      if (jobTargets.length == 1) {
-        // default single-target jobs to grayscale.
-        setTargetChannels({ [jobTargets[0]]: channels[0] });
-      } else if (jobTargets.length <= 3) {
-        // default multi targets to RGB.
-        setTargetChannels(jobTargets.reduce((result, item, index) => {
-          result[item] = channels[index + 1];
-          return result;
-        }, {}));
-      }
+      setTargetChannels(jobTargets.reduce((result, item, index) => {
+        result[item] = channels[index];
+        return result;
+      }, {}));
     }
   }, [selectedJobType]);
 
