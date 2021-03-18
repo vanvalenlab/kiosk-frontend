@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -12,6 +12,7 @@ import FileUpload from './FileUpload';
 import JobCard from './JobCard';
 import ModelDropdown from './ModelDropdown';
 import ScaleForm from './ScaleForm';
+import ChannelForm from './ChannelForm';
 import jobData from './jobData';
 
 const useStyles = makeStyles(theme => ({
@@ -47,9 +48,33 @@ export default function Predict() {
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
   const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
+  const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
   const [scale, setScale] = useState(1);
 
+  /**
+   * Select a channel for each target
+   */
+  const [targetChannels, setTargetChannels] = useState({});
+  const channels = ['red', 'green', 'blue'];
+  const channelValues =  Object.keys(channels).reduce((r, c) =>
+    Object.assign(r, { [channels[c]]: parseInt((r[channels[c]] || '').concat(c)) }), {});
+
+  const updateTargetChannels = (value, target) => {
+    setTargetChannels({ ...targetChannels,  [target]: value });
+  };
+
   const classes = useStyles();
+
+  useEffect(() => {
+    if (selectedJobType) {
+      setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
+      const jobTargets = jobData[selectedJobType].requiredChannels;
+      setTargetChannels(jobTargets.reduce((result, item, index) => {
+        result[item] = channels[index];
+        return result;
+      }, {}));
+    }
+  }, [selectedJobType]);
 
   const showErrorMessage = (errText) => {
     setErrorText(errText);
@@ -124,8 +149,10 @@ export default function Predict() {
         imageName: fileName,
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
-        jobType : selectedJobType,
-        dataRescale: isAutoRescaleEnabled ? '' : scale
+        jobType: selectedJobType,
+        dataRescale: isAutoRescaleEnabled ? (displayRescaleForm ? '' : '1') : scale,
+        channels: (jobData[selectedJobType].requiredChannels).map(
+          c => channelValues[targetChannels[c]]).join(','),
       }
     }).then((response) => {
       checkJobStatus(response.data.hash, 3000);
@@ -155,30 +182,36 @@ export default function Predict() {
         <form autoComplete="off">
           <Grid container direction="row" justify="center" spacing={6}>
 
-            {/* Job info display on left column */}
-            <Grid item xs={12} sm={6}>
-              { selectedJobType.length > 0 &&
-              <JobCard {...jobData[selectedJobType]} />
-              }
-            </Grid>
-
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
 
               {/* Job Options section */}
-              <Grid container direction="row" justify="center">
+              <Grid container>
                 <Paper className={classes.paper}>
-                  <Grid item lg>
-                    <Typography>
-                      Prediction Type
-                    </Typography>
-                    <ModelDropdown
-                      value={selectedJobType}
-                      onChange={setSelectedJobType}
-                      onError={showErrorMessage}
-                    />
+                  <Grid container>
+                    <Grid item md={6}>
+                      <Typography>
+                        Prediction Type
+                      </Typography>
+                      <ModelDropdown
+                        value={selectedJobType}
+                        onChange={setSelectedJobType}
+                        onError={showErrorMessage}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+                      {/* <Typography align="right">
+                        Input Channels
+                      </Typography> */}
+                      <ChannelForm
+                        channels={channels}
+                        targetChannels={targetChannels}
+                        onChange={updateTargetChannels}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item lg>
+                  
+                  { displayRescaleForm && <Grid item lg>
                     <ScaleForm
                       checked={isAutoRescaleEnabled}
                       scale={scale}
@@ -186,6 +219,7 @@ export default function Predict() {
                       onScaleChange={e => setScale(Number(e.target.value))}
                     />
                   </Grid>
+                  }
                 </Paper>
               </Grid>
 
@@ -204,6 +238,13 @@ export default function Predict() {
                 </Paper>
               </Grid>
 
+            </Grid>
+
+            {/* Job info display on left column */}
+            <Grid item xs={12} sm={6}>
+              { selectedJobType.length > 0 &&
+              <JobCard {...jobData[selectedJobType]} />
+              }
             </Grid>
 
           </Grid>
