@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   paddedTop: {
     paddingTop: theme.spacing(4),
   },
+  capitalize: {
+    textTransform: 'capitalize',
+  },
   title: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -72,6 +75,7 @@ export default function Predict() {
   const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
   const [scale, setScale] = useState(1);
+  const [status, setStatus] = useState('');
 
   /**
    * Select a channel for each target
@@ -125,6 +129,7 @@ export default function Predict() {
           'key': ['status', 'progress', 'output_url', 'reason', 'failures']
         }
       }).then((response) => {
+        setStatus(response.data.value[0].split('-').join(' '));
         if (response.data.value[0] === 'failed') {
           clearInterval(statusCheck);
           setErrorText(`Job Failed: ${response.data.value[3]}`);
@@ -189,6 +194,7 @@ export default function Predict() {
       return;
     }
     setSubmitted(true);
+    setStatus('submitting');
     predict();
   };
 
@@ -285,24 +291,32 @@ export default function Predict() {
             </Grid> }
 
           {/* Progress bar for submitted jobs */}
-          { submitted && errorText.length === 0 && downloadURL === null ?
-            progress === 0 || progress === null ?
-              <Grid item lg className={classes.paddedTop}>
+          { submitted && downloadURL === null ?
+            <Grid item lg className={classes.paddedTop}>
+              { progress === 0 || progress === null ?
                 <LinearProgress
                   variant="buffer"
                   value={0}
                   valueBuffer={0}
                   className={classes.progress}
                 />
-              </Grid>
-              :
-              <Grid item lg className={classes.paddedTop}>
+                :
                 <LinearProgress
                   variant="determinate"
                   value={progress}
                   className={classes.progress}
                 />
-              </Grid>
+              }
+              {/* Display status updates to user */}
+              { status.length > 0 &&
+                <Typography
+                  className={classes.paddedTop, classes.capitalize}
+                  variant='body1'
+                  align='center'
+                  color='primary'>
+                  Job Status: {status}
+                </Typography> }
+            </Grid>
             : null }
 
           {/* Download results and Retry buttons */}
