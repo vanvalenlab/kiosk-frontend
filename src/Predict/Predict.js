@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { PropTypes } from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -36,6 +37,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const ErrorText = (props) => {
+  const classes = useStyles();
+  const { error } = props;
+  return (
+    <div>
+      { error.length > 0 &&
+        <Typography
+          className={classes.paddedTop}
+          variant='body2'
+          style={{whiteSpace: 'pre-line'}}
+          align='center'
+          color='error'>
+          {error}
+        </Typography> }
+    </div>
+  );
+};
+
+ErrorText.propTypes = {
+  error: PropTypes.string,
+};
+
 export default function Predict() {
 
   const [fileName, setFileName] = useState('');
@@ -43,7 +66,6 @@ export default function Predict() {
   const [downloadURL, setDownloadURL] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
@@ -76,11 +98,6 @@ export default function Predict() {
     }
   }, [selectedJobType]);
 
-  const showErrorMessage = (errText) => {
-    setErrorText(errText);
-    setShowError(true);
-  };
-
   const expireRedisHash = (redisHash, expireIn) => {
     axios({
       method: 'post',
@@ -91,10 +108,10 @@ export default function Predict() {
       }
     }).then((response) => {
       if (parseInt(response.data.value) !== 1) {
-        showErrorMessage('Hash not expired');
+        setErrorText('Hash not expired');
       }
     }).catch(error => {
-      showErrorMessage(`Failed to expire redis hash due to error: ${error}`);
+      setErrorText(`Failed to expire redis hash due to error: ${error}`);
     });
   };
 
@@ -110,7 +127,7 @@ export default function Predict() {
       }).then((response) => {
         if (response.data.value[0] === 'failed') {
           clearInterval(statusCheck);
-          showErrorMessage(`Job Failed: ${response.data.value[3]}`);
+          setErrorText(`Job Failed: ${response.data.value[3]}`);
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
@@ -125,7 +142,7 @@ export default function Predict() {
             for (const key in parsed) {
               errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
-            showErrorMessage(errText);
+            setErrorText(errText);
           }
         } else {
           let maybeNum = parseInt(response.data.value[1], 10);
@@ -135,7 +152,7 @@ export default function Predict() {
         }
       }).catch(error => {
         let errMsg = `Trouble communicating with Redis due to error: ${error}`;
-        showErrorMessage(errMsg);
+        setErrorText(errMsg);
       });
     }, interval);
   };
@@ -158,7 +175,7 @@ export default function Predict() {
       checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
       let errMsg = `Failed to create job due to error: ${error}.`;
-      showErrorMessage(errMsg);
+      setErrorText(errMsg);
     });
   };
 
@@ -196,7 +213,7 @@ export default function Predict() {
                       <ModelDropdown
                         value={selectedJobType}
                         onChange={setSelectedJobType}
-                        onError={showErrorMessage}
+                        onError={setErrorText}
                       />
                     </Grid>
                     <Grid item md={6}>
@@ -250,15 +267,7 @@ export default function Predict() {
           </Grid>
 
           {/* Display error to user */}
-          { errorText.length > 0 &&
-            <Typography
-              className={classes.paddedTop}
-              variant='body2'
-              style={{whiteSpace: 'pre-line'}}
-              align='center'
-              color='error'>
-              {errorText}
-            </Typography> }
+          <ErrorText error={errorText} />
 
           {/* Submit button */}
           { !submitted &&
@@ -276,7 +285,7 @@ export default function Predict() {
             </Grid> }
 
           {/* Progress bar for submitted jobs */}
-          { submitted && !showError && downloadURL === null ?
+          { submitted && errorText.length === 0 && downloadURL === null ?
             progress === 0 || progress === null ?
               <Grid item lg className={classes.paddedTop}>
                 <LinearProgress
