@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
   paddedTop: {
     paddingTop: theme.spacing(4),
   },
+  capitalize: {
+    textTransform: 'capitalize',
+  },
   title: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -43,13 +46,13 @@ export default function Predict() {
   const [downloadURL, setDownloadURL] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [showError, setShowError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
   const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
   const [scale, setScale] = useState(1);
+  const [status, setStatus] = useState('');
 
   /**
    * Select a channel for each target
@@ -76,11 +79,6 @@ export default function Predict() {
     }
   }, [selectedJobType]);
 
-  const showErrorMessage = (errText) => {
-    setErrorText(errText);
-    setShowError(true);
-  };
-
   const expireRedisHash = (redisHash, expireIn) => {
     axios({
       method: 'post',
@@ -91,10 +89,10 @@ export default function Predict() {
       }
     }).then((response) => {
       if (parseInt(response.data.value) !== 1) {
-        showErrorMessage('Hash not expired');
+        setErrorText('Hash not expired');
       }
     }).catch(error => {
-      showErrorMessage(`Failed to expire redis hash due to error: ${error}`);
+      setErrorText(`Failed to expire redis hash due to error: ${error}`);
     });
   };
 
@@ -108,9 +106,10 @@ export default function Predict() {
           'key': ['status', 'progress', 'output_url', 'reason', 'failures']
         }
       }).then((response) => {
+        setStatus(response.data.value[0].split('-').join(' '));
         if (response.data.value[0] === 'failed') {
           clearInterval(statusCheck);
-          showErrorMessage(`Job Failed: ${response.data.value[3]}`);
+          setErrorText(`Job Failed: ${response.data.value[3]}`);
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
@@ -125,7 +124,7 @@ export default function Predict() {
             for (const key in parsed) {
               errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
             }
-            showErrorMessage(errText);
+            setErrorText(errText);
           }
         } else {
           let maybeNum = parseInt(response.data.value[1], 10);
@@ -135,7 +134,7 @@ export default function Predict() {
         }
       }).catch(error => {
         let errMsg = `Trouble communicating with Redis due to error: ${error}`;
-        showErrorMessage(errMsg);
+        setErrorText(errMsg);
       });
     }, interval);
   };
@@ -158,7 +157,7 @@ export default function Predict() {
       checkJobStatus(response.data.hash, 3000);
     }).catch(error => {
       let errMsg = `Failed to create job due to error: ${error}.`;
-      showErrorMessage(errMsg);
+      setErrorText(errMsg);
     });
   };
 
@@ -172,6 +171,7 @@ export default function Predict() {
       return;
     }
     setSubmitted(true);
+    setStatus('submitting');
     predict();
   };
 
@@ -196,7 +196,7 @@ export default function Predict() {
                       <ModelDropdown
                         value={selectedJobType}
                         onChange={setSelectedJobType}
-                        onError={showErrorMessage}
+                        onError={setErrorText}
                       />
                     </Grid>
                     <Grid item md={6}>
@@ -276,24 +276,32 @@ export default function Predict() {
             </Grid> }
 
           {/* Progress bar for submitted jobs */}
-          { submitted && !showError && downloadURL === null ?
-            progress === 0 || progress === null ?
-              <Grid item lg className={classes.paddedTop}>
+          { submitted && downloadURL === null && errorText.length == 0 ?
+            <Grid item lg className={classes.paddedTop}>
+              { progress === 0 || progress === null ?
                 <LinearProgress
                   variant="buffer"
                   value={0}
                   valueBuffer={0}
                   className={classes.progress}
                 />
-              </Grid>
-              :
-              <Grid item lg className={classes.paddedTop}>
+                :
                 <LinearProgress
                   variant="determinate"
                   value={progress}
                   className={classes.progress}
                 />
-              </Grid>
+              }
+              {/* Display status updates to user */}
+              { status.length > 0 &&
+                <Typography
+                  className={classes.paddedTop, classes.capitalize}
+                  variant='body1'
+                  align='center'
+                  color='primary'>
+                  Job Status: {status}
+                </Typography> }
+            </Grid>
             : null }
 
           {/* Download results and Retry buttons */}
