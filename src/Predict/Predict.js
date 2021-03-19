@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { PropTypes } from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -39,28 +38,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
 }));
-
-const ErrorText = (props) => {
-  const classes = useStyles();
-  const { error } = props;
-  return (
-    <div>
-      { error.length > 0 &&
-        <Typography
-          className={classes.paddedTop}
-          variant='body2'
-          style={{whiteSpace: 'pre-line'}}
-          align='center'
-          color='error'>
-          {error}
-        </Typography> }
-    </div>
-  );
-};
-
-ErrorText.propTypes = {
-  error: PropTypes.string,
-};
 
 export default function Predict() {
 
@@ -273,7 +250,15 @@ export default function Predict() {
           </Grid>
 
           {/* Display error to user */}
-          <ErrorText error={errorText} />
+          { errorText.length > 0 &&
+            <Typography
+              className={classes.paddedTop}
+              variant='body2'
+              style={{whiteSpace: 'pre-line'}}
+              align='center'
+              color='error'>
+              {errorText}
+            </Typography> }
 
           {/* Submit button */}
           { !submitted &&
