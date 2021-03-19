@@ -276,7 +276,7 @@ export default function Predict() {
             </Grid> }
 
           {/* Progress bar for submitted jobs */}
-          { submitted && downloadURL === null ?
+          { submitted && downloadURL === null && errorText.length == 0 ?
             <Grid item lg className={classes.paddedTop}>
               { progress === 0 || progress === null ?
                 <LinearProgress
