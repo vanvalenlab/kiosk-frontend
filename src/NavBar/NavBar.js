@@ -50,14 +50,14 @@ export default function NavBar() {
         <Button color='inherit' href='/predict' className={classes.mobileMenuItem}>
           Predict
         </Button>
-        <Button color='inherit' href='/data' className={classes.mobileMenuItem}>
-          Data
-        </Button>
         <Button color='inherit' href='/about' className={classes.mobileMenuItem}>
           About
         </Button>
         <Button color='inherit' href='/faq' className={classes.mobileMenuItem}>
           FAQ
+        </Button>
+        <Button color='inherit' href='https://datasets.deepcell.org' target='_blank' className={classes.mobileMenuItem}>
+          Data
         </Button>
         <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank' className={classes.mobileMenuItem}>
           <FaGithub size={28} />

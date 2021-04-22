@@ -14,7 +14,7 @@ const Footer = lazy(() => import('../Footer/Footer'));
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Landing = lazy(() => import('../Landing/Landing'));
 const Predict = lazy(() => import('../Predict/Predict'));
-const Data = lazy(() => import('../Data/Data'));
+// const Data = lazy(() => import('../Data/Data'));
 const NotFound = lazy(() => import('../NotFound/NotFound'));
 
 // If the mode is NOT production, then notify that we are in dev mode.
@@ -77,7 +77,7 @@ export default function App() {
             <Route path='/about' component={withTracker(About)}/>
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
-            <Route path='/data' component={withTracker(Data)}/>
+            {/* <Route path='/data' component={withTracker(Data)}/> */}
             <SwaggerUI url='/api/swagger.json' />
             <Route component={withTracker(NotFound)} />
           </Switch>
