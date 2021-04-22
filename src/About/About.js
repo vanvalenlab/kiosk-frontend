@@ -165,7 +165,7 @@ export default function About() {
                 <ul>
                   <li>Segmentation: A nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
                   <li>Tracking: A live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
-                  <li>Multiplex: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the whole-cell segmentation of each cell in the image.</li>
+                  <li>Mesmer: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the whole-cell segmentation of each cell in the image.</li>
                 </ul>
                 However, it is built with extensibility in mind, and it is easy to deploy your own models.
                 To learn more about deploying your own instance of deepcell.org using the kiosk-console, <a href="https://deepcell-kiosk.readthedocs.io/" target="_blank" rel="noreferrer">read the docs</a>.
