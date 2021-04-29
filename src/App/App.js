@@ -77,7 +77,6 @@ export default function App() {
             <Route path='/about' component={withTracker(About)}/>
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
-            {/* <Route path='/data' component={withTracker(Data)}/> */}
             <SwaggerUI url='/api/swagger.json' />
             <Route component={withTracker(NotFound)} />
           </Switch>
