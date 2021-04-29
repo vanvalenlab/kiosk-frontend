@@ -54,6 +54,42 @@ export default function Faq() {
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
+                What does this error message mean?
+              </Typography>
+              <ul>
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Invalid image shape
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    The image provided is not compatible with the model.
+
+                    Check that the channels of the input image match the expected model output, and that the dimensions of the image match the model (i.e. 2D images or 3D movies).
+                  </Typography>
+                </li>
+
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Input only has X channels but channel Y was declared as an input channel.
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    An RGB channel was specified but is out of range for the input image.
+                  </Typography>
+                </li>
+
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Input image is larger than the maximum supported image size of (M, N).
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    Your input image is too big! Try cropping the image and uploading the crops separately.
+                  </Typography>
+                </li>
+              </ul>
+            </Paper>
+
+            <Paper className={classes.paper}>
+              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 Can I use my own models?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
