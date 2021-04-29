@@ -109,7 +109,13 @@ export default function Predict() {
         setStatus(response.data.value[0].split('-').join(' '));
         if (response.data.value[0] === 'failed') {
           clearInterval(statusCheck);
-          setErrorText(`Job Failed: ${response.data.value[3]}`);
+          // only show the full stack trace if NODE_NV is not production
+          let error = response.data.value[3];
+          if (process.env.NODE_ENV === 'production') {
+            const lines = error.split('\n');
+            error = lines[lines.length - 1];
+          }
+          setErrorText(`Job Failed: ${error}`);
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
