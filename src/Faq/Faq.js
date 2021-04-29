@@ -119,22 +119,25 @@ export default function Faq() {
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Where can I get help?
+                Can you help me annotate my data?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                For an overview of the DeepCell ecocystem, please see our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
-                <br />
-                Support for DeepCell Kiosk is available through our <Link href="https://deepcell-kiosk.readthedocs.io/en/master" target="_blank" rel="noopener noreferrer">documentation</Link> and <Link href="https://github.com/vanvalenlab/kiosk/issues" target="_blank" rel="noopener noreferrer">issues on Github</Link>
+                Yes! Our training data was created using <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">DeepCell Label</Link>, a tool for creating segmentation masks for images.
+                DeepCell Label is an open-source web application that can integrate with crowd-sourcing platforms.
+              </Typography>
+              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                If you have any questions or interest in collaborating on the data annotation process, please make a new Issue on the <Link href="https://github.com/vanvalenlab/deepcell-label/issues" target="_blank" rel="noopener noreferrer">repository issue page</Link>.
               </Typography>
             </Paper>
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Can you help me annotate my data?
+                Where can I get help?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                Yes! Our training data was created using <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">DeepCell Label</Link>, a tool for creating segmentation masks for images.
-                DeepCell Label is an open-source web application that can integrate with crowd-sourcing platforms like <Link href="https://www.figure-eight.com" target="_blank" rel="noopener noreferrer">Figure Eight</Link>.
+                For an overview of the DeepCell ecocystem, please see our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
+                <br />
+                If you would like to report a bug or ask a question, please open a new issue on <Link href="https://github.com/vanvalenlab/intro-to-deepcell/issues" target="_blank" rel="noopener noreferrer">the issues page</Link>.
               </Typography>
             </Paper>
 
