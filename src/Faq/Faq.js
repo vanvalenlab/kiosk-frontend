@@ -39,7 +39,7 @@ export default function Faq() {
                 How do I get started using DeepCell?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models. There is example data for uploading on the Data tab.
+                You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models.
 
                 Additionally, you can deploy your own DeepCell Kiosk by following the instructions on the <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" target="_blank" rel="noopener noreferrer">Kiosk Documentation</Link>.
               </Typography>
