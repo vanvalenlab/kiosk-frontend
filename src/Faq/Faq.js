@@ -90,30 +90,13 @@ export default function Faq() {
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Can I use my own models?
+                Can I add my own models?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                Custom models must be exported for TensorFlow Serving and saved in a cloud bucket defined when deploying a new DeepCell Kiosk.
-
-                TensorFlow Serving will read the bucket when it is starting up, and will load all exported models it finds.
+                Yes! deepcell.org is an instance of the <Link href='https://github.com/vanvalenlab/kiosk-console' target='_blank' rel='noopener noreferrer'>kiosk-console</Link> which is fully extensible and serves models from a cloud bucket using <Link href='https://www.tensorflow.org/tfx/guide/serving' target='_target' rel='noopener noreferrer'>TensorFlow Serving</Link>.
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                <Link href="https://github.com/vanvalenlab/deepcell-tf/blob/d0d3c10a76834ef23c851277803ae3c0c404f5aa/deepcell/utils/export_utils.py#L41" target="_blank" rel="noopener noreferrer">See here</Link> for a custom Python function for exporting models to TensorFlow Serving.
-
-                The model can be exported directly to the cloud bucket with the appropriate protocol prefix (e.g. <i>s3://bucket/model</i> or <i>gs://bucket/model</i>)
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Can I add a custom job type?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                This is a bit more involved and requires forked changes to the <Link href="https://github.com/vanvalenlab/kiosk-redis-consumer" rel="noopener noreferrer" target="_blank">consumers</Link>. Check out our <Link href="https://deepcell-kiosk.readthedocs.io/en/master/CUSTOM-JOB.html" rel="noopener noreferrer" target="_blank">tutorial</Link> on building a custom job pipeline.
-
-                The frontend places jobs in a Redis queue, and the consumers will perform all the work. New jobs will require a new job queue, which are listed in the dropdown list on the <Link href="/predict">Predict page</Link>.
-
-                Custom jobs will also require new consumer with any required pre- and post-processing steps to be defined and deployed in the DeepCell Kiosk with a custom <Link href="https://github.com/roboll/helmfile" rel="noopener noreferrer" target="_blank">helmfile</Link> for the new consumer.
+                For more information on creating and customizing your own instance of the kiosk-console, please check out <Link href='https://deepcell-kiosk.readthedocs.io/' target='_blank' rel='noopener noreferrer'>its docs</Link>.
               </Typography>
             </Paper>
 
