@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
@@ -257,14 +258,23 @@ export default function Predict() {
 
           {/* Display error to user */}
           { errorText.length > 0 &&
-            <Typography
-              className={classes.paddedTop}
-              variant='body2'
-              style={{whiteSpace: 'pre-line'}}
-              align='center'
-              color='error'>
-              {errorText}
-            </Typography> }
+            <div>
+              <Typography
+                className={classes.paddedTop}
+                variant='body2'
+                style={{whiteSpace: 'pre-line'}}
+                align='center'
+                color='error'>
+                {errorText}
+              </Typography>
+              <Typography
+                className={classes.paddedTop}
+                variant='subtitle2'
+                align='center'
+                color='error'>
+                See the <Link href='/faq' target='_blank' rel='noopener noreferrer'>FAQ</Link> for information on common errors.
+              </Typography>
+            </div> }
 
           {/* Submit button */}
           { !submitted &&
