@@ -93,7 +93,7 @@ export default function Faq() {
                 Can I add my own models?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                Yes! deepcell.org is an instance of the <Link href='https://github.com/vanvalenlab/kiosk-console' target='_blank' rel='noopener noreferrer'>kiosk-console</Link> which is fully extensible and serves models from a cloud bucket using <Link href='https://www.tensorflow.org/tfx/guide/serving' target='_target' rel='noopener noreferrer'>TensorFlow Serving</Link>.
+                Yes! deepcell.org is an instance of the <Link href='https://github.com/vanvalenlab/kiosk-console' target='_blank' rel='noopener noreferrer'>kiosk-console</Link> which is fully extensible and serves models from a cloud bucket using <Link href='https://www.tensorflow.org/tfx/guide/serving' target='_blank' rel='noopener noreferrer'>TensorFlow Serving</Link>.
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                 For more information on creating and customizing your own instance of the kiosk-console, please check out <Link href='https://deepcell-kiosk.readthedocs.io/' target='_blank' rel='noopener noreferrer'>its docs</Link>.
