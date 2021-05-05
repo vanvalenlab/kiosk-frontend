@@ -118,7 +118,7 @@ export default function Faq() {
                 Where can I get help?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                For an overview of the DeepCell ecocystem, please see our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
+                For an overview of the DeepCell ecocystem, please see the <Link href="/about">About page</Link> and our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
                 <br />
                 If you would like to report a bug or ask a question, please open a new issue on <Link href="https://github.com/vanvalenlab/intro-to-deepcell/issues" target="_blank" rel="noopener noreferrer">the issues page</Link>.
               </Typography>
