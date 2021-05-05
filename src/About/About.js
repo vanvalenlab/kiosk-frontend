@@ -158,17 +158,13 @@ export default function About() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography component={'span'}>
-                The <a href="https://github.com/vanvalenlab/kiosk-console" target="_blank" rel="noreferrer">kiosk-console</a> is a turn-key cloud-based solution for deploying a scalable inference platform.
-                The platform includes <a href="https://deepcell.org/predict">a simple drag-and-drop interface</a> for segmenting a few images, and a <a href="https://github.com/vanvalenlab/kiosk-client" target="_blank" rel="noreferrer">robust API</a> capable of affordably processing millions of images.
+                The <Link href="https://github.com/vanvalenlab/kiosk-console" target="_blank" rel="noreferrer">kiosk-console</Link> is a turn-key cloud-based solution for deploying a scalable inference platform.
+                The platform includes a <Link href="/predict">simple drag-and-drop interface</Link> for segmenting a few images, and a <Link href="https://github.com/vanvalenlab/kiosk-client" target="_blank" rel="noreferrer">robust API</Link> capable of affordably processing millions of images.
                 <br /><br />
-                The platform comes out of the box with three distinct model types:
-                <ul>
-                  <li>Segmentation: A nuclear prediction model for cell culture. The input to this model is a single nuclear image. The output of this model is a mask with the nuclear segmentation of each cell in the image.</li>
-                  <li>Tracking: A live-cell tracking model. The input to this model is a time-lapse movie of a single nuclear channel. The output of this model is a segmentation mask for each frame in the time-lapse movie, with the cell ids linked across images such that the same cell always has the same label.</li>
-                  <li>Mesmer: A multiplex imaging model. The input to this model is a 2-channel image consisting of a nuclear channel and a membrane or cytoplasm channel. The output of this model is a mask with the whole-cell segmentation of each cell in the image.</li>
-                </ul>
+                We use this platform to host DeepCell.org and <Link href="https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models#formatting-data-for-pre-trained-models" target="_blank" rel="noopener noreferrer"> currently deployed models</Link>.
                 However, it is built with extensibility in mind, and it is easy to deploy your own models.
-                To learn more about deploying your own instance of deepcell.org using the kiosk-console, <a href="https://deepcell-kiosk.readthedocs.io/" target="_blank" rel="noreferrer">read the docs</a>.
+
+                To learn more about deploying your own instance of DeepCell.org using the kiosk-console, <Link href="https://deepcell-kiosk.readthedocs.io/" target="_blank" rel="noreferrer">read the docs</Link>.
               </Typography>
             </AccordionDetails>
           </Accordion>
