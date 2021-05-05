@@ -39,7 +39,7 @@ export default function Faq() {
                 How do I get started using DeepCell?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                If you’d like to use our <Link>pretrained models</Link> to segment your own data, you can use the <Link href="/predict">predict page</Link>.
+                If you’d like to use our <Link href="https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models#formatting-data-for-pre-trained-models" target="_blank" rel="noreferrer noopener">pretrained models</Link> to segment your own data, you can use the <Link href="/predict">predict page</Link>.
                 The predict page allows you to easily upload your images with a drag and drop interface, select the most appropriate model, and get predictions back all without needing to install any software.
                 <br /><br />
                 If you’d like to train your own models, check out <Link href="https://github.com/vanvalenlab/deepcell-tf" target="_blank" rel="noopener noreferrer">deepcell-tf</Link>.
