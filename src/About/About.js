@@ -4,6 +4,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -85,11 +86,7 @@ export default function About() {
         (1) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
       </Typography>
 
-      <Grid
-        container
-        alignItems="stretch"
-        justify="space-evenly"
-      >
+      <Grid container alignItems="stretch" justify="space-evenly">
 
         <Grid item xs={10}>
           <Typography variant="h4" className={classes.sectionHeader}>
@@ -103,11 +100,10 @@ export default function About() {
               id="panel-data-1-header"
             >
               <Typography className={classes.heading}>DeepCell Label</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                <a href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noreferrer">DeepCell Label</a> is our training data curation tool.
+                <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noreferrer">DeepCell Label</Link> is our training data curation tool.
                 It provides an inutitive UI for users to create annotations from scratch or to correct model predictions, to faciliate the creation of large, high-quality datasets.
                 DeepCell Label can be deployed locally or on the cloud.
               </Typography>
@@ -128,14 +124,13 @@ export default function About() {
               id="panel-model-dev-1-header"
             >
               <Typography className={classes.heading}>deepcell-tf</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                <a href="https://github.com/vanvalenlab/deepcell-tf" target="_blank" rel="noreferrer">deepcell-tf</a> is our core deep learning library.
+                <Link href="https://github.com/vanvalenlab/deepcell-tf" target="_blank" rel="noreferrer">deepcell-tf</Link> is our core deep learning library.
                 Based on TensorFlow, it contains a suite of tools for building and training deep learning models.
                 The library has been constructed in a modular fashion to make it easy to mix and match different model architectures, prediction tasks, and post-processing functions.
-                For more information, check out the <a href="https://deepcell.readthedocs.io/en/master/" target="_blank" rel="noreferrer">documentation</a>.
+                For more information, check out the <Link href="https://deepcell.readthedocs.io/en/master/" target="_blank" rel="noreferrer">documentation</Link>.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -154,7 +149,6 @@ export default function About() {
               id="panel-deployment-3-header"
             >
               <Typography className={classes.heading}>kiosk-console</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
             </AccordionSummary>
             <AccordionDetails>
               <Typography component={'span'}>
@@ -180,7 +174,7 @@ export default function About() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                The <a href="https://github.com/vanvalenlab/kiosk-imagej-plugin" target="_blank" rel="noreferrer">kiosk-imagej-plugin</a> enables ImageJ to segment images with a deployed DeepCell Kiosk model without leaving the application.
+                The <Link href="https://github.com/vanvalenlab/kiosk-imagej-plugin" target="_blank" rel="noreferrer">kiosk-imagej-plugin</Link> enables ImageJ to segment images with a deployed DeepCell Kiosk model without leaving the application.
               </Typography>
             </AccordionDetails>
           </Accordion>
@@ -196,7 +190,7 @@ export default function About() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                <a href="https://github.com/vanvalenlab/deepcell-applications" target="_blank" rel="noreferrer">deepcell-applications</a> contains a variety of trained deep learning models and post-processing functions for instance segmentation.
+                <Link href="https://github.com/vanvalenlab/deepcell-applications" target="_blank" rel="noreferrer">deepcell-applications</Link> contains a variety of trained deep learning models and post-processing functions for instance segmentation.
                 Each model can be imported and run locally from a Docker image, Jupyter notebook, or custom script.
               </Typography>
             </AccordionDetails>
@@ -213,7 +207,7 @@ export default function About() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                The <a href="https://github.com/angelolab/ark-analysis" target="_blank" rel="noreferrer">ark repository</a> is our integrated multiplex image analysis pipeline.
+                The <Link href="https://github.com/angelolab/ark-analysis" target="_blank" rel="noreferrer">ark repository</Link> is our integrated multiplex image analysis pipeline.
                 The input is multiplexed image data from any platform.
                 It segments the data with <Link href="https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models#mesmer-segmentation-model" target="_blank" rel="noopener noreferrer">Mesmer</Link> using the <Link href="https://deepcell-kiosk.readthedocs.io" target="_blank" rel="noopener noreferrer">Kiosk</Link>, extracts the counts of each marker in each cell, normalizes the data, and then creates a summary table with morphological information and marker intensity for every cell in each image.
                 It also provides an easy way to run some standard spatial analysis functions on your data.
