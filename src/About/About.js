@@ -215,7 +215,7 @@ export default function About() {
               <Typography>
                 The <a href="https://github.com/angelolab/ark-analysis" target="_blank" rel="noreferrer">ark repository</a> is our integrated multiplex image analysis pipeline.
                 The input is multiplexed image data from any platform.
-                It runs the data through deepcell, extracts the counts of each marker in each cell, normalizes the data, and then creates a summary table with morphological information and marker intensity for every cell in each image.
+                It segments the data with <Link href="https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models#mesmer-segmentation-model" target="_blank" rel="noopener noreferrer">Mesmer</Link> using the <Link href="https://deepcell-kiosk.readthedocs.io" target="_blank" rel="noopener noreferrer">Kiosk</Link>, extracts the counts of each marker in each cell, normalizes the data, and then creates a summary table with morphological information and marker intensity for every cell in each image.
                 It also provides an easy way to run some standard spatial analysis functions on your data.
               </Typography>
             </AccordionDetails>
