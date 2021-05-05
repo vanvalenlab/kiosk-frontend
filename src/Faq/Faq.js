@@ -39,16 +39,11 @@ export default function Faq() {
                 How do I get started using DeepCell?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models.
-
-                Additionally, you can deploy your own DeepCell Kiosk by following the instructions on the <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" target="_blank" rel="noopener noreferrer">Kiosk Documentation</Link>.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                The deployment comes with pre-trained models for a few common image processing tasks, including nuclear segmentation for 2D images and nuclear tracking for 3D tiff stacks.
-
-                These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
-
-                The servable model files can be found in our <Link href="https://console.cloud.google.com/storage/browser/deepcell-models" target="_blank" rel="noopener noreferrer">public bucket</Link>.
+                If you’d like to use our <Link>pretrained models</Link> to segment your own data, you can use the <Link href="/predict">predict page</Link>.
+                The predict page allows you to easily upload your images with a drag and drop interface, select the most appropriate model, and get predictions back all without needing to install any software.
+                <br /><br />
+                If you’d like to train your own models, check out <Link href="https://github.com/vanvalenlab/deepcell-tf" target="_blank" rel="noopener noreferrer">deepcell-tf</Link>.
+                If you’d like to annotate your data, you can use the DeepCell Label tool, available via <Link href="https://label.deepcell.org" target="_blank" rel="noopener noreferrer">our website</Link> or from the <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">GitHub repository</Link>.
               </Typography>
             </Paper>
 
