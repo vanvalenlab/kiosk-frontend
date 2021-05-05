@@ -41,7 +41,9 @@ export default function Landing() {
             variant="contained"
             color="primary"
             className={classes.button}
-            href="/data">
+            href="https://datasets.deepcell.org"
+            target="_blank"
+            rel="noopener noreferrer">
             Data
           </Button>
         </Grid>
