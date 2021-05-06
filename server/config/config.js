@@ -34,7 +34,7 @@ const envVarsSchema = Joi.object({
     .default(6379),
   REDIS_SENTINEL: Joi.boolean()
     .default(true),
-  JOB_TYPES: Joi.string().default('predict,track')
+  JOB_TYPES: Joi.string().default('mesmer')
     .description('Comma-separated list of job types (Redis queue names).')
 }).unknown().required();
 
