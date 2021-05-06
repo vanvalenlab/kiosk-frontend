@@ -199,9 +199,9 @@ const SubmitNewButton = () => {
 export default function Predict() {
 
   const [fileName, setFileName] = useState('');
-  const [imageUrl, setImageUrl] = useState('https://s3-us-west-1.amazonaws.com/deepcell-data/tiff_stack_examples/vectra_breast_cancer.tif');
-  const [dimensionOrder, setDimensionOrder] = useState('CYX');
-  const [downloadUrl, setdownloadUrl] = useState('https://storage.googleapis.com/deepcell-prod/output/6241d712226849dd13104095c367e66f.zip');
+  const [imageUrl, setImageUrl] = useState('');
+  const [dimensionOrder, setDimensionOrder] = useState('');
+  const [downloadUrl, setdownloadUrl] = useState('');
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
