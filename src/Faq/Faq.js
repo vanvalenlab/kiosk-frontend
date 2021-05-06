@@ -68,7 +68,7 @@ export default function Faq() {
                     Input only has X channels but channel Y was declared as an input channel.
                   </Typography>
                   <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
-                    An RGB channel was specified but is out of range for the input image.
+                    An RGB channel was specified but that channel does not exist in the input image.
                   </Typography>
                 </li>
 
