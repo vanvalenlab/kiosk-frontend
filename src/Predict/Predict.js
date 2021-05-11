@@ -201,7 +201,7 @@ export default function Predict() {
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [dimensionOrder, setDimensionOrder] = useState('');
-  const [downloadUrl, setdownloadUrl] = useState('');
+  const [downloadUrl, setdownloadUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -261,7 +261,7 @@ export default function Predict() {
         url: '/api/redis',
         data: {
           'hash': redisHash,
-          'key': ['status', 'progress', 'output_url', 'reason', 'failures', 'dimension_order']
+          'key': ['status', 'progress', 'output_url', 'reason', 'failures', 'dim_order']
         }
       }).then((response) => {
         setStatus(response.data.value[0].split('-').join(' '));
