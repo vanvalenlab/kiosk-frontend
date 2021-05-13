@@ -17,7 +17,7 @@ import ChannelForm from './ChannelForm';
 import jobData from './jobData';
 
 const REACT_APP_LABEL_FRONTEND = 'http://deepcell-label.s3-website.us-east-2.amazonaws.com';
-const REACT_APP_LABEL_BACKEND = 'http://react-backend-test.q2qqtvkafv.us-east-2.elasticbeanstalk.com';
+const REACT_APP_LABEL_BACKEND = 'http://predict-visualizer.q2qqtvkafv.us-east-2.elasticbeanstalk.com';
 const labelFrontend = REACT_APP_LABEL_FRONTEND || 'localhost'; // process.env.REACT_APP_LABEL_FRONTEND?
 const labelBackend = REACT_APP_LABEL_BACKEND || 'localhost'; // process.env.REACT_APP_LABEL_BACKEND?
 
@@ -108,10 +108,11 @@ ProgressBar.propTypes = {
 const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
   return <div>
     <DownloadButton downloadUrl={downloadUrl} />
-    <OpenInLabelButton
-      imageUrl={imageUrl}
-      downloadUrl={downloadUrl}
-      dimensionOrder={dimensionOrder} />
+    {downloadUrl.split('.').pop() !== 'zip' &&
+      <OpenInLabelButton
+        imageUrl={imageUrl}
+        downloadUrl={downloadUrl}
+        dimensionOrder={dimensionOrder} />}
     <SubmitNewButton />
   </div>;
 };
