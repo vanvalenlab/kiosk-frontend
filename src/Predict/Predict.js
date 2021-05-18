@@ -16,10 +16,8 @@ import ScaleForm from './ScaleForm';
 import ChannelForm from './ChannelForm';
 import jobData from './jobData';
 
-const REACT_APP_LABEL_FRONTEND = 'http://deepcell-label.s3-website.us-east-2.amazonaws.com';
-const REACT_APP_LABEL_BACKEND = 'http://predict-visualizer.q2qqtvkafv.us-east-2.elasticbeanstalk.com';
-const labelFrontend = REACT_APP_LABEL_FRONTEND || 'localhost'; // process.env.REACT_APP_LABEL_FRONTEND?
-const labelBackend = REACT_APP_LABEL_BACKEND || 'localhost'; // process.env.REACT_APP_LABEL_BACKEND?
+const labelFrontend = process.env.REACT_APP_LABEL_FRONTEND || 'localhost';
+const labelBackend = process.env.REACT_APP_LABEL_BACKEND || 'localhost';
 
 // other option: add backend route that tells us what the Label backend server is
 // would be a bit more kubernetes friendly; can switch at runtime instead of recompiling react app
