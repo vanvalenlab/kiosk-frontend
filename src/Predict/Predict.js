@@ -106,7 +106,7 @@ ProgressBar.propTypes = {
 const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
   return <div>
     <DownloadButton downloadUrl={downloadUrl} />
-    {downloadUrl.split('.').pop() !== 'zip' &&
+    {imageUrl.split('.').pop() !== 'zip' &&
       <OpenInLabelButton
         imageUrl={imageUrl}
         downloadUrl={downloadUrl}
