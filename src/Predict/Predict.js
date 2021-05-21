@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
@@ -109,7 +110,13 @@ export default function Predict() {
         setStatus(response.data.value[0].split('-').join(' '));
         if (response.data.value[0] === 'failed') {
           clearInterval(statusCheck);
-          setErrorText(`Job Failed: ${response.data.value[3]}`);
+          // only show the full stack trace if NODE_NV is not production
+          let error = response.data.value[3];
+          if (process.env.NODE_ENV === 'production') {
+            const lines = error.split('\n');
+            error = lines[lines.length - 1];
+          }
+          setErrorText(`Job Failed: ${error}`);
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
@@ -251,14 +258,23 @@ export default function Predict() {
 
           {/* Display error to user */}
           { errorText.length > 0 &&
-            <Typography
-              className={classes.paddedTop}
-              variant='body2'
-              style={{whiteSpace: 'pre-line'}}
-              align='center'
-              color='error'>
-              {errorText}
-            </Typography> }
+            <div>
+              <Typography
+                className={classes.paddedTop}
+                variant='body2'
+                style={{whiteSpace: 'pre-line'}}
+                align='center'
+                color='error'>
+                {errorText}
+              </Typography>
+              <Typography
+                className={classes.paddedTop}
+                variant='subtitle2'
+                align='center'
+                color='error'>
+                See the <Link href='/faq' target='_blank' rel='noopener noreferrer'>FAQ</Link> for information on common errors.
+              </Typography>
+            </div> }
 
           {/* Submit button */}
           { !submitted &&
