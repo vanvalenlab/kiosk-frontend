@@ -35,7 +35,11 @@ const envVarsSchema = Joi.object({
   REDIS_SENTINEL: Joi.boolean()
     .default(true),
   JOB_TYPES: Joi.string().default('mesmer')
-    .description('Comma-separated list of job types (Redis queue names).')
+    .description('Comma-separated list of job types (Redis queue names).'),
+  REACT_APP_LABEL_BACKEND: Joi.string().default('localhost')
+    .description('URL for DeepCell Label API'),
+  REACT_APP_LABEL_FRONTEND: Joi.string().default('localhost')
+    .description('URL for DeepCell Label frontend'),
 }).unknown().required();
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
