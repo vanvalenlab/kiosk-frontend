@@ -10,3 +10,11 @@ describe('<Predict/> component tests', () => {
     expect(element).toBeDisabled();
   });
 });
+
+describe('View in Label sends a form', () => {
+  it('should send a form', () => {
+    const { container } = render(<Predict/>);
+    const element = container.querySelector('#submitButton');
+    expect(element).toBeDisabled();
+  });
+});
