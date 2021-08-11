@@ -50,18 +50,20 @@ const useStyles = makeStyles(theme => ({
 const SubmitButton = ({ onClick, disabled }) => {
   const classes = useStyles();
 
-  return <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
-    <Button
-      id='submitButton'
-      variant='contained'
-      onClick={onClick}
-      size='large'
-      fullWidth
-      disabled={disabled}
-      color='primary'>
-      Submit
-    </Button>
-  </Grid>;
+  return (
+    <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
+      <Button
+        id='submitButton'
+        variant='contained'
+        onClick={onClick}
+        size='large'
+        fullWidth
+        disabled={disabled}
+        color='primary'>
+        Submit
+      </Button>
+    </Grid>
+  );
 };
 
 SubmitButton.propTypes = {
@@ -72,31 +74,33 @@ SubmitButton.propTypes = {
 const ProgressBar = ({ progress, status }) => {
   const classes = useStyles();
 
-  return <Grid item lg className={classes.paddedTop}>
-    {progress === 0 || progress === null ?
-      <LinearProgress
-        variant="buffer"
-        value={0}
-        valueBuffer={0}
-        className={classes.progress}
-      />
-      :
-      <LinearProgress
-        variant="determinate"
-        value={progress}
-        className={classes.progress}
-      />
-    }
-    {/* Display status updates to user */}
-    {status.length > 0 &&
-      <Typography
-        className={classes.paddedTop, classes.capitalize}
-        variant='body1'
-        align='center'
-        color='primary'>
-        Job Status: {status}
-      </Typography>}
-  </Grid>;
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      {progress === 0 || progress === null ?
+        <LinearProgress
+          variant="buffer"
+          value={0}
+          valueBuffer={0}
+          className={classes.progress}
+        />
+        :
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          className={classes.progress}
+        />
+      }
+      {/* Display status updates to user */}
+      {status.length > 0 &&
+        <Typography
+          className={classes.paddedTop, classes.capitalize}
+          variant='body1'
+          align='center'
+          color='primary'>
+          Job Status: {status}
+        </Typography>}
+    </Grid>
+  );
 };
 
 ProgressBar.propTypes = {
@@ -105,15 +109,17 @@ ProgressBar.propTypes = {
 };
 
 const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
-  return <div>
-    <DownloadButton downloadUrl={downloadUrl} />
-    {imageUrl.split('.').pop() !== 'zip' &&
-      <OpenInLabelButton
-        imageUrl={imageUrl}
-        downloadUrl={downloadUrl}
-        dimensionOrder={dimensionOrder} />}
-    <SubmitNewButton />
-  </div>;
+  return (
+    <div>
+      <DownloadButton downloadUrl={downloadUrl} />
+      {imageUrl.split('.').pop() !== 'zip' &&
+        <OpenInLabelButton
+          imageUrl={imageUrl}
+          downloadUrl={downloadUrl}
+          dimensionOrder={dimensionOrder} />}
+      <SubmitNewButton />
+    </div>
+  );
 };
 
 JobCompleteButtons.propTypes = {
@@ -122,20 +128,21 @@ JobCompleteButtons.propTypes = {
   dimensionOrder: PropTypes.string.isRequired,
 };
 
-
 const DownloadButton = ({ downloadUrl }) => {
   const classes = useStyles();
 
-  return <Grid item lg className={classes.paddedTop}>
-    <Button
-      href={downloadUrl}
-      variant='contained'
-      size='large'
-      fullWidth
-      color='secondary'>
-      Download Results
-    </Button>
-  </Grid>;
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        href={downloadUrl}
+        variant='contained'
+        size='large'
+        fullWidth
+        color='secondary'>
+        Download Results
+      </Button>
+    </Grid>
+  );
 };
 
 DownloadButton.propTypes = {
@@ -162,16 +169,18 @@ const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
     });
   };
 
-  return <Grid item lg className={classes.paddedTop}>
-    <Button
-      variant='contained'
-      size='large'
-      fullWidth
-      color='default'
-      onClick={openResultsInLabel}>
-      View Results
-    </Button>
-  </Grid>;
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        variant='contained'
+        size='large'
+        fullWidth
+        color='default'
+        onClick={openResultsInLabel}>
+        View Results
+      </Button>
+    </Grid>
+  );
 };
 
 OpenInLabelButton.propTypes = {
@@ -180,20 +189,21 @@ OpenInLabelButton.propTypes = {
   dimensionOrder: PropTypes.string.isRequired,
 };
 
-
 const SubmitNewButton = () => {
   const classes = useStyles();
 
-  return <Grid item lg className={classes.paddedTop}>
-    <Button
-      href='/predict'
-      variant='contained'
-      size='large'
-      fullWidth
-      color='primary'>
-      Submit New Image
-    </Button>
-  </Grid>;
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        href='/predict'
+        variant='contained'
+        size='large'
+        fullWidth
+        color='primary'>
+        Submit New Image
+      </Button>
+    </Grid>
+  );
 };
 
 export default function Predict() {
