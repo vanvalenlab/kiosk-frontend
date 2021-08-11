@@ -36,129 +36,62 @@ export default function Faq() {
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                What is DeepCell?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                DeepCell is a software ecosystem that enables deep learning based biological image analysis in the cloud.
-
-                It consists of several software packages, including the deep learning library <i>deepcell-tf</i>, and a Kubernetes cloud deployment platform, the DeepCell Kiosk.
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 How do I get started using DeepCell?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                You can use the Predict tab to upload image files (.tiff, .png, .jpg, etc.) and segment them with our pre-trained models. There is example data for uploading on the Data tab.
-
-                Additionally, you can deploy your own DeepCell Kiosk by following the instructions on the <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" target="_blank" rel="noopener noreferrer">Kiosk Documentation</Link>.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                The deployment comes with pre-trained models for a few common image processing tasks, including nuclear segmentation for 2D images and nuclear tracking for 3D tiff stacks.
-
-                These models are hosted with <Link href="https://github.com/tensorflow/serving" target="_blank" rel="noopener noreferrer">TensorFlow Serving</Link> and are running on auto-scaling GPUs to minimize cost.
-
-                The servable model files can be found in our <Link href="https://console.cloud.google.com/storage/browser/deepcell-models" target="_blank" rel="noopener noreferrer">public bucket</Link>.
+                If you’d like to use our <Link href="https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models#formatting-data-for-pre-trained-models" target="_blank" rel="noreferrer noopener">pretrained models</Link> to segment your own data, you can use the <Link href="/predict">predict page</Link>.
+                The predict page allows you to easily upload your images with a drag and drop interface, select the most appropriate model, and get predictions back all without needing to install any software.
+                <br /><br />
+                If you’d like to train your own models, check out <Link href="https://github.com/vanvalenlab/deepcell-tf" target="_blank" rel="noopener noreferrer">deepcell-tf</Link>.
+                If you’d like to annotate your data, you can use the DeepCell Label tool, available via <Link href="https://label.deepcell.org" target="_blank" rel="noopener noreferrer">our website</Link> or from the <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">GitHub repository</Link>.
               </Typography>
             </Paper>
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                What is the DeepCell Kiosk?
+                What does this error message mean?
               </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                The DeepCell Kiosk is a turn-key cloud solution for large-scale image processing with deep learning models.
+              <ul>
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Invalid image shape
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    The image provided is not compatible with the model.
 
-                It is a public software and fully extensible for custom image processing tasks.
+                    Check that the channels of the input image match the expected model output, and that the dimensions of the image match the model (i.e. 2D images or 3D movies).
+                  </Typography>
+                </li>
 
-                Documentation for the DeepCell Kiosk can be found <Link href="https://deepcell-kiosk.readthedocs.io/en/master/" rel="noopener noreferrer" target="_blank">here</Link>.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                This website is an implementation of the <Link href="https://github.com/vanvalenlab/kiosk/tree/production" target="_blank" rel="noopener noreferrer">production branch</Link> of the DeepCell Kiosk, and is running on the <Link href="https://cloud.google.com/kubernetes-engine/" target="_blank" rel="noopener noreferrer">Google Kubernetes Engine</Link>.
-              </Typography>
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Input only has X channels but channel Y was declared as an input channel.
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    An RGB channel was specified but that channel does not exist in the input image.
+                  </Typography>
+                </li>
+
+                <li>
+                  <Typography variant="subtitle1" align="left" color="error" gutterBottom>
+                    Input image is larger than the maximum supported image size of (M, N).
+                  </Typography>
+                  <Typography variant="body2" align="left" color="textPrimary" gutterBottom>
+                    Your input image is too big! Try cropping the image and uploading the crops separately.
+                  </Typography>
+                </li>
+              </ul>
             </Paper>
 
             <Paper className={classes.paper}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                What is <i>deepcell-tf</i>?
+                Can I add my own models?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                <Link href="https://github.com/vanvalenlab/deepcell-tf" rel="noopener noreferrer" target="_blank">deepcell-tf</Link> is a TensorFlow/Keras based Python library for training deep learning models for biological image analysis.
-                All models hosted on DeepCell.org have been trained using this library.
-
-                Documentation for the library can be found <Link href="https://deepcell.readthedocs.io/en/master" rel="noopener noreferrer" target="_blank">here</Link>.
+                Yes! deepcell.org is an instance of the <Link href='https://github.com/vanvalenlab/kiosk-console' target='_blank' rel='noopener noreferrer'>kiosk-console</Link> which is fully extensible and serves models from a cloud bucket using <Link href='https://www.tensorflow.org/tfx/guide/serving' target='_blank' rel='noopener noreferrer'>TensorFlow Serving</Link>.
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Can I use my own models?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                Custom models must be exported for TensorFlow Serving and saved in a cloud bucket defined when deploying a new DeepCell Kiosk.
-
-                TensorFlow Serving will read the bucket when it is starting up, and will load all exported models it finds.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                <Link href="https://github.com/vanvalenlab/deepcell-tf/blob/d0d3c10a76834ef23c851277803ae3c0c404f5aa/deepcell/utils/export_utils.py#L41" target="_blank" rel="noopener noreferrer">See here</Link> for a custom Python function for exporting models to TensorFlow Serving.
-
-                The model can be exported directly to the cloud bucket with the appropriate protocol prefix (e.g. <i>s3://bucket/model</i> or <i>gs://bucket/model</i>)
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Can I add a custom job type?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                This is a bit more involved and requires forked changes to the <Link href="https://github.com/vanvalenlab/kiosk-redis-consumer" rel="noopener noreferrer" target="_blank">consumers</Link>. Check out our <Link href="https://deepcell-kiosk.readthedocs.io/en/master/CUSTOM-JOB.html" rel="noopener noreferrer" target="_blank">tutorial</Link> on building a custom job pipeline.
-
-                The frontend places jobs in a Redis queue, and the consumers will perform all the work. New jobs will require a new job queue, which are listed in the dropdown list on the <Link href="/predict">Predict page</Link>.
-
-                Custom jobs will also require new consumer with any required pre- and post-processing steps to be defined and deployed in the DeepCell Kiosk with a custom <Link href="https://github.com/roboll/helmfile" rel="noopener noreferrer" target="_blank">helmfile</Link> for the new consumer.
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Where do I get data?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                We have uploaded some sample data both on the <Link href="/data">Data page</Link>.
-                The prediction data is meant to be used with the pre-trained models while
-                the training data is available for download for training new models.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                The training data is also available in <Link href="https://deepcell.readthedocs.io/en/master/API/deepcell.datasets.html" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                What types of data are supported?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                Standard image files are supported (ie. .png, .jpg) as well as .tiff files.
-                Usually we expect around 1000 by 1000 pixel images with no more than 300 objects.
-                Images should be 2D with the exception of data for tracking which should be a 3D stack.
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                The training data is also available in <Link href="https://github.com/vanvalenlab/deepcell-tf/tree/master/deepcell/datasets" target="_blank" rel="noopener noreferrer">deepcell.datasets</Link> which can be used directly within a Python environment.
-              </Typography>
-            </Paper>
-
-            <Paper className={classes.paper}>
-              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
-                Where can I get help?
-              </Typography>
-              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                For an overview of the DeepCell ecocystem, please see our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
-                <br />
-                Support for DeepCell Kiosk is available through our <Link href="https://deepcell-kiosk.readthedocs.io/en/master" target="_blank" rel="noopener noreferrer">documentation</Link> and <Link href="https://github.com/vanvalenlab/kiosk/issues" target="_blank" rel="noopener noreferrer">issues on Github</Link>
+                For more information on creating and customizing your own instance of the kiosk-console, please check out <Link href='https://deepcell-kiosk.readthedocs.io/' target='_blank' rel='noopener noreferrer'>its docs</Link>.
               </Typography>
             </Paper>
 
@@ -168,7 +101,21 @@ export default function Faq() {
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
                 Yes! Our training data was created using <Link href="https://github.com/vanvalenlab/deepcell-label" target="_blank" rel="noopener noreferrer">DeepCell Label</Link>, a tool for creating segmentation masks for images.
-                DeepCell Label is an open-source web application that can integrate with crowd-sourcing platforms like <Link href="https://www.figure-eight.com" target="_blank" rel="noopener noreferrer">Figure Eight</Link>.
+                DeepCell Label is an open-source web application that can integrate with crowd-sourcing platforms.
+              </Typography>
+              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                If you have any questions or interest in collaborating on the data annotation process, please make a new Issue on the <Link href="https://github.com/vanvalenlab/deepcell-label/issues" target="_blank" rel="noopener noreferrer">repository issue page</Link>.
+              </Typography>
+            </Paper>
+
+            <Paper className={classes.paper}>
+              <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
+                Where can I get help?
+              </Typography>
+              <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
+                For an overview of the DeepCell ecocystem, please see the <Link href="/about">About page</Link> and our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
+                <br />
+                If you would like to report a bug or ask a question, please open a new issue on <Link href="https://github.com/vanvalenlab/intro-to-deepcell/issues" target="_blank" rel="noopener noreferrer">the issues page</Link>.
               </Typography>
             </Paper>
 

@@ -2,11 +2,9 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { PropTypes } from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
-import SwaggerUI from 'swagger-ui-react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import 'swagger-ui-react/swagger-ui.css';
 
 const About = lazy(() => import('../About/About'));
 const Faq = lazy(() => import('../Faq/Faq'));
@@ -14,7 +12,8 @@ const Footer = lazy(() => import('../Footer/Footer'));
 const NavBar = lazy(() => import('../NavBar/NavBar'));
 const Landing = lazy(() => import('../Landing/Landing'));
 const Predict = lazy(() => import('../Predict/Predict'));
-const Data = lazy(() => import('../Data/Data'));
+const Swagger = lazy(() => import('../Swagger/Swagger'));
+// const Data = lazy(() => import('../Data/Data'));
 const NotFound = lazy(() => import('../NotFound/NotFound'));
 
 // If the mode is NOT production, then notify that we are in dev mode.
@@ -77,8 +76,7 @@ export default function App() {
             <Route path='/about' component={withTracker(About)}/>
             <Route path='/faq' component={withTracker(Faq)}/>
             <Route path='/predict' component={withTracker(Predict)}/>
-            <Route path='/data' component={withTracker(Data)}/>
-            <SwaggerUI url='/api/swagger.json' />
+            <Route path='/docs' component={withTracker(Swagger)} />
             <Route component={withTracker(NotFound)} />
           </Switch>
         </main>
