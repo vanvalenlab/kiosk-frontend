@@ -12,7 +12,7 @@ import queryString from 'query-string';
 import FileUpload from './FileUpload';
 import JobCard from './JobCard';
 import ModelDropdown from './ModelDropdown';
-import ScaleForm from './ScaleForm';
+import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from './jobData';
 
@@ -50,8 +50,8 @@ export default function Predict() {
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
-  const [isAutoRescaleEnabled, setIsAutoRescaleEnabled] = useState(true);
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
+  const [modelResolution, setModelResolution] = useState(0.5);
   const [scale, setScale] = useState(1);
   const [status, setStatus] = useState('');
 
@@ -72,6 +72,7 @@ export default function Predict() {
   useEffect(() => {
     if (selectedJobType) {
       setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
+      setModelResolution(jobData[selectedJobType].modelResolution);
       const jobTargets = jobData[selectedJobType].requiredChannels;
       setTargetChannels(jobTargets.reduce((result, item, index) => {
         result[item] = channels[index];
@@ -156,7 +157,7 @@ export default function Predict() {
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
         jobType: selectedJobType,
-        dataRescale: isAutoRescaleEnabled ? (displayRescaleForm ? '' : '1') : scale,
+        dataRescale: scale,
         channels: (jobData[selectedJobType].requiredChannels).map(
           c => channelValues[targetChannels[c]]).join(','),
       }
@@ -219,11 +220,13 @@ export default function Predict() {
                   </Grid>
                   
                   { displayRescaleForm && <Grid item lg>
-                    <ScaleForm
-                      checked={isAutoRescaleEnabled}
+                    <Typography>
+                      Image Resolution
+                    </Typography>
+                    <ResolutionDropdown
+                      modelMpp={modelResolution}
                       scale={scale}
-                      onCheckboxChange={e => setIsAutoRescaleEnabled(Boolean(e.target.checked))}
-                      onScaleChange={e => setScale(Number(e.target.value))}
+                      onChange={setScale}
                     />
                   </Grid>
                   }
