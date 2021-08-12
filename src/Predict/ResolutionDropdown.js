@@ -33,9 +33,7 @@ export default function ResolutionDropdown({
           open={isOpen}
           onClose={() => setIsOpen(false)}
           onOpen={() => setIsOpen(true)}
-          onChange={e => {
-            onChange(e.target.value);
-          }}
+          onChange={e => onChange(e.target.value)}
         >
           {Object.entries(zoomToMpp).map(([zoom, mpp], i) => {
             return (
