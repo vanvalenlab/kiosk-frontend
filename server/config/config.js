@@ -79,6 +79,10 @@ const config = {
   },
   uploadDirectory: envVars.UPLOAD_PREFIX,
   jobTypes: envVars.JOB_TYPES.split(','),
+  label: {
+    backend: envVars.REACT_APP_LABEL_BACKEND,
+    frontend: envVars.REACT_APP_LABEL_FRONTEND,
+  }
 };
 
 export default config;

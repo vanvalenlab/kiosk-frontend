@@ -36,4 +36,9 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    // define environment variables here to change them at runtime in prod.
+    window.REACT_APP_LABEL_BACKEND = "\<\%= REACT_APP_LABEL_BACKEND \%\>";
+    window.REACT_APP_LABEL_FRONTEND = "\<\%= REACT_APP_LABEL_FRONTEND \%\>";
+  </script>
 </html>

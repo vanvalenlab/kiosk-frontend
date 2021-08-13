@@ -68,8 +68,18 @@ app.get('*.css.gz', (req, res, next) => {
   next();
 });
 
+// treat the index.html as a template and substitute the value at runtime
+// to enable environment variable substitution
+app.set('views', DIST_DIR);
+app.engine('html', require('ejs').renderFile);
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+  res.render(path.join(DIST_DIR, 'index.html'), {
+    // TODO: generalize for all REACT_APP variables
+    // to prevent enumerating them here and in public/index.html
+    REACT_APP_LABEL_FRONTEND: config.label.frontend,
+    REACT_APP_LABEL_BACKEND: config.label.backend,
+  });
 });
 
 // log error in winston transports except when executing test suite

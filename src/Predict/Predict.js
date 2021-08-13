@@ -17,11 +17,18 @@ import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from './jobData';
 
-const labelFrontend = process.env.REACT_APP_LABEL_FRONTEND || 'localhost';
-const labelBackend = process.env.REACT_APP_LABEL_BACKEND || 'localhost';
+// get DeepCell Label viewer addresses from the environment.
+// these are defined in public/index.html to allow the server
+// to override them at runtime.
+const isProd = process.env.NODE_ENV === 'production';
+// if prod, read from window override. otherwise pull from environment
+const labelFrontend = isProd ?
+  window.REACT_APP_LABEL_FRONTEND :
+  (process.env.REACT_APP_LABEL_FRONTEND || 'localhost');
 
-// other option: add backend route that tells us what the Label backend server is
-// would be a bit more kubernetes friendly; can switch at runtime instead of recompiling react app
+const labelBackend = isProd ?
+  window.REACT_APP_LABEL_BACKEND :
+  (process.env.REACT_APP_LABEL_BACKEND || 'localhost');
 
 const useStyles = makeStyles(theme => ({
   root: {
