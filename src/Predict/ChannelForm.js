@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
+import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -63,15 +64,18 @@ export default function ChannelForm(props) {
 
   return (
     <FormGroup>
-      {targetChannels && Object.keys(targetChannels).map((t, i) => (
-        <ChannelDropdown
-          label={`${t}`}
-          key={i}
-          value={targetChannels[t]}
-          channels={channels}
-          onChange={e => onChange(e.target.value, t)}
-        />
-      ))}
+      <Grid container spacing={1} xs={12}>
+        {targetChannels && Object.keys(targetChannels).map((t, i) => (
+          <Grid item key={i}>
+            <ChannelDropdown
+              label={`${t}`}
+              value={targetChannels[t]}
+              channels={channels}
+              onChange={e => onChange(e.target.value, t)}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </FormGroup>
   );
 }
