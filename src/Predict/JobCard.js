@@ -27,7 +27,6 @@ export default function JobCard({
   name = 'Model',
   model = 'The Model takes in single-channeled images.',
   inputs = 'An image file.',
-  resolution = '20X (0.5 μm)',
   thumbnail = 'https://bit.ly/2ZxBrQ1',
 }) {
 
@@ -51,9 +50,6 @@ export default function JobCard({
         </Typography>
         <Typography variant="subtitle1">
           <strong>Inputs:</strong> { inputs }
-        </Typography>
-        <Typography variant="subtitle1">
-          <strong>Resolution:</strong> { resolution }
         </Typography>
       </CardContent>
       <CardActions>
