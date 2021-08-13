@@ -196,16 +196,30 @@ export default function Predict() {
               {/* Job Options section */}
               <Grid container>
                 <Paper className={classes.paper}>
-                  <Grid container>
+                  <Grid container spacing={1}>
+
+                    {/* Prediction type and Image Resolution in a column */}
                     <Grid item md={6}>
-                      <Typography>
-                        Prediction Type
-                      </Typography>
-                      <ModelDropdown
-                        value={selectedJobType}
-                        onChange={setSelectedJobType}
-                        onError={setErrorText}
-                      />
+                      <Grid container direction={'column'} spacing={1}>
+                        <Grid item>
+                          <Typography>
+                            Prediction Type
+                          </Typography>
+                          <ModelDropdown
+                            value={selectedJobType}
+                            onChange={setSelectedJobType}
+                            onError={setErrorText}
+                          />
+                        </Grid>
+                        { displayRescaleForm && <Grid item lg>
+                          <Typography>Image Resolution</Typography>
+                          <ResolutionDropdown
+                            modelMpp={modelResolution}
+                            scale={scale}
+                            onChange={setScale}
+                          />
+                        </Grid>}
+                      </Grid>
                     </Grid>
                     <Grid item md={6}>
                       {/* <Typography align="right">
@@ -218,18 +232,6 @@ export default function Predict() {
                       />
                     </Grid>
                   </Grid>
-                  
-                  { displayRescaleForm && <Grid item lg>
-                    <Typography>
-                      Image Resolution
-                    </Typography>
-                    <ResolutionDropdown
-                      modelMpp={modelResolution}
-                      scale={scale}
-                      onChange={setScale}
-                    />
-                  </Grid>
-                  }
                 </Paper>
               </Grid>
 
