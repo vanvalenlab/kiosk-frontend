@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -15,6 +16,19 @@ import ModelDropdown from './ModelDropdown';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from './jobData';
+
+// get DeepCell Label viewer addresses from the environment.
+// these are defined in public/index.html to allow the server
+// to override them at runtime.
+const isProd = process.env.NODE_ENV === 'production';
+// if prod, read from window override. otherwise pull from environment
+const labelFrontend = isProd ?
+  window.REACT_APP_LABEL_FRONTEND :
+  (process.env.REACT_APP_LABEL_FRONTEND || 'localhost');
+
+const labelBackend = isProd ?
+  window.REACT_APP_LABEL_BACKEND :
+  (process.env.REACT_APP_LABEL_BACKEND || 'localhost');
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,11 +54,171 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const SubmitButton = ({ onClick, disabled }) => {
+  const classes = useStyles();
+
+  return (
+    <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
+      <Button
+        id='submitButton'
+        variant='contained'
+        onClick={onClick}
+        size='large'
+        fullWidth
+        disabled={disabled}
+        color='primary'>
+        Submit
+      </Button>
+    </Grid>
+  );
+};
+
+SubmitButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};
+
+const ProgressBar = ({ progress, status }) => {
+  const classes = useStyles();
+
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      {progress === 0 || progress === null ?
+        <LinearProgress
+          variant="buffer"
+          value={0}
+          valueBuffer={0}
+          className={classes.progress}
+        />
+        :
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          className={classes.progress}
+        />
+      }
+      {/* Display status updates to user */}
+      {status.length > 0 &&
+        <Typography
+          className={classes.paddedTop, classes.capitalize}
+          variant='body1'
+          align='center'
+          color='primary'>
+          Job Status: {status}
+        </Typography>}
+    </Grid>
+  );
+};
+
+ProgressBar.propTypes = {
+  progress: PropTypes.number.isRequired,
+  status: PropTypes.string.isRequired,
+};
+
+const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
+  return (
+    <div>
+      <DownloadButton downloadUrl={downloadUrl} />
+      {imageUrl.split('.').pop() !== 'zip' &&
+        <OpenInLabelButton
+          imageUrl={imageUrl}
+          downloadUrl={downloadUrl}
+          dimensionOrder={dimensionOrder} />}
+      <SubmitNewButton />
+    </div>
+  );
+};
+
+JobCompleteButtons.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  downloadUrl: PropTypes.string.isRequired,
+  dimensionOrder: PropTypes.string.isRequired,
+};
+
+const DownloadButton = ({ downloadUrl }) => {
+  const classes = useStyles();
+
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        href={downloadUrl}
+        variant='contained'
+        size='large'
+        fullWidth
+        color='secondary'>
+        Download Results
+      </Button>
+    </Grid>
+  );
+};
+
+DownloadButton.propTypes = {
+  downloadUrl: PropTypes.string.isRequired,
+};
+
+const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
+  const classes = useStyles();
+
+  const openResultsInLabel = () => {
+    var formData = new FormData();
+    formData.append('url', imageUrl);
+    formData.append('labeled_url', downloadUrl);
+    formData.append('axes', dimensionOrder);
+    const newTab = window.open(labelFrontend, '_blank');
+    axios({
+      method: 'post',
+      url: `${labelBackend}/api/project`,
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(res => {
+      const url = `${labelFrontend}/?projectId=${res.data.projectId}`;
+      newTab.location.href = url;
+    });
+  };
+
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        variant='contained'
+        size='large'
+        fullWidth
+        color='default'
+        onClick={openResultsInLabel}>
+        View Results
+      </Button>
+    </Grid>
+  );
+};
+
+OpenInLabelButton.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  downloadUrl: PropTypes.string.isRequired,
+  dimensionOrder: PropTypes.string.isRequired,
+};
+
+const SubmitNewButton = () => {
+  const classes = useStyles();
+
+  return (
+    <Grid item lg className={classes.paddedTop}>
+      <Button
+        href='/predict'
+        variant='contained'
+        size='large'
+        fullWidth
+        color='primary'>
+        Submit New Image
+      </Button>
+    </Grid>
+  );
+};
+
 export default function Predict() {
 
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [downloadURL, setDownloadURL] = useState(null);
+  const [dimensionOrder, setDimensionOrder] = useState('');
+  const [downloadUrl, setdownloadUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -105,7 +279,7 @@ export default function Predict() {
         url: '/api/redis',
         data: {
           'hash': redisHash,
-          'key': ['status', 'progress', 'output_url', 'reason', 'failures']
+          'key': ['status', 'progress', 'output_url', 'reason', 'failures', 'dim_order']
         }
       }).then((response) => {
         setStatus(response.data.value[0].split('-').join(' '));
@@ -121,7 +295,8 @@ export default function Predict() {
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
-          setDownloadURL(response.data.value[2]);
+          setdownloadUrl(response.data.value[2]);
+          setDimensionOrder(response.data.value[5]);
           expireRedisHash(redisHash, 3600);
           // This is only used during zip uploads.
           // Some jobs may fail while other jobs can succeed.
@@ -169,12 +344,12 @@ export default function Predict() {
     });
   };
 
-  const canBeSubmitted = () => {
+  const canSubmit = () => {
     return fileName.length > 0 && imageUrl.length > 0;
   };
 
   const handleSubmit = (event) => {
-    if (!canBeSubmitted()) {
+    if (!canSubmit()) {
       event.preventDefault();
       return;
     }
@@ -282,74 +457,20 @@ export default function Predict() {
             </div> }
 
           {/* Submit button */}
-          { !submitted &&
-            <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
-              <Button
-                id='submitButton'
-                variant='contained'
-                onClick={handleSubmit}
-                size='large'
-                fullWidth
-                disabled={!canBeSubmitted()}
-                color='primary'>
-                Submit
-              </Button>
-            </Grid> }
+          { !submitted && <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} /> }
 
           {/* Progress bar for submitted jobs */}
-          { submitted && downloadURL === null && errorText.length == 0 ?
-            <Grid item lg className={classes.paddedTop}>
-              { progress === 0 || progress === null ?
-                <LinearProgress
-                  variant="buffer"
-                  value={0}
-                  valueBuffer={0}
-                  className={classes.progress}
-                />
-                :
-                <LinearProgress
-                  variant="determinate"
-                  value={progress}
-                  className={classes.progress}
-                />
-              }
-              {/* Display status updates to user */}
-              { status.length > 0 &&
-                <Typography
-                  className={classes.paddedTop, classes.capitalize}
-                  variant='body1'
-                  align='center'
-                  color='primary'>
-                  Job Status: {status}
-                </Typography> }
-            </Grid>
+          { submitted && downloadUrl === null && errorText.length == 0 ?
+            <ProgressBar progress={progress} status={status} />
             : null }
 
-          {/* Download results and Retry buttons */}
-          { downloadURL !== null &&
-            <div>
-              <Grid item lg className={classes.paddedTop}>
-                <Button
-                  href={downloadURL}
-                  variant='contained'
-                  size='large'
-                  fullWidth
-                  color='secondary'>
-                  Download Results
-                </Button>
-              </Grid>
-
-              <Grid item lg className={classes.paddedTop}>
-                <Button
-                  href='/predict'
-                  variant='contained'
-                  size='large'
-                  fullWidth
-                  color='primary'>
-                  Submit New Image
-                </Button>
-              </Grid>
-            </div> }
+          {/* Download results, Open in Label, and Retry buttons */}
+          { downloadUrl !== null &&
+            <JobCompleteButtons
+              imageUrl={imageUrl}
+              downloadUrl={downloadUrl}
+              dimensionOrder={dimensionOrder}
+            />}
 
         </form>
       </Container>
