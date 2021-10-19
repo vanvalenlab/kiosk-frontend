@@ -40,6 +40,8 @@ const envVarsSchema = Joi.object({
     .description('URL for DeepCell Label API'),
   REACT_APP_LABEL_FRONTEND: Joi.string().default('localhost')
     .description('URL for DeepCell Label frontend'),
+  GA_TRACKING_ID: Joi.string().default('UA-000000000-0')
+    .description('Google Analytics Tracking ID.')
 }).unknown().required();
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
@@ -82,7 +84,8 @@ const config = {
   label: {
     backend: envVars.REACT_APP_LABEL_BACKEND,
     frontend: envVars.REACT_APP_LABEL_FRONTEND,
-  }
+  },
+  gaTrackingId: GA_TRACKING_ID,
 };
 
 export default config;
