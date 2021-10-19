@@ -85,7 +85,7 @@ const config = {
     backend: envVars.REACT_APP_LABEL_BACKEND,
     frontend: envVars.REACT_APP_LABEL_FRONTEND,
   },
-  gaTrackingId: GA_TRACKING_ID,
+  gaTrackingId: envVars.GA_TRACKING_ID,
 };
 
 export default config;
