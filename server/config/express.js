@@ -79,6 +79,7 @@ app.get('*', (req, res) => {
     // to prevent enumerating them here and in public/index.html
     REACT_APP_LABEL_FRONTEND: config.label.frontend,
     REACT_APP_LABEL_BACKEND: config.label.backend,
+    GA_TRACKING_ID: config.gaTrackingId,
   });
 });
 
