@@ -22,7 +22,12 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-ReactGA.initialize(process.env.GA_TRACKING_ID || 'UA-000000000-0', {
+// if prod, read from window override. otherwise pull from environment
+const gaTrackingId = process.env.NODE_ENV === 'production' ?
+  window.GA_TRACKING_ID :
+  (process.env.GA_TRACKING_ID || 'UA-000000000-0');
+
+ReactGA.initialize(gaTrackingId, {
   debug: process.env.NODE_ENV !== 'production',
   testMode: process.env.NODE_ENV === 'test',
 });
