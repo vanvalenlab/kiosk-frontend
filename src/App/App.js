@@ -1,10 +1,10 @@
-import React, { lazy, Suspense, useEffect } from 'react';
-import ReactGA from 'react-ga';
-import { PropTypes } from 'prop-types';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+
+import useGoogleAnalytics from '../analytics';
 
 const About = lazy(() => import('../About/About'));
 const Faq = lazy(() => import('../Faq/Faq'));
@@ -22,41 +22,6 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-// if prod, read from window override. otherwise pull from environment
-const gaTrackingId = process.env.NODE_ENV === 'production' ?
-  window.GA_TRACKING_ID :
-  (process.env.GA_TRACKING_ID || 'UA-000000000-0');
-
-ReactGA.initialize(gaTrackingId, {
-  debug: process.env.NODE_ENV !== 'production',
-  testMode: process.env.NODE_ENV === 'test',
-});
-
-const withTracker = (WrappedComponent, options = {}) => {
-  // https://github.com/react-ga/react-ga/wiki/React-Router-v4-withTracker
-  const trackPage = page => {
-    ReactGA.set({ page, ...options });
-    ReactGA.pageview(page);
-  };
-
-  const HOC = props => {
-
-    useEffect(() => trackPage(props.location.pathname), [
-      props.location.pathname
-    ]);
-
-    return <WrappedComponent {...props} />;
-  };
-
-  HOC.propTypes = {
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-    }),
-  };
-
-  return HOC;
-};
-
 const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
   root: {
     display: 'flex',
@@ -70,6 +35,9 @@ const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
 
 export default function App() {
   const classes = useStyles();
+
+  useGoogleAnalytics();
+
   return (
     <div className={classes.root}>
       <Suspense fallback={<CircularProgress />}>
@@ -77,12 +45,12 @@ export default function App() {
         <NavBar />
         <main className={classes.main}>
           <Switch>
-            <Route exact path='/' component={withTracker(Landing)}/>
-            <Route path='/about' component={withTracker(About)}/>
-            <Route path='/faq' component={withTracker(Faq)}/>
-            <Route path='/predict' component={withTracker(Predict)}/>
-            <Route path='/docs' component={withTracker(Swagger)} />
-            <Route component={withTracker(NotFound)} />
+            <Route exact path='/' component={Landing}/>
+            <Route path='/about' component={About}/>
+            <Route path='/faq' component={Faq}/>
+            <Route path='/predict' component={Predict}/>
+            <Route path='/docs' component={Swagger} />
+            <Route component={NotFound} />
           </Switch>
         </main>
         <Footer />
