@@ -13,7 +13,7 @@ const options = {
     openapi: '3.0.0', // Specification (optional, defaults to swagger: '2.0')
     info: {
       title: 'DeepCell Kiosk API', // Title (required)
-      version: '0.5.0', // Version (required)
+      version: '0.8.2', // Version (required)
       description: 'The API for interacting with the DeepCell Kiosk.'
     },
   },
