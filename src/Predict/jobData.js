@@ -11,7 +11,7 @@ const jobCards = {
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
   },
-  tracking: {
+  caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
     name: 'Cell Tracking',
     model: 'The cell tracking model segments and tracks objects over time and creates a lineage file for division information.',
@@ -37,5 +37,7 @@ const jobCards = {
 
 // TODO: this is a stop gap to support both multiplex and mesmer names
 jobCards.multilplex = jobCards.mesmer;
+// TODO: this is a stop gap to support both tracking and caliban names
+jobCards.tracking = jobCards.caliban;
 
 export default jobCards;
