@@ -21,6 +21,7 @@ export default function ResolutionDropdown({
     '20x': 0.5,
     '40x': 0.25,
     '60x': 0.1667,
+    '100x': 0.1,
   };
 
   return (
