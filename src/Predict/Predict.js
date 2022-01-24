@@ -115,11 +115,11 @@ ProgressBar.propTypes = {
   status: PropTypes.string.isRequired,
 };
 
-const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
+const JobCompleteButtons = ({ openInLabel, imageUrl, downloadUrl, dimensionOrder }) => {
   return (
     <div>
       <DownloadButton downloadUrl={downloadUrl} />
-      {imageUrl.split('.').pop() !== 'zip' &&
+      {openInLabel && imageUrl.split('.').pop() !== 'zip' &&
         <OpenInLabelButton
           imageUrl={imageUrl}
           downloadUrl={downloadUrl}
@@ -130,6 +130,7 @@ const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
 };
 
 JobCompleteButtons.propTypes = {
+  openInLabel: PropTypes.bool.isRequired,
   imageUrl: PropTypes.string.isRequired,
   downloadUrl: PropTypes.string.isRequired,
   dimensionOrder: PropTypes.string.isRequired,
@@ -224,6 +225,7 @@ export default function Predict() {
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
+  const [submittedJobType, setSubmittedJobType] = useState('');
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
   const [modelResolution, setModelResolution] = useState(0.5);
   const [scale, setScale] = useState(1);
@@ -355,6 +357,7 @@ export default function Predict() {
     }
     setSubmitted(true);
     setStatus('submitting');
+    setSubmittedJobType(selectedJobType);
     predict();
   };
 
@@ -467,6 +470,7 @@ export default function Predict() {
           {/* Download results, Open in Label, and Retry buttons */}
           { downloadUrl !== null &&
             <JobCompleteButtons
+              openInLabel={jobData[submittedJobType].canOpenInLabel}
               imageUrl={imageUrl}
               downloadUrl={downloadUrl}
               dimensionOrder={dimensionOrder}

@@ -10,6 +10,7 @@ const jobCards = {
     scaleEnabled: true,
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
+    canOpenInLabel: true,
   },
   caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
@@ -21,6 +22,7 @@ const jobCards = {
     scaleEnabled: true,
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
+    canOpenInLabel: true,
   },
   mesmer: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',
@@ -32,6 +34,7 @@ const jobCards = {
     scaleEnabled: true,
     requiredChannels: ['nuclei', 'cytoplasm'],
     modelResolution: 0.5,
+    canOpenInLabel: true,
   },
   polaris: {
     file: 'tiff_stack_examples/MERFISH_example.tiff',
@@ -42,7 +45,8 @@ const jobCards = {
     thumbnail: 'thumbnails/FISH_example.png',
     scaleEnabled: true,
     requiredChannels: ['spots'],
-    modelResolution: 0.1
+    modelResolution: 0.1,
+    canOpenInLabel: false,
   },
 };
 
