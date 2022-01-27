@@ -227,6 +227,7 @@ export default function Predict() {
   const [selectedJobType, setSelectedJobType] = useState('');
   const [submittedJobType, setSubmittedJobType] = useState('');
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
+  const [displayChannelForm, setDisplayChannelForm] = useState(false);
   const [modelResolution, setModelResolution] = useState(0.5);
   const [scale, setScale] = useState(1);
   const [status, setStatus] = useState('');
@@ -248,6 +249,7 @@ export default function Predict() {
   useEffect(() => {
     if (selectedJobType) {
       setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
+      setDisplayChannelForm(jobData[selectedJobType].channelEnabled);
       setModelResolution(jobData[selectedJobType].modelResolution);
       const jobTargets = jobData[selectedJobType].requiredChannels;
       setTargetChannels(jobTargets.reduce((result, item, index) => {
@@ -399,7 +401,7 @@ export default function Predict() {
                         </Grid>}
                       </Grid>
                     </Grid>
-                    <Grid item md={6}>
+                    { displayChannelForm && <Grid item md={6}>
                       {/* <Typography align="right">
                         Input Channels
                       </Typography> */}
@@ -408,7 +410,7 @@ export default function Predict() {
                         targetChannels={targetChannels}
                         onChange={updateTargetChannels}
                       />
-                    </Grid>
+                    </Grid>}
                   </Grid>
                 </Paper>
               </Grid>
