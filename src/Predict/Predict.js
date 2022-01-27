@@ -115,11 +115,11 @@ ProgressBar.propTypes = {
   status: PropTypes.string.isRequired,
 };
 
-const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
+const JobCompleteButtons = ({ openInLabel, imageUrl, downloadUrl, dimensionOrder }) => {
   return (
     <div>
       <DownloadButton downloadUrl={downloadUrl} />
-      {imageUrl.split('.').pop() !== 'zip' &&
+      {openInLabel && imageUrl.split('.').pop() !== 'zip' &&
         <OpenInLabelButton
           imageUrl={imageUrl}
           downloadUrl={downloadUrl}
@@ -130,6 +130,7 @@ const JobCompleteButtons = ({ imageUrl, downloadUrl, dimensionOrder }) => {
 };
 
 JobCompleteButtons.propTypes = {
+  openInLabel: PropTypes.bool.isRequired,
   imageUrl: PropTypes.string.isRequired,
   downloadUrl: PropTypes.string.isRequired,
   dimensionOrder: PropTypes.string.isRequired,
@@ -224,7 +225,9 @@ export default function Predict() {
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
+  const [submittedJobType, setSubmittedJobType] = useState('');
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
+  const [displayChannelForm, setDisplayChannelForm] = useState(false);
   const [modelResolution, setModelResolution] = useState(0.5);
   const [scale, setScale] = useState(1);
   const [status, setStatus] = useState('');
@@ -246,6 +249,7 @@ export default function Predict() {
   useEffect(() => {
     if (selectedJobType) {
       setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
+      setDisplayChannelForm(jobData[selectedJobType].channelEnabled);
       setModelResolution(jobData[selectedJobType].modelResolution);
       const jobTargets = jobData[selectedJobType].requiredChannels;
       setTargetChannels(jobTargets.reduce((result, item, index) => {
@@ -355,6 +359,7 @@ export default function Predict() {
     }
     setSubmitted(true);
     setStatus('submitting');
+    setSubmittedJobType(selectedJobType);
     predict();
   };
 
@@ -396,7 +401,7 @@ export default function Predict() {
                         </Grid>}
                       </Grid>
                     </Grid>
-                    <Grid item md={6}>
+                    { displayChannelForm && <Grid item md={6}>
                       {/* <Typography align="right">
                         Input Channels
                       </Typography> */}
@@ -405,7 +410,7 @@ export default function Predict() {
                         targetChannels={targetChannels}
                         onChange={updateTargetChannels}
                       />
-                    </Grid>
+                    </Grid>}
                   </Grid>
                 </Paper>
               </Grid>
@@ -467,6 +472,7 @@ export default function Predict() {
           {/* Download results, Open in Label, and Retry buttons */}
           { downloadUrl !== null &&
             <JobCompleteButtons
+              openInLabel={jobData[submittedJobType].canOpenInLabel}
               imageUrl={imageUrl}
               downloadUrl={downloadUrl}
               dimensionOrder={dimensionOrder}
