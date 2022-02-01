@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import makeStyles from '@mui/styles/makeStyles';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const useStyles = makeStyles(theme => ({
   leftPad: {
@@ -38,7 +38,7 @@ function ChannelDropdown(props) {
         onChange={onChange}
         value={value}
         autoWidth={true}
-        className={classes.leftPad, classes.capitalize}
+        className={(classes.leftPad, classes.capitalize)}
       >
         {channels.map((c, i) => (
           <MenuItem value={c} key={i} className={classes.capitalize}>

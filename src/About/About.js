@@ -1,14 +1,14 @@
 import React from 'react';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import AboutImage from '.VirtuousCycle.svg';
 import AboutImage from './VirtuousCycle.png';
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   heroContent: {
     maxWidth: 800,
     margin: '0 auto',
-    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
+    padding: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
   },
   paper: {
     padding: theme.spacing(2),
@@ -53,7 +53,7 @@ export default function About() {
 
   const classes = useStyles();
 
-  return(
+  return (
     <div className={classes.root}>
       {/* Start Top Banner Area */}
       <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -66,7 +66,7 @@ export default function About() {
         container
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
 
         <Grid item xs={12}>
@@ -86,7 +86,7 @@ export default function About() {
         (1) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
       </Typography>
 
-      <Grid container alignItems="stretch" justify="space-evenly">
+      <Grid container alignItems="stretch" justifyContent="space-evenly">
 
         <Grid item xs={10}>
           <Typography variant="h4" className={classes.sectionHeader}>

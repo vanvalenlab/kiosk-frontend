@@ -1,13 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles(theme => ({
   footer: {
     flex: 'none',
     marginTop: theme.spacing(6),
-    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
+    padding: `${theme.spacing(2)} ${theme.spacing(2)}`,
     backgroundColor: theme.palette.background.paper
   }
 }));

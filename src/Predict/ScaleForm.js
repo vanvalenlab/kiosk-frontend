@@ -1,10 +1,10 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import TextField from '@material-ui/core/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import TextField from '@mui/material/TextField';
 
 export default function ScaleForm({
   checked = true,

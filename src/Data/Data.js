@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import DataCard from './DataCard.js';
 
 // Styles Object for MaterialUI styling
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   heroContent: {
     maxWidth: 600,
     margin: '0 auto',
-    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
+    padding: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
   },
   heroButtons: {
     marginTop: theme.spacing(4),
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   cardGrid: {
-    padding: `${theme.spacing(8)}px 0`,
+    padding: `${theme.spacing(8)} 0`,
   },
   card: {
     height: '100%',

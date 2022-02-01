@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
   heroContent: {
     maxWidth: 600,
     margin: '0 auto',
-    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
+    padding: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
   },
   button: {
     minWidth: '20vh',
@@ -23,7 +23,7 @@ export default function Landing() {
 
   const classes = useStyles();
 
-  return(
+  return (
     <div className={classes.root}>
       <div className={classes.heroContent}>
         <Typography variant="h1" align="center" color="textPrimary" gutterBottom>
@@ -33,7 +33,7 @@ export default function Landing() {
           Use a deep learning model to segment images.
         </Typography>
       </div>
-      <Grid container justify="center" spacing={5}>
+      <Grid container justifyContent="center" spacing={5}>
         <Grid item>
           <Button
             fullWidth

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from './FileUpload';
@@ -100,7 +100,7 @@ const ProgressBar = ({ progress, status }) => {
       {/* Display status updates to user */}
       {status.length > 0 &&
         <Typography
-          className={classes.paddedTop, classes.capitalize}
+          className={(classes.paddedTop, classes.capitalize)}
           variant='body1'
           align='center'
           color='primary'>
@@ -179,12 +179,7 @@ const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
 
   return (
     <Grid item lg className={classes.paddedTop}>
-      <Button
-        variant='contained'
-        size='large'
-        fullWidth
-        color='default'
-        onClick={openResultsInLabel}>
+      <Button variant='contained' size='large' fullWidth onClick={openResultsInLabel}>
         View Results
       </Button>
     </Grid>
@@ -368,7 +363,7 @@ export default function Predict() {
 
       <Container maxWidth="md" className={classes.paddedTop}>
         <form autoComplete="off">
-          <Grid container direction="row" justify="center" spacing={6}>
+          <Grid container direction="row" justifyContent="center" spacing={6}>
 
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
@@ -416,7 +411,7 @@ export default function Predict() {
               </Grid>
 
               {/* File Upload section */}
-              <Grid container direction="row" justify="center" className={classes.paddedTop}>
+              <Grid container direction="row" justifyContent="center" className={classes.paddedTop}>
                 <Paper className={classes.paper}>
                   <Grid item lg>
                     <FileUpload

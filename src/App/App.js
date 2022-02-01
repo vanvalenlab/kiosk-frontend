@@ -1,8 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import CircularProgress from '@mui/material/CircularProgress';
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import useGoogleAnalytics from '../analytics';
 
 const About = lazy(() => import('../About/About'));
@@ -21,7 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 const useStyles = makeStyles((theme) => ({ // eslint-disable-line no-unused-vars
   root: {
@@ -61,7 +62,11 @@ function KioskFrontend() {
 }
 
 function App() {
-  return <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>;
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>
+    </StyledEngineProvider>
+  );
 }
 
 export default App;
