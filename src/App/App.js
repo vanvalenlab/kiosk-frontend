@@ -2,8 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
-
+import { ThemeProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import useGoogleAnalytics from '../analytics';
 
 const About = lazy(() => import('../About/About'));
@@ -22,7 +21,9 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
+const theme = createMuiTheme();
+
+const useStyles = makeStyles((theme) => ({ // eslint-disable-line no-unused-vars
   root: {
     display: 'flex',
     minHeight: '100vh',
@@ -33,7 +34,7 @@ const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
   }
 }));
 
-export default function App() {
+function KioskFrontend() {
   const classes = useStyles();
 
   useGoogleAnalytics();
@@ -58,3 +59,9 @@ export default function App() {
     </div>
   );
 }
+
+function App() {
+  return <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>;
+}
+
+export default App;
