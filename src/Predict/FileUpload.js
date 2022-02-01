@@ -1,28 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { PropTypes } from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
 import Typography from '@mui/material/Typography';
 import CloudUpload from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/system';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    height: '100%',
-  },
-  preview: {
-    borderRadius: theme.spacing(1),
-    objectFit: 'cover',
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-  },
-  uploadIcon: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-    height: '100%'
-  }
-}));
+const Img = styled('img')``;
 
 export default function FileUpload(props) {
 
@@ -31,8 +15,6 @@ export default function FileUpload(props) {
   const [errorText, setErrorText] = useState('');
 
   const { infoText, onDroppedFile } = props;
-
-  const classes = useStyles();
 
   // This function will run upon file upload completion.
   const onDrop = useCallback((droppedFiles) => {
@@ -85,7 +67,7 @@ export default function FileUpload(props) {
 
             {/* Display error to user */}
             { showError &&
-              <Typography className={classes.paddedTop} variant='caption' display='block' align='center' color='error'>
+              <Typography variant='caption' display='block' align='center' color='error'>
                 { errorText }
               </Typography> }
 
@@ -95,11 +77,19 @@ export default function FileUpload(props) {
                 <Typography variant='caption' align='center' color='textSecondary' paragraph={true}>
                   Successfully uploaded file!
                 </Typography>
-                <img className={classes.preview} src={uploadedFileLocation} />
+                <Img
+                  sx={{
+                    borderRadius: (theme) => theme.spacing(1),
+                    objectFit: 'cover',
+                    width: (theme) => theme.spacing(10),
+                    height: (theme) => theme.spacing(10)
+                  }}
+                  src={uploadedFileLocation}
+                />
               </div>
               :
               <div align='center' display='block'>
-                <CloudUpload color='disabled' fontSize='large' className={classes.uploadIcon} />
+                <CloudUpload color='disabled' fontSize='large' sx={{ py: 4, height: '100%' }} />
               </div> }
 
           </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -7,54 +8,76 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import AboutImage from '.VirtuousCycle.svg';
 import AboutImage from './VirtuousCycle.png';
 
-const useStyles = makeStyles(theme => ({
-  root: {
+const PREFIX = 'About';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  heroUnit: `${PREFIX}-heroUnit`,
+  heroContent: `${PREFIX}-heroContent`,
+  paper: `${PREFIX}-paper`,
+  sectionHeader: `${PREFIX}-sectionHeader`,
+  heading: `${PREFIX}-heading`,
+  secondaryHeading: `${PREFIX}-secondaryHeading`,
+  img: `${PREFIX}-img`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`&.${classes.root}`]: {
     flexGrow: 1,
-    margin: theme.spacing(4)
+    m: 4
   },
-  heroUnit: {
+
+  [`& .${classes.heroUnit}`]: {
     backgroundColor: theme.palette.background.paper,
   },
-  heroContent: {
+
+  [`& .${classes.heroContent}`]: {
     maxWidth: 800,
-    margin: '0 auto',
-    padding: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
+    m: '0 auto',
+    p: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
   },
-  paper: {
-    padding: theme.spacing(2),
+
+  [`& .${classes.paper}`]: {
+    p: 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  sectionHeader: {
-    // margin: theme.spacing(4),
-    padding: theme.spacing(2),
+
+  [`& .${classes.sectionHeader}`]: {
+    p: 2,
     textAlign: 'center',
   },
-  heading: {
+
+  [`& .${classes.heading}`]: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
     flexShrink: 0,
   },
-  secondaryHeading: {
+
+  [`& .${classes.secondaryHeading}`]: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
-  img: {
+
+  [`& .${classes.img}`]: {
     maxWidth: '100%'
   }
 }));
 
 export default function About() {
 
-  const classes = useStyles();
+
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       {/* Start Top Banner Area */}
       <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
         What is DeepCell?
@@ -219,6 +242,6 @@ export default function About() {
 
       </Grid>
 
-    </div>
+    </Root>
   );
 }

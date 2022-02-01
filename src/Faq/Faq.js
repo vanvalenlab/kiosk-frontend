@@ -4,29 +4,15 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/system';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  title: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
-    margin: theme.spacing(2),
-  }
-}));
+const Div = styled('div')``;
+const paperStyle = { p: 2, color: 'text.secondary', m: 2 };
 
 export default function Faq() {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <Typography variant="h2" align="center" color="textPrimary" gutterBottom className={classes.title}>
+    <Div sx={{ flexGrow: 1 }}>
+      <Typography variant="h2" align="center" color="textPrimary" gutterBottom sx={{ pt: 4, pb: 2 }}>
         Frequently Asked Questions
       </Typography>
 
@@ -34,7 +20,7 @@ export default function Faq() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
 
-            <Paper className={classes.paper}>
+            <Paper sx={paperStyle}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 How do I get started using DeepCell?
               </Typography>
@@ -47,7 +33,7 @@ export default function Faq() {
               </Typography>
             </Paper>
 
-            <Paper className={classes.paper}>
+            <Paper sx={paperStyle}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 What does this error message mean?
               </Typography>
@@ -83,7 +69,7 @@ export default function Faq() {
               </ul>
             </Paper>
 
-            <Paper className={classes.paper}>
+            <Paper sx={paperStyle}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 Can I add my own models?
               </Typography>
@@ -95,7 +81,7 @@ export default function Faq() {
               </Typography>
             </Paper>
 
-            <Paper className={classes.paper}>
+            <Paper sx={paperStyle}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 Can you help me annotate my data?
               </Typography>
@@ -108,12 +94,12 @@ export default function Faq() {
               </Typography>
             </Paper>
 
-            <Paper className={classes.paper}>
+            <Paper sx={paperStyle}>
               <Typography variant="h5" align="left" color="textPrimary" gutterBottom>
                 Where can I get help?
               </Typography>
               <Typography variant="body1" align="left" color="textPrimary" gutterBottom>
-                For an overview of the DeepCell ecocystem, please see the <Link href="/about">About page</Link> and our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
+                For an overview of the DeepCell ecosystem, please see the <Link href="/about">About page</Link> and our <Link href="https://github.com/vanvalenlab/intro-to-deepcell" target="_blank" rel="noopener noreferrer" >introductory docs</Link>.
                 <br />
                 If you would like to report a bug or ask a question, please open a new issue on <Link href="https://github.com/vanvalenlab/intro-to-deepcell/issues" target="_blank" rel="noopener noreferrer">the issues page</Link>.
               </Typography>
@@ -122,6 +108,6 @@ export default function Faq() {
           </Grid>
         </Grid>
       </Container>
-    </div>
+    </Div>
   );
 }

@@ -1,47 +1,68 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import DataCard from './DataCard.js';
 
-// Styles Object for MaterialUI styling
-const useStyles = makeStyles(theme => ({
-  heroUnit: {
+const PREFIX = 'Data';
+
+const classes = {
+  heroUnit: `${PREFIX}-heroUnit`,
+  heroContent: `${PREFIX}-heroContent`,
+  heroButtons: `${PREFIX}-heroButtons`,
+  layout: `${PREFIX}-layout`,
+  cardGrid: `${PREFIX}-cardGrid`,
+  card: `${PREFIX}-card`,
+  cardMedia: `${PREFIX}-cardMedia`,
+  cardContent: `${PREFIX}-cardContent`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.heroUnit}`]: {
     backgroundColor: theme.palette.background.paper,
   },
-  heroContent: {
+
+  [`& .${classes.heroContent}`]: {
     maxWidth: 600,
-    margin: '0 auto',
-    padding: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
+    m: '0 auto',
+    p: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
   },
-  heroButtons: {
-    marginTop: theme.spacing(4),
+
+  [`& .${classes.heroButtons}`]: {
+    mt: 4,
   },
-  layout: {
+
+  [`& .${classes.layout}`]: {
     width: 'auto',
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
+    mx: 3,
     [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
       width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      mx: 'auto',
     },
   },
-  cardGrid: {
-    padding: `${theme.spacing(8)} 0`,
+
+  [`& .${classes.cardGrid}`]: {
+    p: `${theme.spacing(8)} 0`,
   },
-  card: {
+
+  [`& .${classes.card}`]: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
+
+  [`& .${classes.cardMedia}`]: {
+    pt: '56.25%', // 16:9
   },
-  cardContent: {
+
+  [`& .${classes.cardContent}`]: {
     flexGrow: 1,
   }
 }));
@@ -64,10 +85,10 @@ export default function Data() {
 
   const [value, setValue] = useState('prediction');
 
-  const classes = useStyles();
+
 
   return (
-    <div>
+    <Root>
       {/* Start Top Banner Area */}
       <div className={classes.heroUnit}>
         <div className={classes.heroContent}>
@@ -106,6 +127,6 @@ export default function Data() {
         <DataCard cardType={value} />
       </TabContainer>}
       {/* END MaterialUI Tabs/tab appbar */}
-    </div>
+    </Root>
   );
 }

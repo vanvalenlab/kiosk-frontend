@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import { PropTypes } from 'prop-types';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -7,31 +8,45 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+const PREFIX = 'DataCard';
 
-const useStyles = makeStyles(theme => ({
-  layout: {
+const classes = {
+  layout: `${PREFIX}-layout`,
+  cardGrid: `${PREFIX}-cardGrid`,
+  card: `${PREFIX}-card`,
+  cardMedia: `${PREFIX}-cardMedia`,
+  cardContent: `${PREFIX}-cardContent`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.layout}`]: {
     width: 'auto',
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
+    mx: theme.spacing(3),
     [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
       width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      mx: 'auto',
     },
   },
-  cardGrid: {
-    padding: `${theme.spacing(8)} 0`,
+
+  [`& .${classes.cardGrid}`]: {
+    p: `${theme.spacing(8)} 0`,
   },
-  card: {
+
+  [`& .${classes.card}`]: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
+
+  [`& .${classes.cardMedia}`]: {
+    pt: '56.25%', // 16:9
   },
-  cardContent: {
+
+  [`& .${classes.cardContent}`]: {
     flexGrow: 1,
   }
 }));
@@ -126,7 +141,7 @@ const allCards = [
 export default function DataCard(props) {
   const { cardType } = props;
   const [cardsInUse, setCardsInUse] = useState([]);
-  const classes = useStyles();
+
   const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
 
   const trainingData = 'training';
@@ -162,7 +177,7 @@ export default function DataCard(props) {
   }, [baseUrl]);
 
   return (
-    <div className={(classes.layout, classes.cardGrid)}>
+    <Root className={(classes.layout, classes.cardGrid)}>
       <Grid container spacing={4}>
         {cardsInUse.map(card => (
           <Grid item key={allCards.indexOf(card)} xs={12} sm={6} md={3}>
@@ -193,7 +208,7 @@ export default function DataCard(props) {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </Root>
   );
 }
 
