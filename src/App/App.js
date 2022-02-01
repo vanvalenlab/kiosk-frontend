@@ -1,33 +1,13 @@
 import React, { lazy, Suspense } from 'react';
-import { styled } from '@mui/material/styles';
 import { Switch, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import { styled } from '@mui/system';
 import useGoogleAnalytics from '../analytics';
 
-const PREFIX = 'App';
-
-const classes = {
-  root: `${PREFIX}-root`,
-  main: `${PREFIX}-main`
-};
-
-const StyledStyledEngineProvider = styled(StyledEngineProvider)((
-  {
-    theme // eslint-disable-line no-unused-vars
-  }
-) => ({
-  [`& .${classes.root}`]: {
-    display: 'flex',
-    minHeight: '100vh',
-    flexDirection: 'column'
-  },
-
-  [`& .${classes.main}`]: {
-    flexGrow: 1,
-  }
-}));
+const Div = styled('div')``;
+const Main = styled('main')``;
 
 const About = lazy(() => import('../About/About'));
 const Faq = lazy(() => import('../Faq/Faq'));
@@ -48,16 +28,14 @@ if (process.env.NODE_ENV !== 'production') {
 const theme = createTheme();
 
 function KioskFrontend() {
-
-
   useGoogleAnalytics();
 
   return (
-    <div className={classes.root}>
+    <Div sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
       <Suspense fallback={<CircularProgress />}>
         <CssBaseline />
         <NavBar />
-        <main className={classes.main}>
+        <Main sx={{ flexGrow: 1 }}>
           <Switch>
             <Route exact path='/' component={Landing}/>
             <Route path='/about' component={About}/>
@@ -66,18 +44,18 @@ function KioskFrontend() {
             <Route path='/docs' component={Swagger} />
             <Route component={NotFound} />
           </Switch>
-        </main>
+        </Main>
         <Footer />
       </Suspense>
-    </div>
+    </Div>
   );
 }
 
 function App() {
   return (
-    <StyledStyledEngineProvider injectFirst>
+    <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>
-    </StyledStyledEngineProvider>
+    </StyledEngineProvider>
   );
 }
 
