@@ -52,7 +52,7 @@ describe('Upload Controller Tests', () => {
 
   describe('POST /api/upload', () => {
 
-    it('should upload file using multer S3', done => {
+    it('should upload file using multer S3', async () => {
       config.cloud = 'aws';
       const tmpobj = tmp.fileSync({postfix: '.png'});
       const request = supertest(app);
@@ -61,10 +61,9 @@ describe('Upload Controller Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('imageURL');
-      done();
     });
 
-    it('should upload file using multer', done => {
+    it('should upload file using multer', async () => {
       config.cloud = 'gcp';
 
       const tmpobj = tmp.fileSync({postfix: '.png'});
@@ -80,7 +79,6 @@ describe('Upload Controller Tests', () => {
       const resolved = await response;
       expect(resolved.status).toBe(200);
       expect(resolved.body).toHaveProperty('imageURL');
-      done();
     });
 
   });

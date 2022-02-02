@@ -31,7 +31,7 @@ describe('Predict Controller Tests', () => {
   });
 
   describe('predictController.predict', () => {
-    it('should create a job in redis', done => {
+    it('should create a job in redis', async () => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
@@ -40,30 +40,27 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('hash');
       // TODO: check Redis entries for valid data.
-      done();
     });
 
-    it('should return a 400 for bad request body', done => {
+    it('should return a 400 for bad request body', async () => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
         .send({ hash: 'jobId' });
 
       expect(response.statusCode).toEqual(400);
-      done();
     });
 
-    it('should return a 400 for bad job type', done => {
+    it('should return a 400 for bad job type', async () => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
         .send({ jobType: 'invalidJobType', imageName: 'test.zip' });
 
       expect(response.statusCode).toEqual(400);
-      done();
     });
 
-    // it('should return a 500 when an error is raised', done => {
+    // it('should return a 500 when an error is raised', async () => {
 
     //   jest.doMock('../config/config', () => {
     //     return {
@@ -84,7 +81,7 @@ describe('Predict Controller Tests', () => {
 
   describe('predictController.getJobStatus', () => {
 
-    it('should get the correct job status', done => {
+    it('should get the correct job status', async () => {
       const request = supertest(app);
       const response = await request.post('/api/status')
         .set('content-type', 'application/json')
@@ -93,10 +90,9 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('status');
       expect(response.body.status).toEqual('done');
-      done();
     });
 
-    it('should return null for invalid record', done => {
+    it('should return null for invalid record', async () => {
       const request = supertest(app);
       const response = await request.post('/api/status')
         .set('content-type', 'application/json')
@@ -105,26 +101,24 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('status');
       expect(response.body.status).toEqual(null);
-      done();
     });
   });
 
   describe('predictController.getJobTypes', () => {
 
-    it('should return the jobs supportin in config', done => {
+    it('should return the jobs supportin in config', async () => {
       const request = supertest(app);
       const response = await request.get('/api/jobtypes');
 
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('jobTypes');
       expect(response.body.jobTypes).toEqual(['testJob1', 'testJob2']);
-      done();
     });
   });
 
   describe('predictController.getKey', () => {
 
-    it('should return the correct redis value', done => {
+    it('should return the correct redis value', async () => {
       const request = supertest(app);
       const response = await request.post('/api/redis')
         .set('content-type', 'application/json')
@@ -133,10 +127,9 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('value');
       expect(response.body.value).toEqual('testValue');
-      done();
     });
 
-    it('should return the multiple redis values', done => {
+    it('should return the multiple redis values', async () => {
       const request = supertest(app);
       const response = await request.post('/api/redis')
         .set('content-type', 'application/json')
@@ -145,13 +138,12 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('value');
       expect(response.body.value).toEqual(['done', 'testValue']);
-      done();
     });
   });
 
   describe('predictController.expireHash', () => {
 
-    it('should expire the hash', done => {
+    it('should expire the hash', async () => {
       const request = supertest(app);
       const response = await request.post('/api/redis/expire')
         .set('content-type', 'application/json')
@@ -160,10 +152,9 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('value');
       expect(response.body.value).toEqual(1);
-      done();
     });
 
-    it('should return 0 if there is no hash found', done => {
+    it('should return 0 if there is no hash found', async () => {
       const request = supertest(app);
       const response = await request.post('/api/redis/expire')
         .set('content-type', 'application/json')
@@ -172,7 +163,6 @@ describe('Predict Controller Tests', () => {
       expect(response.statusCode).toEqual(404);
       expect(response.body).toHaveProperty('value');
       expect(response.body.value).toEqual(0);
-      done();
     });
   });
 });

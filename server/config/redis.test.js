@@ -52,59 +52,54 @@ describe('Redis tests', () => {
 
   describe('Test HGET', () => {
 
-    it('should get the correct value', done => {
+    it('should get the correct value', async () => {
       let value = await redis.hget('jobId', 'status');
       expect(value).toBe('done');
 
       config.redis.sentinelEnabled = true;
       value = await redis.hget('jobId', 'status');
       expect(value).toBe('done');
-
-      done();
     });
 
   });
 
   describe('Test HMGET', () => {
 
-    it('should get the correct values', done => {
+    it('should get the correct values', async () => {
       let value = await redis.hmget('jobId', ['status', 'otherKey']);
       expect(value).toMatchObject(['done', 'testValue']);
 
       config.redis.sentinelEnabled = true;
       value = await redis.hmget('jobId', ['status', 'otherKey']);
       expect(value).toMatchObject(['done', 'testValue']);
-      done();
     });
 
   });
 
   describe('Test EXPIRE', () => {
 
-    it('should expire the key', done => {
+    it('should expire the key', async () => {
       let value = await redis.expire('jobId', 1);
       expect(value).toBe(1);
 
       config.redis.sentinelEnabled = true;
       value = await redis.expire('jobId', 1);
       expect(value).toBe(1);
-      done();
     });
 
-    it('should return 0 if no valid key', done => {
+    it('should return 0 if no valid key', async () => {
       let value = await redis.expire('otherKey', 1);
       expect(value).toBe(0);
 
       config.redis.sentinelEnabled = true;
       value = await redis.expire('anotherKey', 1);
       expect(value).toBe(0);
-      done();
     });
   });
 
   describe('Test LPUSH', () => {
 
-    it('should push a single value to a queue', done => {
+    it('should push a single value to a queue', async () => {
       let value = await redis.lpush('testQueue0', 'newKey');
       expect(value).toBe(1);
 
@@ -117,10 +112,9 @@ describe('Redis tests', () => {
 
       response = await mocks.redis.llen('testQueue1');
       expect(response).toBe(1);
-      done();
     });
 
-    it('should push an array of values to a queue', done => {
+    it('should push an array of values to a queue', async () => {
       let value = await redis.lpush('testQueue2', ['newKey', 'otherNewKey']);
       expect(value).toBe(2);
 
@@ -133,13 +127,12 @@ describe('Redis tests', () => {
 
       response = await mocks.redis.llen('testQueue3');
       expect(response).toBe(2);
-      done();
     });
   });
 
   describe('Test HMSET', () => {
 
-    it('should set multiple values', done => {
+    it('should set multiple values', async () => {
       const newStatus = 'success';
       let value = await redis.hmset('jobId', ['status', newStatus]);
       expect(value).toBe('OK');
@@ -153,7 +146,6 @@ describe('Redis tests', () => {
 
       response = await mocks.redis.hget('jobId', 'status');
       expect(response).toBe(newStatus);
-      done();
     });
   });
 
