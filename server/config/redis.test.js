@@ -52,7 +52,7 @@ describe('Redis tests', () => {
 
   describe('Test HGET', () => {
 
-    it('should get the correct value', async done => {
+    it('should get the correct value', done => {
       let value = await redis.hget('jobId', 'status');
       expect(value).toBe('done');
 
@@ -67,7 +67,7 @@ describe('Redis tests', () => {
 
   describe('Test HMGET', () => {
 
-    it('should get the correct values', async done => {
+    it('should get the correct values', done => {
       let value = await redis.hmget('jobId', ['status', 'otherKey']);
       expect(value).toMatchObject(['done', 'testValue']);
 
@@ -81,7 +81,7 @@ describe('Redis tests', () => {
 
   describe('Test EXPIRE', () => {
 
-    it('should expire the key', async done => {
+    it('should expire the key', done => {
       let value = await redis.expire('jobId', 1);
       expect(value).toBe(1);
 
@@ -91,7 +91,7 @@ describe('Redis tests', () => {
       done();
     });
 
-    it('should return 0 if no valid key', async done => {
+    it('should return 0 if no valid key', done => {
       let value = await redis.expire('otherKey', 1);
       expect(value).toBe(0);
 
@@ -104,7 +104,7 @@ describe('Redis tests', () => {
 
   describe('Test LPUSH', () => {
 
-    it('should push a single value to a queue', async done => {
+    it('should push a single value to a queue', done => {
       let value = await redis.lpush('testQueue0', 'newKey');
       expect(value).toBe(1);
 
@@ -120,7 +120,7 @@ describe('Redis tests', () => {
       done();
     });
 
-    it('should push an array of values to a queue', async done => {
+    it('should push an array of values to a queue', done => {
       let value = await redis.lpush('testQueue2', ['newKey', 'otherNewKey']);
       expect(value).toBe(2);
 
@@ -139,7 +139,7 @@ describe('Redis tests', () => {
 
   describe('Test HMSET', () => {
 
-    it('should set multiple values', async done => {
+    it('should set multiple values', done => {
       const newStatus = 'success';
       let value = await redis.hmset('jobId', ['status', newStatus]);
       expect(value).toBe('OK');

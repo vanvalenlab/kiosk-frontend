@@ -7,7 +7,7 @@ describe('Miscellaneous Controller Tests', () => {
 
   describe('GET /api/swagger.json', () => {
 
-    it('should return a JSON Swagger spec', async done => {
+    it('should return a JSON Swagger spec', done => {
       const request = supertest(app);
       const response = await request.get('/api/swagger.json');
 
@@ -20,7 +20,7 @@ describe('Miscellaneous Controller Tests', () => {
 
   describe('GET /api/health-check', () => {
 
-    it('should return 200 OK', async done => {
+    it('should return 200 OK', done => {
       const request = supertest(app);
       const response = await request.get('/api/health-check');
 
@@ -34,7 +34,7 @@ describe('Miscellaneous Controller Tests', () => {
 
   describe('GET /api/invalid-route', () => {
 
-    it('should return 404 NOT_FOUND', async done => {
+    it('should return 404 NOT_FOUND', done => {
       const request = supertest(app);
       const response = await request.get('/api/invalid-route');
       expect(response.status).toBe(404);
@@ -44,7 +44,7 @@ describe('Miscellaneous Controller Tests', () => {
 
   describe('POST /api/invalid-route', () => {
 
-    it('should return 404 NOT_FOUND', async done => {
+    it('should return 404 NOT_FOUND', done => {
       const request = supertest(app);
       const response = await request.post('/api/invalid-route');
       expect(response.status).toBe(404);

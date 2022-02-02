@@ -52,7 +52,7 @@ describe('Upload Controller Tests', () => {
 
   describe('POST /api/upload', () => {
 
-    it('should upload file using multer S3', async done => {
+    it('should upload file using multer S3', done => {
       config.cloud = 'aws';
       const tmpobj = tmp.fileSync({postfix: '.png'});
       const request = supertest(app);
@@ -64,7 +64,7 @@ describe('Upload Controller Tests', () => {
       done();
     });
 
-    it('should upload file using multer', async done => {
+    it('should upload file using multer', done => {
       config.cloud = 'gcp';
 
       const tmpobj = tmp.fileSync({postfix: '.png'});

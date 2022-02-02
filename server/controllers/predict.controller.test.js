@@ -31,7 +31,7 @@ describe('Predict Controller Tests', () => {
   });
 
   describe('predictController.predict', () => {
-    it('should create a job in redis', async done => {
+    it('should create a job in redis', done => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
@@ -43,7 +43,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    it('should return a 400 for bad request body', async done => {
+    it('should return a 400 for bad request body', done => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
@@ -53,7 +53,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    it('should return a 400 for bad job type', async done => {
+    it('should return a 400 for bad job type', done => {
       const request = supertest(app);
       const response = await request.post('/api/predict')
         .set('content-type', 'application/json')
@@ -63,7 +63,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    // it('should return a 500 when an error is raised', async done => {
+    // it('should return a 500 when an error is raised', done => {
 
     //   jest.doMock('../config/config', () => {
     //     return {
@@ -84,7 +84,7 @@ describe('Predict Controller Tests', () => {
 
   describe('predictController.getJobStatus', () => {
 
-    it('should get the correct job status', async done => {
+    it('should get the correct job status', done => {
       const request = supertest(app);
       const response = await request.post('/api/status')
         .set('content-type', 'application/json')
@@ -96,7 +96,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    it('should return null for invalid record', async done => {
+    it('should return null for invalid record', done => {
       const request = supertest(app);
       const response = await request.post('/api/status')
         .set('content-type', 'application/json')
@@ -111,7 +111,7 @@ describe('Predict Controller Tests', () => {
 
   describe('predictController.getJobTypes', () => {
 
-    it('should return the jobs supportin in config', async done => {
+    it('should return the jobs supportin in config', done => {
       const request = supertest(app);
       const response = await request.get('/api/jobtypes');
 
@@ -124,7 +124,7 @@ describe('Predict Controller Tests', () => {
 
   describe('predictController.getKey', () => {
 
-    it('should return the correct redis value', async done => {
+    it('should return the correct redis value', done => {
       const request = supertest(app);
       const response = await request.post('/api/redis')
         .set('content-type', 'application/json')
@@ -136,7 +136,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    it('should return the multiple redis values', async done => {
+    it('should return the multiple redis values', done => {
       const request = supertest(app);
       const response = await request.post('/api/redis')
         .set('content-type', 'application/json')
@@ -151,7 +151,7 @@ describe('Predict Controller Tests', () => {
 
   describe('predictController.expireHash', () => {
 
-    it('should expire the hash', async done => {
+    it('should expire the hash', done => {
       const request = supertest(app);
       const response = await request.post('/api/redis/expire')
         .set('content-type', 'application/json')
@@ -163,7 +163,7 @@ describe('Predict Controller Tests', () => {
       done();
     });
 
-    it('should return 0 if there is no hash found', async done => {
+    it('should return 0 if there is no hash found', done => {
       const request = supertest(app);
       const response = await request.post('/api/redis/expire')
         .set('content-type', 'application/json')

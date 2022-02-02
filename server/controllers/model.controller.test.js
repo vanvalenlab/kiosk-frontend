@@ -101,7 +101,7 @@ describe('Model Controller Tests', () => {
 
   describe('GET /api/models', () => {
 
-    it('should get models from AWS bucket', async done => {
+    it('should get models from AWS bucket', done => {
       config.cloud = 'aws';
       const request = supertest(app);
       const response = await request.get('/api/models');
@@ -115,7 +115,7 @@ describe('Model Controller Tests', () => {
       done();
     });
 
-    it('should get models from GCP bucket', async done => {
+    it('should get models from GCP bucket', done => {
       config.cloud = 'gcp';
 
       const request = supertest(app);
