@@ -1,71 +1,13 @@
 import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { styled } from '@mui/system';
 import DataCard from './DataCard.js';
 
-const PREFIX = 'Data';
-
-const classes = {
-  heroUnit: `${PREFIX}-heroUnit`,
-  heroContent: `${PREFIX}-heroContent`,
-  heroButtons: `${PREFIX}-heroButtons`,
-  layout: `${PREFIX}-layout`,
-  cardGrid: `${PREFIX}-cardGrid`,
-  card: `${PREFIX}-card`,
-  cardMedia: `${PREFIX}-cardMedia`,
-  cardContent: `${PREFIX}-cardContent`
-};
-
-const Root = styled('div')((
-  {
-    theme
-  }
-) => ({
-  [`& .${classes.heroUnit}`]: {
-    backgroundColor: theme.palette.background.paper,
-  },
-
-  [`& .${classes.heroContent}`]: {
-    maxWidth: 600,
-    m: '0 auto',
-    p: `${theme.spacing(8)} 0 ${theme.spacing(6)}`,
-  },
-
-  [`& .${classes.heroButtons}`]: {
-    mt: 4,
-  },
-
-  [`& .${classes.layout}`]: {
-    width: 'auto',
-    mx: 3,
-    [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
-      width: 1100,
-      mx: 'auto',
-    },
-  },
-
-  [`& .${classes.cardGrid}`]: {
-    p: `${theme.spacing(8)} 0`,
-  },
-
-  [`& .${classes.card}`]: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-
-  [`& .${classes.cardMedia}`]: {
-    pt: '56.25%', // 16:9
-  },
-
-  [`& .${classes.cardContent}`]: {
-    flexGrow: 1,
-  }
-}));
+const Div = styled('div')``;
 
 // This function is described before the Class declaration for the Data component, below.
 function TabContainer(props) {
@@ -82,16 +24,13 @@ TabContainer.propTypes = {
 };
 
 export default function Data() {
-
   const [value, setValue] = useState('prediction');
 
-
-
   return (
-    <Root>
+    <div>
       {/* Start Top Banner Area */}
-      <div className={classes.heroUnit}>
-        <div className={classes.heroContent}>
+      <Div sx={{ backgroundColor: 'background.paper' }}>
+        <Div sx={{ maxWidth: 600, m: '0 auto', p:  (theme) => `${theme.spacing(8)} 0 ${theme.spacing(6)}` }}>
           <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
             Example Image Data
           </Typography>
@@ -99,8 +38,8 @@ export default function Data() {
             Here are some images that you can download and submit to the models
             to see how deepcell works!
           </Typography>
-        </div>
-      </div>
+        </Div>
+      </Div>
       {/* Top Banner Area - END */}
 
       {/* Start MaterialUI Tabs/tab appbar */}
@@ -127,6 +66,6 @@ export default function Data() {
         <DataCard cardType={value} />
       </TabContainer>}
       {/* END MaterialUI Tabs/tab appbar */}
-    </Root>
+    </div>
   );
 }
