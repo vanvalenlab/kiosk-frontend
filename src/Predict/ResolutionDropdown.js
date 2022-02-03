@@ -28,6 +28,7 @@ export default function ResolutionDropdown({
     <FormGroup row>
       <FormControl>
         <Select
+          size="small"
           labelId="input-resolution-select-label"
           id="input-resolution-select"
           value={scale}
@@ -35,6 +36,7 @@ export default function ResolutionDropdown({
           onClose={() => setIsOpen(false)}
           onOpen={() => setIsOpen(true)}
           onChange={e => onChange(e.target.value)}
+          variant="standard"
         >
           {Object.entries(zoomToMpp).map(([zoom, mpp], i) => {
             return (

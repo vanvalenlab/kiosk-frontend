@@ -29,12 +29,14 @@ export default function ModelDropdown(props) {
   return (
     <FormControl>
       <Select
+        size='small'
         open={isOpen}
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
         onChange={e => onChange(e.target.value)}
         value={value}
-        style={{textTransform: 'capitalize'}}
+        sx={{ textTransform: 'capitalize' }}
+        variant="standard"
       >
         {allJobTypes.map((job, i) => (
           <MenuItem value={job} style={{textTransform: 'capitalize'}} key={i}>

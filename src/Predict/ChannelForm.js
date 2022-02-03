@@ -13,9 +13,10 @@ function ChannelDropdown(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <FormControl fullWidth>
+    <FormControl variant='standard' fullWidth>
       <InputLabel margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
       <Select
+        size='small'
         labelId={`${label}-input`}
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -23,7 +24,7 @@ function ChannelDropdown(props) {
         onChange={onChange}
         value={value}
         autoWidth={true}
-        sx={{ pl: 1, textTransform: 'capitalize' }}
+        sx={{ textTransform: 'capitalize' }}
       >
         {channels.map((c, i) => (
           <MenuItem value={c} key={i} sx={{ textTransform: 'capitalize' }}>
