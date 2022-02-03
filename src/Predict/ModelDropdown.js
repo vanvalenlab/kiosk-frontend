@@ -39,7 +39,7 @@ export default function ModelDropdown(props) {
         variant="standard"
       >
         {allJobTypes.map((job, i) => (
-          <MenuItem value={job} style={{textTransform: 'capitalize'}} key={i}>
+          <MenuItem value={job} sx={{ textTransform: 'capitalize' }} key={i}>
             {job}
           </MenuItem>
         ))}

@@ -12,7 +12,7 @@ const Div = styled('div')``;
 // This function is described before the Class declaration for the Data component, below.
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" sx={{ padding: 8 * 3 }}>
       {props.children}
     </Typography>
   );

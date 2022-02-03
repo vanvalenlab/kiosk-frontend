@@ -405,9 +405,8 @@ export default function Predict() {
           { errorText.length > 0 &&
             <div>
               <Typography
-                sx={{ pt: 4 }}
+                sx={{ pt: 4, whiteSpace: 'pre-line' }}
                 variant='body2'
-                style={{whiteSpace: 'pre-line'}}
                 align='center'
                 color='error'>
                 {errorText}
