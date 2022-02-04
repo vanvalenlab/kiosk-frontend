@@ -16,6 +16,7 @@ import ModelDropdown from './ModelDropdown';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from './jobData';
+import SegmentationTypeDropdown from './SegmentationTypeDropdown';
 
 // get DeepCell Label viewer addresses from the environment.
 // these are defined in public/index.html to allow the server
@@ -225,9 +226,11 @@ export default function Predict() {
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
   const [selectedJobType, setSelectedJobType] = useState('');
+  const [selectedSegmentationType, setSelectedSegmentationType] = useState('');
   const [submittedJobType, setSubmittedJobType] = useState('');
   const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
   const [displayChannelForm, setDisplayChannelForm] = useState(false);
+  const [displaySegmentationForm, setDisplaySegmentationForm] = useState(false);
   const [modelResolution, setModelResolution] = useState(0.5);
   const [scale, setScale] = useState(1);
   const [status, setStatus] = useState('');
@@ -250,6 +253,7 @@ export default function Predict() {
     if (selectedJobType) {
       setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
       setDisplayChannelForm(jobData[selectedJobType].channelEnabled);
+      setDisplaySegmentationForm(jobData[selectedJobType].segmentationTypeEnabled);
       setModelResolution(jobData[selectedJobType].modelResolution);
       const jobTargets = jobData[selectedJobType].requiredChannels;
       setTargetChannels(jobTargets.reduce((result, item, index) => {
@@ -337,6 +341,7 @@ export default function Predict() {
         imageUrl: imageUrl,
         jobType: selectedJobType,
         dataRescale: scale,
+        segmentationType: selectedSegmentationType,
         channels: (jobData[selectedJobType].requiredChannels).map(
           c => channelValues[targetChannels[c]]).join(','),
       }
@@ -397,6 +402,13 @@ export default function Predict() {
                             modelMpp={modelResolution}
                             scale={scale}
                             onChange={setScale}
+                          />
+                        </Grid>}
+                        { displaySegmentationForm && <Grid item lg>
+                          <Typography>Segmentation Type</Typography>
+                          <SegmentationTypeDropdown
+                            value={selectedSegmentationType}
+                            onChange={setSelectedSegmentationType}
                           />
                         </Grid>}
                       </Grid>
