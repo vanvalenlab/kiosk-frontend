@@ -101,7 +101,7 @@ describe('Model Controller Tests', () => {
 
   describe('GET /api/models', () => {
 
-    it('should get models from AWS bucket', async done => {
+    it('should get models from AWS bucket', async () => {
       config.cloud = 'aws';
       const request = supertest(app);
       const response = await request.get('/api/models');
@@ -112,10 +112,9 @@ describe('Model Controller Tests', () => {
       expect(response.body.models.Model).toMatchObject(['0', '1']);
       expect(response.body.models).toHaveProperty('Model2');
       expect(response.body.models.Model2).toMatchObject(['0', '1']);
-      done();
     });
 
-    it('should get models from GCP bucket', async done => {
+    it('should get models from GCP bucket', async () => {
       config.cloud = 'gcp';
 
       const request = supertest(app);
@@ -125,7 +124,6 @@ describe('Model Controller Tests', () => {
       expect(response.body).toHaveProperty('models');
       expect(response.body.models).toHaveProperty('Model');
       expect(response.body.models.Model).toMatchObject(['0']);
-      done();
     });
 
   });

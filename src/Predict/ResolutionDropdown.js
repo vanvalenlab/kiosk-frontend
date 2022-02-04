@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 export default function ResolutionDropdown({
   modelMpp = 0.5,
@@ -28,6 +28,7 @@ export default function ResolutionDropdown({
     <FormGroup row>
       <FormControl>
         <Select
+          size="small"
           labelId="input-resolution-select-label"
           id="input-resolution-select"
           value={scale}
@@ -35,6 +36,7 @@ export default function ResolutionDropdown({
           onClose={() => setIsOpen(false)}
           onOpen={() => setIsOpen(true)}
           onChange={e => onChange(e.target.value)}
+          variant="standard"
         >
           {Object.entries(zoomToMpp).map(([zoom, mpp], i) => {
             return (

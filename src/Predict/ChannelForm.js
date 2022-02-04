@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-
-const useStyles = makeStyles(theme => ({
-  leftPad: {
-    paddingLeft: theme.spacing(1),
-  },
-  floatLeft: {
-    float: 'left',
-  },
-  capitalize: {
-    textTransform: 'capitalize',
-  }
-}));
+import FormControl from '@mui/material/FormControl';
+import FormGroup from '@mui/material/FormGroup';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 function ChannelDropdown(props) {
 
   const { label, value, channels, onChange } = props;
   const [isOpen, setIsOpen] = useState(false);
 
-  const classes = useStyles();
-
   return (
-    <FormControl fullWidth>
+    <FormControl variant='standard' fullWidth>
       <InputLabel margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
       <Select
+        size='small'
         labelId={`${label}-input`}
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -38,10 +24,10 @@ function ChannelDropdown(props) {
         onChange={onChange}
         value={value}
         autoWidth={true}
-        className={classes.leftPad, classes.capitalize}
+        sx={{ textTransform: 'capitalize' }}
       >
         {channels.map((c, i) => (
-          <MenuItem value={c} key={i} className={classes.capitalize}>
+          <MenuItem value={c} key={i} sx={{ textTransform: 'capitalize' }}>
             Channel {i+1} ({c})
           </MenuItem>
         ))}

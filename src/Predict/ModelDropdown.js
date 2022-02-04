@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 
 export default function ModelDropdown(props) {
@@ -29,15 +29,17 @@ export default function ModelDropdown(props) {
   return (
     <FormControl>
       <Select
+        size='small'
         open={isOpen}
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
         onChange={e => onChange(e.target.value)}
         value={value}
-        style={{textTransform: 'capitalize'}}
+        sx={{ textTransform: 'capitalize' }}
+        variant="standard"
       >
         {allJobTypes.map((job, i) => (
-          <MenuItem value={job} style={{textTransform: 'capitalize'}} key={i}>
+          <MenuItem value={job} sx={{ textTransform: 'capitalize' }} key={i}>
             {job}
           </MenuItem>
         ))}

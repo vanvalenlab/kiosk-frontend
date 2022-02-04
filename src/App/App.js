@@ -1,10 +1,13 @@
 import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
-
+import CssBaseline from '@mui/material/CssBaseline';
+import CircularProgress from '@mui/material/CircularProgress';
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import { styled } from '@mui/system';
 import useGoogleAnalytics from '../analytics';
+
+const Div = styled('div')``;
+const Main = styled('main')``;
 
 const About = lazy(() => import('../About/About'));
 const Faq = lazy(() => import('../Faq/Faq'));
@@ -22,28 +25,17 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
-const useStyles = makeStyles(theme => ({ // eslint-disable-line no-unused-vars
-  root: {
-    display: 'flex',
-    minHeight: '100vh',
-    flexDirection: 'column'
-  },
-  main: {
-    flexGrow: 1,
-  }
-}));
+const theme = createTheme();
 
-export default function App() {
-  const classes = useStyles();
-
+function KioskFrontend() {
   useGoogleAnalytics();
 
   return (
-    <div className={classes.root}>
+    <Div sx={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
       <Suspense fallback={<CircularProgress />}>
         <CssBaseline />
         <NavBar />
-        <main className={classes.main}>
+        <Main sx={{ flexGrow: 1 }}>
           <Switch>
             <Route exact path='/' component={Landing}/>
             <Route path='/about' component={About}/>
@@ -52,9 +44,19 @@ export default function App() {
             <Route path='/docs' component={Swagger} />
             <Route component={NotFound} />
           </Switch>
-        </main>
+        </Main>
         <Footer />
       </Suspense>
-    </div>
+    </Div>
   );
 }
+
+function App() {
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>
+    </StyledEngineProvider>
+  );
+}
+
+export default App;

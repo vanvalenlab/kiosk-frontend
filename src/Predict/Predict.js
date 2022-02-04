@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
 import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from './FileUpload';
@@ -30,35 +30,11 @@ const labelBackend = isProd ?
   window.REACT_APP_LABEL_BACKEND :
   (process.env.REACT_APP_LABEL_BACKEND || 'localhost');
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  progress: {
-    margin: theme.spacing(2),
-  },
-  paddedTop: {
-    paddingTop: theme.spacing(4),
-  },
-  capitalize: {
-    textTransform: 'capitalize',
-  },
-  title: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(4),
-    height: '100%',
-    width: '100%',
-  },
-}));
+const Div = styled('div')``;
 
 const SubmitButton = ({ onClick, disabled }) => {
-  const classes = useStyles();
-
   return (
-    <Grid id='submitButtonWrapper' item lg className={classes.paddedTop}>
+    <Grid id='submitButtonWrapper' item lg sx={{ pt: 4 }}>
       <Button
         id='submitButton'
         variant='contained'
@@ -79,28 +55,26 @@ SubmitButton.propTypes = {
 };
 
 const ProgressBar = ({ progress, status }) => {
-  const classes = useStyles();
-
   return (
-    <Grid item lg className={classes.paddedTop}>
+    <Grid item lg sx={{ pt: 4 }}>
       {progress === 0 || progress === null ?
         <LinearProgress
           variant="buffer"
           value={0}
           valueBuffer={0}
-          className={classes.progress}
+          sx={{ m: 2 }}
         />
         :
         <LinearProgress
           variant="determinate"
           value={progress}
-          className={classes.progress}
+          sx={{ m: 2 }}
         />
       }
       {/* Display status updates to user */}
       {status.length > 0 &&
         <Typography
-          className={classes.paddedTop, classes.capitalize}
+          sx={{ pt: 4, textTransform: 'capitalize' }}
           variant='body1'
           align='center'
           color='primary'>
@@ -137,10 +111,8 @@ JobCompleteButtons.propTypes = {
 };
 
 const DownloadButton = ({ downloadUrl }) => {
-  const classes = useStyles();
-
   return (
-    <Grid item lg className={classes.paddedTop}>
+    <Grid item lg sx={{ pt: 4 }}>
       <Button
         href={downloadUrl}
         variant='contained'
@@ -158,8 +130,6 @@ DownloadButton.propTypes = {
 };
 
 const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
-  const classes = useStyles();
-
   const openResultsInLabel = () => {
     var formData = new FormData();
     formData.append('url', imageUrl);
@@ -178,13 +148,8 @@ const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
   };
 
   return (
-    <Grid item lg className={classes.paddedTop}>
-      <Button
-        variant='contained'
-        size='large'
-        fullWidth
-        color='default'
-        onClick={openResultsInLabel}>
+    <Grid item lg sx={{ pt: 4 }}>
+      <Button variant='contained' size='large' fullWidth onClick={openResultsInLabel}>
         View Results
       </Button>
     </Grid>
@@ -198,10 +163,8 @@ OpenInLabelButton.propTypes = {
 };
 
 const SubmitNewButton = () => {
-  const classes = useStyles();
-
   return (
-    <Grid item lg className={classes.paddedTop}>
+    <Grid item lg sx={{ pt: 4 }}>
       <Button
         href='/predict'
         variant='contained'
@@ -215,7 +178,6 @@ const SubmitNewButton = () => {
 };
 
 export default function Predict() {
-
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [dimensionOrder, setDimensionOrder] = useState('');
@@ -243,8 +205,6 @@ export default function Predict() {
   const updateTargetChannels = (value, target) => {
     setTargetChannels({ ...targetChannels,  [target]: value });
   };
-
-  const classes = useStyles();
 
   useEffect(() => {
     if (selectedJobType) {
@@ -364,18 +324,18 @@ export default function Predict() {
   };
 
   return (
-    <div className={classes.root}>
+    <Div sx={{ flexGrow: 1 }}>
 
-      <Container maxWidth="md" className={classes.paddedTop}>
+      <Container maxWidth="md" sx={{ pt: 4 }}>
         <form autoComplete="off">
-          <Grid container direction="row" justify="center" spacing={6}>
+          <Grid container direction="row" justifyContent="center" spacing={6}>
 
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
 
               {/* Job Options section */}
               <Grid container>
-                <Paper className={classes.paper}>
+                <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
                   <Grid container spacing={1}>
 
                     {/* Prediction type and Image Resolution in a column */}
@@ -416,8 +376,8 @@ export default function Predict() {
               </Grid>
 
               {/* File Upload section */}
-              <Grid container direction="row" justify="center" className={classes.paddedTop}>
-                <Paper className={classes.paper}>
+              <Grid container direction="row" justifyContent="center" sx={{ pt: 4 }}>
+                <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
                   <Grid item lg>
                     <FileUpload
                       infoText='Upload Here to Begin Image Prediction'
@@ -445,15 +405,14 @@ export default function Predict() {
           { errorText.length > 0 &&
             <div>
               <Typography
-                className={classes.paddedTop}
+                sx={{ pt: 4, whiteSpace: 'pre-line' }}
                 variant='body2'
-                style={{whiteSpace: 'pre-line'}}
                 align='center'
                 color='error'>
                 {errorText}
               </Typography>
               <Typography
-                className={classes.paddedTop}
+                sx={{ pt: 4 }}
                 variant='subtitle2'
                 align='center'
                 color='error'>
@@ -480,6 +439,6 @@ export default function Predict() {
 
         </form>
       </Container>
-    </div>
+    </Div>
   );
 }

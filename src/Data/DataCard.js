@@ -1,40 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
 
-const useStyles = makeStyles(theme => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-    [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
-      width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  cardGrid: {
-    padding: `${theme.spacing(8)}px 0`,
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  }
-}));
+const Div = styled('div')``;
 
 const allCards = [
   {
@@ -126,7 +101,7 @@ const allCards = [
 export default function DataCard(props) {
   const { cardType } = props;
   const [cardsInUse, setCardsInUse] = useState([]);
-  const classes = useStyles();
+
   const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
 
   const trainingData = 'training';
@@ -161,18 +136,26 @@ export default function DataCard(props) {
     organizeCardTypes();
   }, [baseUrl]);
 
-  return(
-    <div className={classes.layout, classes.cardGrid}>
+  return (
+    <Div sx={(theme) => ({
+      p: `${theme.spacing(8)} 0`,
+      width: 'auto',
+      mx: theme.spacing(3),
+      [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
+        width: 1100,
+        mx: 'auto',
+      },
+    })}>
       <Grid container spacing={4}>
         {cardsInUse.map(card => (
           <Grid item key={allCards.indexOf(card)} xs={12} sm={6} md={3}>
-            <Card className={classes.card}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardMedia
-                className={classes.cardMedia}
+                sx={{ pt: '56.25%' }} // 16:9
                 image={`${baseUrl}/${card.thumbnail}`}
                 title={`${card.name}`}
               />
-              <CardContent className={classes.cardContent}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h5">
                   { card.name }
                 </Typography>
@@ -193,7 +176,7 @@ export default function DataCard(props) {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </Div>
   );
 }
 

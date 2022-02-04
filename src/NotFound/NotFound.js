@@ -1,28 +1,19 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
 
-const useStyles = makeStyles({
-  root: {
-    paddingTop: '20%',
-    flexGrow: 1,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-});
+const Div = styled('div')``;
 
 export default function NotFound() {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <Typography variant='h2' color='inherit' className={classes.grow} gutterBottom align='center'>
+    <Div sx={{ pt: '20%', flexGrow: 1 }}>
+      <Typography variant='h2' color='inherit' sx={{ flexGrow: 1 }} gutterBottom align='center'>
         404 page not found
       </Typography>
 
-      <Typography variant='h5' color='inherit' className={classes.grow} gutterBottom align='center'>
+      <Typography variant='h5' color='inherit' sx={{ flexGrow: 1 }} gutterBottom align='center'>
         We are sorry but the page you are looking for does not exist.
       </Typography>
-    </div>
+    </Div>
   );
 }

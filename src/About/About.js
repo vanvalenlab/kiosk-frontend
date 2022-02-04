@@ -1,60 +1,29 @@
 import React from 'react';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// import AboutImage from '.VirtuousCycle.svg';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { styled } from '@mui/system';
 import AboutImage from './VirtuousCycle.png';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    margin: theme.spacing(4)
-  },
-  heroUnit: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  heroContent: {
-    maxWidth: 800,
-    margin: '0 auto',
-    padding: `${theme.spacing(8)}px 0 ${theme.spacing(6)}px`,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-  sectionHeader: {
-    // margin: theme.spacing(4),
-    padding: theme.spacing(2),
-    textAlign: 'center',
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0,
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
-  img: {
-    maxWidth: '100%'
-  }
-}));
+const Div = styled('div')``;
+const Img = styled('img')``;
+
+const headingStyle = {
+  fontSize: (theme) => theme.typography.pxToRem(15),
+  flexBasis: '33.33%',
+  flexShrink: 0
+};
+
 
 export default function About() {
-
-  const classes = useStyles();
-
-  return(
-    <div className={classes.root}>
+  return (
+    <Div sx={{ flexGrow: 1, m: 4 }}>
       {/* Start Top Banner Area */}
       <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
         What is DeepCell?
@@ -66,14 +35,13 @@ export default function About() {
         container
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
 
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
+          <Paper sx={{ p: 2, textAlign: 'center', color: 'text.secondary' }}>
             <Container  maxWidth="sm">
-              {/* <AboutImage /> */}
-              <img className={classes.img} src={AboutImage}/>
+              <Img sx={{ maxWidth: '100%' }} src={AboutImage}/>
             </Container>
           </Paper>
         </Grid>
@@ -81,15 +49,24 @@ export default function About() {
       </Grid>
       {/* SVG Image - END */}
 
-      <Typography variant="h5" align="center" color="textSecondary" className={classes.heroContent}>
+      <Typography
+        variant="h5"
+        align="center"
+        color="textSecondary"
+        sx={{
+          maxWidth: 800,
+          m: '0 auto',
+          p: (theme) => `${theme.spacing(8)} 0 ${theme.spacing(6)}`
+        }}
+      >
         DeepCell is a collection of machine learning resources that facilitate the development and application of new deep learning methods to biology by addressing 3 needs:
         (1) Data Annotation and Management, (2) Model Development, and (3) Deployment and Inference
       </Typography>
 
-      <Grid container alignItems="stretch" justify="space-evenly">
+      <Grid container alignItems="stretch" justifyContent="space-evenly">
 
         <Grid item xs={10}>
-          <Typography variant="h4" className={classes.sectionHeader}>
+          <Typography variant="h4" sx={{ p: 2, textAlign: 'center' }}>
             Data Annotation and Management
           </Typography>
 
@@ -99,7 +76,7 @@ export default function About() {
               aria-controls="panel-data-1-content"
               id="panel-data-1-header"
             >
-              <Typography className={classes.heading}>DeepCell Label</Typography>
+              <Typography sx={headingStyle}>DeepCell Label</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -113,7 +90,7 @@ export default function About() {
         </Grid>
 
         <Grid item xs={10}>
-          <Typography variant="h4" className={classes.sectionHeader}>
+          <Typography variant="h4" sx={{ p: 2, textAlign: 'center' }}>
             Model Development
           </Typography>
 
@@ -123,7 +100,7 @@ export default function About() {
               aria-controls="panel-model-dev-1-content"
               id="panel-model-dev-1-header"
             >
-              <Typography className={classes.heading}>deepcell-tf</Typography>
+              <Typography sx={headingStyle}>deepcell-tf</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -138,7 +115,7 @@ export default function About() {
         </Grid>
 
         <Grid item xs={10}>
-          <Typography variant="h4" className={classes.sectionHeader}>
+          <Typography variant="h4" sx={{ p: 2, textAlign: 'center' }}>
             Deployment & Inference
           </Typography>
 
@@ -148,7 +125,7 @@ export default function About() {
               aria-controls="panel-deployment-3-content"
               id="panel-deployment-3-header"
             >
-              <Typography className={classes.heading}>kiosk-console</Typography>
+              <Typography sx={headingStyle}>kiosk-console</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography component={'span'}>
@@ -169,8 +146,7 @@ export default function About() {
               aria-controls="panel-deployment-3-content"
               id="panel-deployment-3-header"
             >
-              <Typography className={classes.heading}>kiosk-imagej-plugin</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
+              <Typography sx={headingStyle}>kiosk-imagej-plugin</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -185,8 +161,7 @@ export default function About() {
               aria-controls="panel-deployment-2-content"
               id="panel-deployment-2-header"
             >
-              <Typography className={classes.heading}>deepcell-applications</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
+              <Typography sx={headingStyle}>deepcell-applications</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -202,8 +177,7 @@ export default function About() {
               aria-controls="panel-deployment-4-content"
               id="panel-deployment-4-header"
             >
-              <Typography className={classes.heading}>ark-analysis</Typography>
-              {/* <Typography className={classes.secondaryHeading}>I am an accordion</Typography> */}
+              <Typography sx={headingStyle}>ark-analysis</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -214,11 +188,8 @@ export default function About() {
               </Typography>
             </AccordionDetails>
           </Accordion>
-
         </Grid>
-
       </Grid>
-
-    </div>
+    </Div>
   );
 }
