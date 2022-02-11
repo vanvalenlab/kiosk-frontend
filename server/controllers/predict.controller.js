@@ -109,13 +109,14 @@ async function predict(req, res) {
       'preprocess_function', data.preprocessFunction || '',
       'cuts', data.cuts || '0', // to split up very large images
       'url', data.imageUrl || '', // unused?
-      'scale', data.dataRescale || '',
       'label', data.dataLabel || '',
       'status', 'new',
       'created_at', now,
       'updated_at', now,
       'identity_upload', config.hostname,
-      'channels', data.channels || '',
+      'channels', data.jobForm.selectedChannels || '',
+      'scale', data.jobForm.scale || '',
+      'segmentation_type', data.jobForm.segmentationType || '',
     ]);
     await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });

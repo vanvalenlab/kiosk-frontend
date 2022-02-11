@@ -1,30 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PropTypes } from 'prop-types';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import axios from 'axios';
 
 export default function ModelDropdown(props) {
 
-  const { value, onChange, onError } = props;
+  const { value, onChange, options } = props;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [allJobTypes, setAllJobTypes] = useState([]);
-
-  const getAllJobTypes = () => {
-    axios({
-      method: 'get',
-      url: '/api/jobtypes'
-    }).then((response) => {
-      setAllJobTypes(response.data.jobTypes);
-      onChange(response.data.jobTypes[0]);
-    }).catch(error => {
-      onError(`Failed to get job types due to error: ${error}`);
-    });
-  };
-
-  useEffect(() => getAllJobTypes(), [0]);
 
   return (
     <FormControl>
@@ -38,9 +22,9 @@ export default function ModelDropdown(props) {
         sx={{ textTransform: 'capitalize' }}
         variant="standard"
       >
-        {allJobTypes.map((job, i) => (
-          <MenuItem value={job} sx={{ textTransform: 'capitalize' }} key={i}>
-            {job}
+        {options.map((jobType, i) => (
+          <MenuItem value={jobType} sx={{ textTransform: 'capitalize' }} key={i}>
+            {jobType}
           </MenuItem>
         ))}
       </Select>
@@ -51,5 +35,5 @@ export default function ModelDropdown(props) {
 ModelDropdown.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  onError: PropTypes.func,
+  options: PropTypes.array,
 };

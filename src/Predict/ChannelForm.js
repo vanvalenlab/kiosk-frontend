@@ -8,9 +8,9 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 function ChannelDropdown(props) {
-
-  const { label, value, channels, onChange } = props;
+  const { label, value, onChange } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const channels = ['red', 'green', 'blue'];
 
   return (
     <FormControl variant='standard' fullWidth>
@@ -27,7 +27,7 @@ function ChannelDropdown(props) {
         sx={{ textTransform: 'capitalize' }}
       >
         {channels.map((c, i) => (
-          <MenuItem value={c} key={i} sx={{ textTransform: 'capitalize' }}>
+          <MenuItem value={i} key={c} sx={{ textTransform: 'capitalize' }}>
             Channel {i+1} ({c})
           </MenuItem>
         ))}
@@ -38,7 +38,7 @@ function ChannelDropdown(props) {
 
 ChannelDropdown.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.number,
   channels: PropTypes.array,
   onChange: PropTypes.func,
 };
@@ -46,18 +46,17 @@ ChannelDropdown.propTypes = {
 
 export default function ChannelForm(props) {
 
-  const { targetChannels, channels, onChange } = props;
-
+  const { selectedChannels, requiredChannels, onChange } = props;
   return (
     <FormGroup>
       <Grid container spacing={1} xs={12}>
-        {targetChannels && Object.keys(targetChannels).map((t, i) => (
+        {selectedChannels && selectedChannels.map((channel, i) => (
           <Grid item key={i}>
             <ChannelDropdown
-              label={`${t}`}
-              value={targetChannels[t]}
-              channels={channels}
-              onChange={e => onChange(e.target.value, t)}
+              label={`${requiredChannels[i]}`}
+              value={channel}
+              index={i}
+              onChange={e => onChange(e.target.value, i)}
             />
           </Grid>
         ))}
@@ -67,7 +66,7 @@ export default function ChannelForm(props) {
 }
 
 ChannelForm.propTypes = {
-  channels: PropTypes.array,
-  targetChannels: PropTypes.object,
+  requiredChannels: PropTypes.array,
+  selectedChannels: PropTypes.array,
   onChange: PropTypes.func,
 };
