@@ -114,9 +114,9 @@ async function predict(req, res) {
       'created_at', now,
       'updated_at', now,
       'identity_upload', config.hostname,
-      'channels', data.jobForm.selectedChannels || '',
-      'scale', data.jobForm.scale || '',
-      'segmentation_type', data.jobForm.segmentationType || '',
+      'channels', data.jobForm?.selectedChannels || '',
+      'scale', data.jobForm?.scale || '',
+      'segmentation_type', data.jobForm?.segmentationType || '',
     ]);
     await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
