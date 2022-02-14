@@ -8,13 +8,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 function ChannelDropdown(props) {
-  const { label, value, onChange } = props;
+  const { label, value, onChange, required } = props;
   const [isOpen, setIsOpen] = useState(false);
   const channels = ['red', 'green', 'blue'];
 
   return (
     <FormControl variant='standard' fullWidth>
-      <InputLabel margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
+      <InputLabel shrink margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
       <Select
         size='small'
         labelId={`${label}-input`}
@@ -23,10 +23,12 @@ function ChannelDropdown(props) {
         onOpen={() => setIsOpen(true)}
         onChange={onChange}
         value={value}
-        autoWidth={true}
+        // autoWidth={true}
+        displayEmpty
         sx={{ textTransform: 'capitalize' }}
       >
-        {channels.map((c, i) => (
+        {!required && <MenuItem value={null}>None</MenuItem>}
+        {channels.map((c , i) => (
           <MenuItem value={i} key={c} sx={{ textTransform: 'capitalize' }}>
             Channel {i+1} ({c})
           </MenuItem>
@@ -41,22 +43,24 @@ ChannelDropdown.propTypes = {
   value: PropTypes.number,
   channels: PropTypes.array,
   onChange: PropTypes.func,
+  required: PropTypes.bool, 
 };
 
 
 export default function ChannelForm(props) {
 
-  const { selectedChannels, requiredChannels, onChange } = props;
+  const { channels, selectedChannels, requiredChannels, onChange } = props;
   return (
     <FormGroup>
-      <Grid container spacing={1} xs={12}>
+      <Grid container spacing={1} xs={12} direction='column'>
         {selectedChannels && selectedChannels.map((channel, i) => (
-          <Grid item key={i}>
+          <Grid item key={channels[i]}>
             <ChannelDropdown
-              label={`${requiredChannels[i]}`}
+              label={`${channels[i]}`}
               value={channel}
               index={i}
               onChange={e => onChange(e.target.value, i)}
+              required={requiredChannels[i]}
             />
           </Grid>
         ))}
@@ -66,6 +70,7 @@ export default function ChannelForm(props) {
 }
 
 ChannelForm.propTypes = {
+  channels: PropTypes.array,
   requiredChannels: PropTypes.array,
   selectedChannels: PropTypes.array,
   onChange: PropTypes.func,

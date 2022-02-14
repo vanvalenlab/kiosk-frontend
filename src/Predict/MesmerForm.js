@@ -15,8 +15,9 @@ MesmerForm.propTypes = {
 
 export default function MesmerForm({ selectJobType, setJobForm }) {
   const modelResolution = jobData.mesmer.modelResolution;
-  const requiredChannels = jobData.mesmer.requiredChannels;
-  const [selectedChannels, setSelectedChannels] = useState([...Array(requiredChannels.length).keys()]);
+  const channels = jobData.mesmer.requiredChannels;
+  const [requiredChannels] = useState(Array(channels.length).fill(true));
+  const [selectedChannels, setSelectedChannels] = useState([...Array(channels.length).keys()]);
   const [scale, setScale] = useState(1);
 
   const updateSelectedChannels = (value, i) => {
@@ -49,6 +50,7 @@ export default function MesmerForm({ selectJobType, setJobForm }) {
           </Grid>
           <Grid item md={6}>
             <ChannelForm
+              channels={channels}
               requiredChannels={requiredChannels}
               selectedChannels={selectedChannels}
               onChange={updateSelectedChannels}

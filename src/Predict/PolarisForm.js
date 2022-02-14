@@ -53,26 +53,31 @@ PolarisForm.propTypes = {
 };
 
 export default function PolarisForm({ selectJobType, setJobForm }) {
+  const [channels, setChannels] = useState([]);
   const [requiredChannels, setRequiredChannels] = useState([]);
-  const [selectedChannels, setSelectedChannels] = useState([]); // which channel to use for each required channel
+  const [selectedChannels, setSelectedChannels] = useState([]);
   const [segmentationType, setSegmentationType] = useState('none');
   const segmentationOptions = ['none', 'tissue', 'cell culture'];
 
   useEffect(() => {
     if (segmentationType === 'none') {
+      setChannels([]);
       setRequiredChannels([]);
+      setSelectedChannels([]);
     } else if (segmentationType === 'tissue') {
-      setRequiredChannels(['spots', 'nuclei', 'cytoplasm']);
+      setChannels(['spots', 'nuclei', 'cytoplasm']);
+      setRequiredChannels([true, true, true]);
+      setSelectedChannels([0, 1, 2]);
     } else if (segmentationType === 'cell culture') {
-      setRequiredChannels(['spots', 'nuclei', 'cytoplasm']);
+      setChannels(['spots', 'nuclei', 'cytoplasm']);
+      setRequiredChannels([true, false, false]);
+      setSelectedChannels([0, null, null]);
     } else {
+      setChannels([]);
       setRequiredChannels([]);
+      setSelectedChannels([]);
     }
   }, [segmentationType]);
-
-  useEffect(() => {
-    setSelectedChannels([...Array(requiredChannels.length).keys()]);
-  }, [requiredChannels]);
 
   useEffect(() => {
     setJobForm({ selectedChannels: selectedChannels.join(','), segmentationType });
@@ -104,8 +109,9 @@ export default function PolarisForm({ selectJobType, setJobForm }) {
           </Grid>
           <Grid item md={6}>
             <ChannelForm
-              requiredChannels={requiredChannels}
+              channels={channels}
               selectedChannels={selectedChannels}
+              requiredChannels={requiredChannels}
               onChange={updateSelectedChannels}
             />
           </Grid>
