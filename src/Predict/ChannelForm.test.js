@@ -11,7 +11,8 @@ describe('<ChannelForm/> component tests', () => {
     const target2 = 'channelLabel2';
     const { getByText } = render(
       <ChannelForm
-        requiredChannels={[target1, target2]}
+        channels={[target1, target2]}
+        requiredChannels={[true, true]}
         selectedChannels={[0, 1]}
       />
     );
