@@ -13,9 +13,9 @@ import queryString from 'query-string';
 import FileUpload from './FileUpload';
 import JobCard from './JobCard';
 import ModelDropdown from './ModelDropdown';
-import ResolutionDropdown from './ResolutionDropdown';
-import ChannelForm from './ChannelForm';
 import jobData from './jobData';
+import MesmerForm from './MesmerForm';
+import PolarisForm from './PolarisForm';
 
 // get DeepCell Label viewer addresses from the environment.
 // these are defined in public/index.html to allow the server
@@ -181,43 +181,15 @@ export default function Predict() {
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [dimensionOrder, setDimensionOrder] = useState('');
-  const [downloadUrl, setdownloadUrl] = useState(null);
+  const [downloadUrl, setDownloadUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [progress, setProgress] = useState(0);
-  const [selectedJobType, setSelectedJobType] = useState('');
+  const [jobType, setJobType] = useState('');
   const [submittedJobType, setSubmittedJobType] = useState('');
-  const [displayRescaleForm, setDisplayRescaleForm] = useState(false);
-  const [displayChannelForm, setDisplayChannelForm] = useState(false);
-  const [modelResolution, setModelResolution] = useState(0.5);
-  const [scale, setScale] = useState(1);
   const [status, setStatus] = useState('');
-
-  /**
-   * Select a channel for each target
-   */
-  const [targetChannels, setTargetChannels] = useState({});
-  const channels = ['red', 'green', 'blue'];
-  const channelValues =  Object.keys(channels).reduce((r, c) =>
-    Object.assign(r, { [channels[c]]: parseInt((r[channels[c]] || '').concat(c)) }), {});
-
-  const updateTargetChannels = (value, target) => {
-    setTargetChannels({ ...targetChannels,  [target]: value });
-  };
-
-  useEffect(() => {
-    if (selectedJobType) {
-      setDisplayRescaleForm(jobData[selectedJobType].scaleEnabled);
-      setDisplayChannelForm(jobData[selectedJobType].channelEnabled);
-      setModelResolution(jobData[selectedJobType].modelResolution);
-      const jobTargets = jobData[selectedJobType].requiredChannels;
-      setTargetChannels(jobTargets.reduce((result, item, index) => {
-        result[item] = channels[index];
-        return result;
-      }, {}));
-    }
-  }, [selectedJobType]);
+  const [jobForm, setJobForm] = useState({});
 
   const expireRedisHash = (redisHash, expireIn) => {
     axios({
@@ -259,7 +231,7 @@ export default function Predict() {
           expireRedisHash(redisHash, 3600);
         } else if (response.data.value[0] === 'done') {
           clearInterval(statusCheck);
-          setdownloadUrl(response.data.value[2]);
+          setDownloadUrl(response.data.value[2]);
           setDimensionOrder(response.data.value[5]);
           expireRedisHash(redisHash, 3600);
           // This is only used during zip uploads.
@@ -295,10 +267,8 @@ export default function Predict() {
         imageName: fileName,
         uploadedName: uploadedFileName,
         imageUrl: imageUrl,
-        jobType: selectedJobType,
-        dataRescale: scale,
-        channels: (jobData[selectedJobType].requiredChannels).map(
-          c => channelValues[targetChannels[c]]).join(','),
+        jobType: jobType,
+        jobForm: jobForm,
       }
     }).then((response) => {
       checkJobStatus(response.data.hash, 3000);
@@ -319,62 +289,48 @@ export default function Predict() {
     }
     setSubmitted(true);
     setStatus('submitting');
-    setSubmittedJobType(selectedJobType);
+    setSubmittedJobType(jobType);
     predict();
   };
 
+  const [jobTypes, setJobTypes] = useState([]);
+
+  const getJobTypes = () => {
+    axios({
+      method: 'get',
+      url: '/api/jobtypes'
+    }).then((response) => {
+      setJobTypes(response.data.jobTypes);
+      setJobType(response.data.jobTypes[0]);
+    }).catch(error => {
+      setErrorText(`Failed to get job types due to error: ${error}`);
+    });
+  };
+
+  useEffect(() => getJobTypes(), []);
+
+  // Make Prediction Type dropdown to use with any job form
+  const selectJobType = <Grid item>
+    <Typography>
+      Prediction Type
+    </Typography>
+    <ModelDropdown
+      options={jobTypes}
+      value={jobType}
+      onChange={setJobType}
+    />
+  </Grid>;
+
   return (
     <Div sx={{ flexGrow: 1 }}>
-
       <Container maxWidth="md" sx={{ pt: 4 }}>
         <form autoComplete="off">
           <Grid container direction="row" justifyContent="center" spacing={6}>
-
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
-
-              {/* Job Options section */}
-              <Grid container>
-                <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
-                  <Grid container spacing={1}>
-
-                    {/* Prediction type and Image Resolution in a column */}
-                    <Grid item md={6}>
-                      <Grid container direction={'column'} spacing={1}>
-                        <Grid item>
-                          <Typography>
-                            Prediction Type
-                          </Typography>
-                          <ModelDropdown
-                            value={selectedJobType}
-                            onChange={setSelectedJobType}
-                            onError={setErrorText}
-                          />
-                        </Grid>
-                        { displayRescaleForm && <Grid item lg>
-                          <Typography>Image Resolution</Typography>
-                          <ResolutionDropdown
-                            modelMpp={modelResolution}
-                            scale={scale}
-                            onChange={setScale}
-                          />
-                        </Grid>}
-                      </Grid>
-                    </Grid>
-                    { displayChannelForm && <Grid item md={6}>
-                      {/* <Typography align="right">
-                        Input Channels
-                      </Typography> */}
-                      <ChannelForm
-                        channels={channels}
-                        targetChannels={targetChannels}
-                        onChange={updateTargetChannels}
-                      />
-                    </Grid>}
-                  </Grid>
-                </Paper>
-              </Grid>
-
+              {/* Job Form section */}
+              {jobType === 'mesmer' && <MesmerForm selectJobType={selectJobType} setJobForm={setJobForm} />}
+              {jobType === 'polaris' && <PolarisForm selectJobType={selectJobType} setJobForm={setJobForm} />}
               {/* File Upload section */}
               <Grid container direction="row" justifyContent="center" sx={{ pt: 4 }}>
                 <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
@@ -389,18 +345,14 @@ export default function Predict() {
                   </Grid>
                 </Paper>
               </Grid>
-
             </Grid>
-
             {/* Job info display on left column */}
             <Grid item xs={12} sm={6}>
-              { selectedJobType.length > 0 &&
-              <JobCard {...jobData[selectedJobType]} />
+              { jobType.length > 0 &&
+              <JobCard {...jobData[jobType]} />
               }
             </Grid>
-
           </Grid>
-
           {/* Display error to user */}
           { errorText.length > 0 &&
             <div>
@@ -419,15 +371,12 @@ export default function Predict() {
                 See the <Link href='/faq' target='_blank' rel='noopener noreferrer'>FAQ</Link> for information on common errors.
               </Typography>
             </div> }
-
           {/* Submit button */}
-          { !submitted && <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} /> }
-
+          {!submitted && <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} /> }
           {/* Progress bar for submitted jobs */}
           { submitted && downloadUrl === null && errorText.length == 0 ?
             <ProgressBar progress={progress} status={status} />
             : null }
-
           {/* Download results, Open in Label, and Retry buttons */}
           { downloadUrl !== null &&
             <JobCompleteButtons
@@ -436,7 +385,6 @@ export default function Predict() {
               downloadUrl={downloadUrl}
               dimensionOrder={dimensionOrder}
             />}
-
         </form>
       </Container>
     </Div>

@@ -8,13 +8,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 function ChannelDropdown(props) {
-
-  const { label, value, channels, onChange } = props;
+  const { label, value, onChange, required } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const channels = ['red', 'green', 'blue'];
 
   return (
     <FormControl variant='standard' fullWidth>
-      <InputLabel margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
+      <InputLabel shrink margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
       <Select
         size='small'
         labelId={`${label}-input`}
@@ -23,11 +23,13 @@ function ChannelDropdown(props) {
         onOpen={() => setIsOpen(true)}
         onChange={onChange}
         value={value}
-        autoWidth={true}
+        // autoWidth={true}
+        displayEmpty
         sx={{ textTransform: 'capitalize' }}
       >
-        {channels.map((c, i) => (
-          <MenuItem value={c} key={i} sx={{ textTransform: 'capitalize' }}>
+        {!required && <MenuItem value={null}>None</MenuItem>}
+        {channels.map((c , i) => (
+          <MenuItem value={i} key={c} sx={{ textTransform: 'capitalize' }}>
             Channel {i+1} ({c})
           </MenuItem>
         ))}
@@ -38,26 +40,27 @@ function ChannelDropdown(props) {
 
 ChannelDropdown.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.number,
   channels: PropTypes.array,
   onChange: PropTypes.func,
+  required: PropTypes.bool, 
 };
 
 
 export default function ChannelForm(props) {
 
-  const { targetChannels, channels, onChange } = props;
-
+  const { channels, selectedChannels, requiredChannels, onChange } = props;
   return (
     <FormGroup>
-      <Grid container spacing={1} xs={12}>
-        {targetChannels && Object.keys(targetChannels).map((t, i) => (
-          <Grid item key={i}>
+      <Grid container spacing={1} xs={12} direction='column'>
+        {selectedChannels && selectedChannels.map((channel, i) => (
+          <Grid item key={channels[i]}>
             <ChannelDropdown
-              label={`${t}`}
-              value={targetChannels[t]}
-              channels={channels}
-              onChange={e => onChange(e.target.value, t)}
+              label={`${channels[i]}`}
+              value={channel}
+              index={i}
+              onChange={e => onChange(e.target.value, i)}
+              required={requiredChannels[i]}
             />
           </Grid>
         ))}
@@ -68,6 +71,7 @@ export default function ChannelForm(props) {
 
 ChannelForm.propTypes = {
   channels: PropTypes.array,
-  targetChannels: PropTypes.object,
+  requiredChannels: PropTypes.array,
+  selectedChannels: PropTypes.array,
   onChange: PropTypes.func,
 };
