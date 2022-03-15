@@ -9,7 +9,7 @@ const jobCards = {
     thumbnail: 'thumbnails/HeLa_nuclear_color.png',
     scaleEnabled: true,
     channelEnabled: true,
-    requiredChannels: ['nuclei', 'cytoplasm'],
+    requiredChannels: [],
     modelResolution: 0.5,
     canOpenInLabel: true,
   },
