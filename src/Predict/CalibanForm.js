@@ -17,7 +17,7 @@ export default function CalibanForm({ selectJobType, setJobForm }) {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
-    setJobForm({ scale});
+    setJobForm({ scale });
   }, [scale]);
 
   return (
