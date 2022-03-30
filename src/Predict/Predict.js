@@ -16,6 +16,8 @@ import ModelDropdown from './ModelDropdown';
 import jobData from './jobData';
 import MesmerForm from './MesmerForm';
 import PolarisForm from './PolarisForm';
+import SegmentationForm from './SegmentationForm';
+import CalibanForm from './CalibanForm';
 
 // get DeepCell Label viewer addresses from the environment.
 // these are defined in public/index.html to allow the server
@@ -331,6 +333,8 @@ export default function Predict() {
               {/* Job Form section */}
               {jobType === 'mesmer' && <MesmerForm selectJobType={selectJobType} setJobForm={setJobForm} />}
               {jobType === 'polaris' && <PolarisForm selectJobType={selectJobType} setJobForm={setJobForm} />}
+              {jobType == 'segmentation' && <SegmentationForm selectJobType={selectJobType} setJobForm={setJobForm} />}
+              {jobType == 'caliban' && <CalibanForm selectJobType={selectJobType} setJobForm={setJobForm} />}
               {/* File Upload section */}
               <Grid container direction="row" justifyContent="center" sx={{ pt: 4 }}>
                 <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
