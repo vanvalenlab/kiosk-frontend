@@ -13,7 +13,6 @@ export default function JobCard({
   name = 'Model',
   model = 'The Model takes in single-channeled images.',
   inputs = 'An image file.',
-  resolution = 'Model training resolution.',
   thumbnail = 'https://bit.ly/2ZxBrQ1',
 }) {
 
