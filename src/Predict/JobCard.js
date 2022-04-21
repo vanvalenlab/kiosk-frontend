@@ -37,9 +37,6 @@ export default function JobCard({
         <Typography variant="subtitle1">
           <strong>Inputs:</strong> { inputs }
         </Typography>
-        <Typography variant="subtitle1">
-          <strong>Resolution:</strong> { resolution }
-        </Typography>
       </CardContent>
       <CardActions>
         <Button
