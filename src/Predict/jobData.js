@@ -17,10 +17,10 @@ const jobCards = {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
     name: 'Caliban',
     model: 'Caliban segments and tracks nuclei over time and creates a lineage file with division information.',
-    inputs: 'A single-channel image stack of fluorescent nuclei (3D TIFF).',
+    inputs: 'A single-channel image stack of fluorescent nuclei (3D TIFF). Caliban expects data that is approximately 20X (0.65 μm/pixel).',
     resolution: 'Caliban expects data that is approximately 20X (0.65 μm/pixel).',
     thumbnail: 'thumbnails/3T3_nuc_example_256.png',
-    scaleEnabled: true,
+    scaleEnabled: false,
     channelEnabled: false,  // Caliban form does not have a channel form so this value doesn't matter
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
