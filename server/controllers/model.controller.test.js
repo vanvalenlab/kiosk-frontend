@@ -4,11 +4,15 @@ import app from '../index';
 import config from '../config/config';
 
 const mockGcpResponse = [
-  [], null, { prefixes: [`${config.model.prefix}/Model`] }
+  [],
+  null,
+  { prefixes: [`${config.model.prefix}/Model`] },
 ];
 
 const mockGcpResponse2 = [
-  [], null, { prefixes: [`${config.model.prefix}/Model/0`] }
+  [],
+  null,
+  { prefixes: [`${config.model.prefix}/Model/0`] },
 ];
 
 const mockAwsModel = `${config.model.prefix}/Model`;
@@ -25,21 +29,24 @@ jest.mock('aws-sdk', () => {
       listObjectsV2: jest.fn((params) => {
         return {
           promise() {
-            const isTruncated = !Object.prototype.hasOwnProperty.call(
-              params, 'ContinuationToken')  && !params.Prefix.includes('Model');
+            const isTruncated =
+              !Object.prototype.hasOwnProperty.call(
+                params,
+                'ContinuationToken'
+              ) && !params.Prefix.includes('Model');
 
             let response;
-            if (isTruncated)  {
+            if (isTruncated) {
               response = mockAwsResponse;
             } else if (params.Prefix.endsWith('Model')) {
               response = [
-                { Prefix: `${mockAwsModel}/0`},
-                { Prefix: `${mockAwsModel}/1`}
+                { Prefix: `${mockAwsModel}/0` },
+                { Prefix: `${mockAwsModel}/1` },
               ];
             } else if (params.Prefix.endsWith('Model2')) {
               response = [
-                { Prefix: `${mockAwsModel2}/0`},
-                { Prefix: `${mockAwsModel2}/1`}
+                { Prefix: `${mockAwsModel2}/0` },
+                { Prefix: `${mockAwsModel2}/1` },
               ];
             } else {
               response = mockAwsResponse2;
@@ -48,15 +55,15 @@ jest.mock('aws-sdk', () => {
             return Promise.resolve({
               NextContinuationToken: 'token',
               IsTruncated: isTruncated,
-              CommonPrefixes: response
+              CommonPrefixes: response,
             });
-          }
+          },
         };
-      })
+      }),
     })),
     config: {
-      update: () => true
-    }
+      update: () => true,
+    },
   };
 });
 
@@ -70,11 +77,11 @@ jest.mock('@google-cloud/storage', () => ({
               return mockGcpResponse;
             }
             return mockGcpResponse2;
-          })
+          }),
         };
-      })
+      }),
     };
-  })
+  }),
 }));
 
 jest.mock('../config/multer', () => ({
@@ -83,24 +90,22 @@ jest.mock('../config/multer', () => ({
       req.file = {
         originalname: 'sample.name',
         mimetype: 'sample.type',
-        path: 'sample.url'
+        path: 'sample.url',
       };
       return next();
     };
-  })
+  }),
 }));
 
 jest.mock('../config/config', () => ({
   gcp: {},
   aws: {},
   uploadDirectory: '/test/',
-  model: { prefix: 'models' }
+  model: { prefix: 'models' },
 }));
 
 describe('Model Controller Tests', () => {
-
   describe('GET /api/models', () => {
-
     it('should get models from AWS bucket', async () => {
       config.cloud = 'aws';
       const request = supertest(app);
@@ -125,7 +130,5 @@ describe('Model Controller Tests', () => {
       expect(response.body.models).toHaveProperty('Model');
       expect(response.body.models.Model).toMatchObject(['0']);
     });
-
   });
-
 });

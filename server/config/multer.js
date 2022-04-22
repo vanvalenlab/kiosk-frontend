@@ -6,7 +6,7 @@ import config from './config';
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
   secretAccessKey: config.aws.secretAccessKey,
-  region: config.aws.region
+  region: config.aws.region,
 });
 
 const s3 = new AWS.S3();
@@ -20,18 +20,19 @@ if (prefix[0] === '/') {
 }
 
 const multer = Multer({
-  storage: config.cloud === 'aws' ?
-    multerS3({
-      s3: s3,
-      bucket: config.bucketName,
-      key: (req, file, cb) => {
-        cb(null, `${prefix}/${file.originalname}`);
-      }
-    })
-    : Multer.memoryStorage(),
+  storage:
+    config.cloud === 'aws'
+      ? multerS3({
+          s3: s3,
+          bucket: config.bucketName,
+          key: (req, file, cb) => {
+            cb(null, `${prefix}/${file.originalname}`);
+          },
+        })
+      : Multer.memoryStorage(),
   limits: {
-    fileSize: 5 * 1024 * 1024 * 1024 * 1024 // 5 TB
-  }
+    fileSize: 5 * 1024 * 1024 * 1024 * 1024, // 5 TB
+  },
 });
 
 export default multer;

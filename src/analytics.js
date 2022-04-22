@@ -7,9 +7,9 @@ function init() {
   // Enable debug mode on the local development environment
   const isDev = process.env.NODE_ENV !== 'production';
 
-  const gaTrackingId = !isDev ?
-    window.REACT_APP_GA_TRACKING_ID :
-    (process.env.REACT_APP_GA_TRACKING_ID || 'UA-000000000-0');
+  const gaTrackingId = !isDev
+    ? window.REACT_APP_GA_TRACKING_ID
+    : process.env.REACT_APP_GA_TRACKING_ID || 'UA-000000000-0';
 
   ReactGA.initialize(gaTrackingId, {
     debug: isDev,
@@ -29,11 +29,11 @@ function sendPageview(path) {
 
 export default function useGoogleAnalytics() {
   const location = useLocation();
- 
+
   useEffect(() => {
     init();
   }, []);
- 
+
   useEffect(() => {
     const currentPath = location.pathname + location.search;
     sendPageview(currentPath);

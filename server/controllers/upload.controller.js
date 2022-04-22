@@ -7,7 +7,7 @@ import config from '../config/config';
 import logger from '../config/winston';
 
 const storage = new Storage({
-  projectId: config.gcp.projectId
+  projectId: config.gcp.projectId,
 });
 
 function gcpUpload(req, res, next) {
@@ -23,7 +23,8 @@ function gcpUpload(req, res, next) {
     prefix = prefix.slice(1);
   }
 
-  const hashed = crypto.createHash('md5')
+  const hashed = crypto
+    .createHash('md5')
     .update(`${req.file.originalname}_${Date.now()}`)
     .digest('hex');
 
@@ -41,12 +42,14 @@ function gcpUpload(req, res, next) {
   blobStream.on('finish', () => {
     // The public URL can be used to directly access the file via HTTP.
     // Make the file public
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+    const publicUrl = format(
+      `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+    );
 
     blob.makePublic().then(() => {
       res.status(httpStatus.OK).send({
         imageURL: publicUrl,
-        uploadedName: filename
+        uploadedName: filename,
       });
     });
   });
@@ -59,7 +62,7 @@ function awsUpload(req, res) {
     // TODO: do we need to hash AWS filenames?
     res.status(httpStatus.OK).send({
       imageURL: `${req.file.location}`,
-      uploadedName: req.file.location
+      uploadedName: req.file.location,
     });
   } catch (error) {
     logger.error(`Error uploading file: ${error}`);

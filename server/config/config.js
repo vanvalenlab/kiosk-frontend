@@ -9,40 +9,44 @@ const envVarsSchema = Joi.object({
   NODE_ENV: Joi.string()
     .valid('development', 'production', 'test', 'provision')
     .default('development'),
-  PORT: Joi.number()
-    .default(8080),
+  PORT: Joi.number().default(8080),
   MODEL_PREFIX: Joi.string()
     .description('S3 Folder in which models are saved')
     .default('models'),
   UPLOAD_PREFIX: Joi.string()
     .description('S3 Folder in which uploaded files are saved')
     .default('uploads'),
-  AWS_REGION: Joi.string()
-    .default('us-east-1'),
+  AWS_REGION: Joi.string().default('us-east-1'),
   AWS_ACCESS_KEY_ID: Joi.string().default('invalid_value'),
   AWS_SECRET_ACCESS_KEY: Joi.string().default('invalid_value'),
   GCLOUD_KEY_FILE: Joi.string().default('invalid_value'),
   GCLOUD_PROJECT_ID: Joi.string().default('invalid_value'),
   STORAGE_BUCKET: Joi.string()
-    .description('Cloud storage bucket where data is uploaded and models are saved.')
+    .description(
+      'Cloud storage bucket where data is uploaded and models are saved.'
+    )
     .default('gs://deepcell-output'),
-  HOSTNAME: Joi.string()
-    .description('Kubernetes pod name'),
-  REDIS_HOST: Joi.string().default('localhost')
+  HOSTNAME: Joi.string().description('Kubernetes pod name'),
+  REDIS_HOST: Joi.string()
+    .default('localhost')
     .description('Redis DB host url'),
-  REDIS_PORT: Joi.number()
-    .default(6379),
-  REDIS_SENTINEL: Joi.boolean()
-    .default(true),
-  JOB_TYPES: Joi.string().default('mesmer,polaris')
+  REDIS_PORT: Joi.number().default(6379),
+  REDIS_SENTINEL: Joi.boolean().default(true),
+  JOB_TYPES: Joi.string()
+    .default('mesmer,polaris')
     .description('Comma-separated list of job types (Redis queue names).'),
-  REACT_APP_LABEL_BACKEND: Joi.string().default('localhost')
+  REACT_APP_LABEL_BACKEND: Joi.string()
+    .default('localhost')
     .description('URL for DeepCell Label API'),
-  REACT_APP_LABEL_FRONTEND: Joi.string().default('localhost')
+  REACT_APP_LABEL_FRONTEND: Joi.string()
+    .default('localhost')
     .description('URL for DeepCell Label frontend'),
-  REACT_APP_GA_TRACKING_ID: Joi.string().default('UA-000000000-0')
-    .description('Google Analytics Tracking ID.')
-}).unknown().required();
+  REACT_APP_GA_TRACKING_ID: Joi.string()
+    .default('UA-000000000-0')
+    .description('Google Analytics Tracking ID.'),
+})
+  .unknown()
+  .required();
 
 const envVars = Joi.attempt(process.env, envVarsSchema);
 
@@ -65,11 +69,11 @@ const config = {
   aws: {
     accessKeyId: envVars.AWS_ACCESS_KEY_ID,
     secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
-    region: envVars.AWS_REGION
+    region: envVars.AWS_REGION,
   },
   gcp: {
     keyFile: envVars.GCLOUD_KEY_FILE,
-    projectId: envVars.GCLOUD_PROJECT_ID
+    projectId: envVars.GCLOUD_PROJECT_ID,
   },
   redis: {
     host: envVars.REDIS_HOST,
@@ -77,7 +81,7 @@ const config = {
     sentinelEnabled: envVars.REDIS_SENTINEL,
   },
   model: {
-    prefix: envVars.MODEL_PREFIX
+    prefix: envVars.MODEL_PREFIX,
   },
   uploadDirectory: envVars.UPLOAD_PREFIX,
   jobTypes: envVars.JOB_TYPES.split(','),

@@ -11,35 +11,34 @@ jest.mock('ioredis', () => {
     // the first mock is an ioredis shim because ioredis-mock depends on it
     // https://github.com/stipsan/ioredis-mock/blob/master/src/index.js#L101-L111
     return {
-      Command: { _transformer: { argument: {}, reply: {} } }
+      Command: { _transformer: { argument: {}, reply: {} } },
     };
   }
   // second mock for our code
-  return function(...args) {
+  return function (...args) {
     const dummyData = {
       data: {
         jobId: {
-          'status': 'done',
-          'otherKey': 'testValue'
-        }
-      }
+          status: 'done',
+          otherKey: 'testValue',
+        },
+      },
     };
-    const instance = new Redis({...args, ...dummyData});
+    const instance = new Redis({ ...args, ...dummyData });
     mocks.redis = instance;
     return instance;
-  }
+  };
 });
 
 jest.mock('../config/config', () => {
   return {
     redis: {
-      sentinelEnabled: false
-    }
+      sentinelEnabled: false,
+    },
   };
 });
 
 describe('Redis tests', () => {
-
   beforeEach(() => {
     if (mocks.redis != null) {
       mocks.redis.hmset('jobId', ['status', 'done', 'otherKey', 'testValue']);
@@ -51,7 +50,6 @@ describe('Redis tests', () => {
   });
 
   describe('Test HGET', () => {
-
     it('should get the correct value', async () => {
       let value = await redis.hget('jobId', 'status');
       expect(value).toBe('done');
@@ -60,11 +58,9 @@ describe('Redis tests', () => {
       value = await redis.hget('jobId', 'status');
       expect(value).toBe('done');
     });
-
   });
 
   describe('Test HMGET', () => {
-
     it('should get the correct values', async () => {
       let value = await redis.hmget('jobId', ['status', 'otherKey']);
       expect(value).toMatchObject(['done', 'testValue']);
@@ -73,11 +69,9 @@ describe('Redis tests', () => {
       value = await redis.hmget('jobId', ['status', 'otherKey']);
       expect(value).toMatchObject(['done', 'testValue']);
     });
-
   });
 
   describe('Test EXPIRE', () => {
-
     it('should expire the key', async () => {
       let value = await redis.expire('jobId', 1);
       expect(value).toBe(1);
@@ -98,7 +92,6 @@ describe('Redis tests', () => {
   });
 
   describe('Test LPUSH', () => {
-
     it('should push a single value to a queue', async () => {
       let value = await redis.lpush('testQueue0', 'newKey');
       expect(value).toBe(1);
@@ -131,7 +124,6 @@ describe('Redis tests', () => {
   });
 
   describe('Test HMSET', () => {
-
     it('should set multiple values', async () => {
       const newStatus = 'success';
       let value = await redis.hmset('jobId', ['status', newStatus]);
@@ -148,5 +140,4 @@ describe('Redis tests', () => {
       expect(response).toBe(newStatus);
     });
   });
-
 });

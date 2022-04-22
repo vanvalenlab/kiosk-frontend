@@ -7,13 +7,13 @@ import logger from '../config/winston';
 AWS.config.update({
   accessKeyId: config.aws.accessKeyId,
   secretAccessKey: config.aws.secretAccessKey,
-  region: config.aws.region
+  region: config.aws.region,
 });
 
 const s3 = new AWS.S3();
 
 const gcs = new Storage({
-  projectId: config.gcp.projectId
+  projectId: config.gcp.projectId,
 });
 
 function getModelObject(allModels) {
@@ -35,7 +35,7 @@ function getModelObject(allModels) {
 
 async function getAwsKeys(params, keys) {
   let s3Response = await s3.listObjectsV2(params).promise();
-  s3Response.CommonPrefixes.forEach(obj => keys.push(obj.Prefix));
+  s3Response.CommonPrefixes.forEach((obj) => keys.push(obj.Prefix));
   if (s3Response.IsTruncated) {
     let newParams = Object.assign({}, params);
     newParams.ContinuationToken = s3Response.NextContinuationToken;
@@ -68,12 +68,16 @@ async function getAwsModels(req, res) {
     });
 
     let allModels = [];
-    await Promise.all(arrayOfParams.map(param => getAwsKeys(param, allModels)));
+    await Promise.all(
+      arrayOfParams.map((param) => getAwsKeys(param, allModels))
+    );
     let cleanModels = getModelObject(allModels);
     logger.info(`Found Models: ${JSON.stringify(cleanModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: cleanModels });
   } catch (error) {
-    logger.error(`Error while retrieving models and versions from S3: ${error}`);
+    logger.error(
+      `Error while retrieving models and versions from S3: ${error}`
+    );
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
 }
@@ -81,8 +85,8 @@ async function getAwsModels(req, res) {
 async function getGcpKeys(bucket, key, arr) {
   let response = await bucket.getFiles({
     prefix: key,
-    delimiter:'/',
-    autoPaginate: false
+    delimiter: '/',
+    autoPaginate: false,
   });
   Array.prototype.push.apply(arr, response[2].prefixes);
 }
@@ -97,7 +101,7 @@ async function getGcpModels(req, res) {
     let allModels = [];
     let models = [];
     await getGcpKeys(bucket, config.model.prefix, models);
-    await Promise.all(models.map(m => getGcpKeys(bucket, m, allModels)));
+    await Promise.all(models.map((m) => getGcpKeys(bucket, m, allModels)));
     let cleanModels = getModelObject(allModels);
     logger.info(`Found Models: ${JSON.stringify(cleanModels, null, 4)}`);
     res.status(httpStatus.OK).send({ models: cleanModels });

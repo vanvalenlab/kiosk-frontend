@@ -17,25 +17,34 @@ const app = express();
 app.use(compress());
 
 if (config.env === 'development') {
-  app.use(morgan('dev', {
-    skip: (req, res) => res.statusCode < 400,
-    stream: process.stderr
-  }));
+  app.use(
+    morgan('dev', {
+      skip: (req, res) => res.statusCode < 400,
+      stream: process.stderr,
+    })
+  );
 
-  app.use(morgan('dev', {
-    skip: (req, res) => res.statusCode >= 400,
-    stream: process.stdout
-  }));
+  app.use(
+    morgan('dev', {
+      skip: (req, res) => res.statusCode >= 400,
+      stream: process.stdout,
+    })
+  );
 } else if (config.env === 'production') {
   // capture request logs from morgan
   // removed repeated timestamp from 'combined'
-  app.use(morgan(':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {
-    stream: winstonInstance.stream
-  }));
+  app.use(
+    morgan(
+      ':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
+      {
+        stream: winstonInstance.stream,
+      }
+    )
+  );
 }
 
 // parse body params and attach them to req.body
-app.use(bodyParser.json({limit: '1gb'}));
+app.use(bodyParser.json({ limit: '1gb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1gb' }));
 
 // view engine setup
@@ -50,8 +59,8 @@ if (config.env === 'production') {
 app.use(express.static(DIST_DIR));
 
 app.use(cookieParser());
-app.use(helmet());  // secure apps by setting various HTTP headers
-app.use(cors());   // enable CORS - Cross Origin Resource Sharing
+app.use(helmet()); // secure apps by setting various HTTP headers
+app.use(cors()); // enable CORS - Cross Origin Resource Sharing
 
 // mount all routes
 app.use('/api', routes);
@@ -85,16 +94,19 @@ app.get('*', (req, res) => {
 
 // log error in winston transports except when executing test suite
 if (config.env !== 'test') {
-  app.use(expressWinston.errorLogger({
-    winstonInstance
-  }));
+  app.use(
+    expressWinston.errorLogger({
+      winstonInstance,
+    })
+  );
 }
 
 // error handler, send stacktrace only during development
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
+app.use((err, req, res, next) => {
+  // eslint-disable-line no-unused-vars
   res.status(err.status).json({
     message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: config.env === 'development' ? err.stack : {}
+    stack: config.env === 'development' ? err.stack : {},
   });
 });
 

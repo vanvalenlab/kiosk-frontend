@@ -30,7 +30,7 @@ function getClient() {
 }
 
 function isArray(a) {
-  return (!!a) && (a.constructor === Array);
+  return !!a && a.constructor === Array;
 }
 
 async function hget(key, field) {
@@ -71,7 +71,9 @@ async function expire(key, expireTime) {
     logger.debug(`EXPIRE ${key} ${expireTime} got result: ${value}.`);
     return value;
   } catch (err) {
-    logger.error(`Encountered error during "EXPIRE ${key} ${expireTime}": ${err}`);
+    logger.error(
+      `Encountered error during "EXPIRE ${key} ${expireTime}": ${err}`
+    );
     throw err;
   } finally {
     client.disconnect();
@@ -91,7 +93,9 @@ async function lpush(queueName, redisKey) {
     logger.debug(`"LPUSH ${redisKey}" response: ${response}`);
     return response;
   } catch (err) {
-    logger.error(`Encountered error during "LPUSH ${queueName} ${redisKey}": ${err}`);
+    logger.error(
+      `Encountered error during "LPUSH ${queueName} ${redisKey}": ${err}`
+    );
     throw err;
   } finally {
     client.disconnect();
@@ -118,5 +122,5 @@ export default {
   hmget,
   expire,
   lpush,
-  hmset
+  hmset,
 };

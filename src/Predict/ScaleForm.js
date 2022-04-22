@@ -12,11 +12,9 @@ export default function ScaleForm({
   onCheckboxChange = () => {},
   onScaleChange = () => {},
 }) {
-
   return (
     <FormGroup row>
       <FormControl>
-
         <FormControlLabel
           control={
             <Checkbox
@@ -25,18 +23,18 @@ export default function ScaleForm({
               value={checked}
             />
           }
-          label="Rescale Automatically"
+          label='Rescale Automatically'
         />
 
         <TextField
-          id="outlined-number"
-          label="Rescaling Value"
+          id='outlined-number'
+          label='Rescaling Value'
           disabled={checked}
           value={scale}
           onChange={onScaleChange}
-          type="number"
-          margin="dense"
-          variant="standard"
+          type='number'
+          margin='dense'
+          variant='standard'
         />
       </FormControl>
     </FormGroup>

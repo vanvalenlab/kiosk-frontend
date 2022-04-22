@@ -5,7 +5,7 @@ import NavBar from './NavBar';
 
 describe('<NavBar/> component tests', () => {
   it('<NavBar/> renders with copyright info', () => {
-    const { getAllByRole } = render(<NavBar/>);
+    const { getAllByRole } = render(<NavBar />);
     const element = getAllByRole('button');
     expect(element).toHaveLength(1);
   });

@@ -5,7 +5,7 @@ import NotFound from './NotFound';
 
 describe('<NotFound/> component tests', () => {
   it('<NotFound/> renders with buttons', () => {
-    const { getByText } = render(<NotFound/>);
+    const { getByText } = render(<NotFound />);
     const element = getByText(/404/i);
     expect(element).toBeInTheDocument();
   });

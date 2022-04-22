@@ -14,7 +14,7 @@ const options = {
     info: {
       title: 'DeepCell Kiosk API', // Title (required)
       version: '0.5.0', // Version (required)
-      description: 'The API for interacting with the DeepCell Kiosk.'
+      description: 'The API for interacting with the DeepCell Kiosk.',
     },
   },
   // Path to the API docs

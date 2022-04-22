@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import ChannelForm from './ChannelForm';
 
 describe('<ChannelForm/> component tests', () => {
-
   it('<ChannelForm/> renders with targets as labels.', () => {
     // const { targetChannels, channels, onChange } = props;
     const target1 = 'channelLabel';
@@ -22,5 +21,4 @@ describe('<ChannelForm/> component tests', () => {
     const element2 = getByText(`${target2} channel`);
     expect(element2).toBeInTheDocument();
   });
-
 });

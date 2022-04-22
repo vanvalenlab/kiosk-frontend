@@ -6,7 +6,7 @@ import logger from '../config/winston';
 
 // helper functions
 function isArray(a) {
-  return (!!a) && (a.constructor === Array);
+  return !!a && a.constructor === Array;
 }
 
 function isValidPredictdata(data) {
@@ -14,7 +14,7 @@ function isValidPredictdata(data) {
     // 'modelName',
     // 'modelVersion',
     'imageName',
-    'jobType'
+    'jobType',
   ];
   for (let key of requiredKeys) {
     if (!Object.prototype.hasOwnProperty.call(data, key)) {
@@ -40,9 +40,10 @@ async function getKey(req, res) {
       value = await redis.hget(redisHash, redisKey);
     }
     return res.status(httpStatus.OK).send({ value });
-
   } catch (err) {
-    logger.error(`Could not get hash ${redisHash} key ${redisKey} values: ${err}`);
+    logger.error(
+      `Could not get hash ${redisHash} key ${redisKey} values: ${err}`
+    );
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: err });
   }
 }
@@ -68,7 +69,9 @@ async function expireHash(req, res) {
       logger.warn(`Hash "${redisHash}" not found`);
       return res.status(httpStatus.NOT_FOUND).send({ value });
     }
-    logger.debug(`Expiring hash ${redisHash} in ${expireTime} seconds: ${value}`);
+    logger.debug(
+      `Expiring hash ${redisHash} in ${expireTime} seconds: ${value}`
+    );
     return res.status(httpStatus.OK).send({ value });
   } catch (err) {
     logger.error(`Error during EXPIRE ${redisHash} ${expireTime}: ${err}`);
@@ -79,7 +82,7 @@ async function expireHash(req, res) {
 async function predict(req, res) {
   if (!isValidPredictdata(req.body)) {
     return res.status(httpStatus.BAD_REQUEST).send({
-      message: 'Invalid prediction request body.'
+      message: 'Invalid prediction request body.',
     });
   }
 
@@ -87,7 +90,7 @@ async function predict(req, res) {
 
   if (config.jobTypes.indexOf(queueName) == -1) {
     return res.status(httpStatus.BAD_REQUEST).send({
-      message: `Invalid Job Type: ${req.body.jobType}.`
+      message: `Invalid Job Type: ${req.body.jobType}.`,
     });
   }
 
@@ -101,22 +104,38 @@ async function predict(req, res) {
 
   try {
     await redis.hmset(redisKey, [
-      'original_name', data.imageName, // to save results with the same name
-      'input_file_name', data.uploadedName || data.imageName, // used for unique files
-      'model_name', data.modelName || '',
-      'model_version', data.modelVersion || '',
-      'postprocess_function', data.postprocessFunction || '',
-      'preprocess_function', data.preprocessFunction || '',
-      'cuts', data.cuts || '0', // to split up very large images
-      'url', data.imageUrl || '', // unused?
-      'label', data.dataLabel || '',
-      'status', 'new',
-      'created_at', now,
-      'updated_at', now,
-      'identity_upload', config.hostname,
-      'channels', data.jobForm?.selectedChannels || '',
-      'scale', data.jobForm?.scale || '',
-      'segmentation_type', data.jobForm?.segmentationType || '',
+      'original_name',
+      data.imageName, // to save results with the same name
+      'input_file_name',
+      data.uploadedName || data.imageName, // used for unique files
+      'model_name',
+      data.modelName || '',
+      'model_version',
+      data.modelVersion || '',
+      'postprocess_function',
+      data.postprocessFunction || '',
+      'preprocess_function',
+      data.preprocessFunction || '',
+      'cuts',
+      data.cuts || '0', // to split up very large images
+      'url',
+      data.imageUrl || '', // unused?
+      'label',
+      data.dataLabel || '',
+      'status',
+      'new',
+      'created_at',
+      now,
+      'updated_at',
+      now,
+      'identity_upload',
+      config.hostname,
+      'channels',
+      data.jobForm?.selectedChannels || '',
+      'scale',
+      data.jobForm?.scale || '',
+      'segmentation_type',
+      data.jobForm?.segmentationType || '',
     ]);
     await redis.lpush(queueName, redisKey);
     return res.status(httpStatus.OK).send({ hash: redisKey });
@@ -130,5 +149,5 @@ export default {
   getKey,
   expireHash,
   getJobStatus,
-  predict
+  predict,
 };

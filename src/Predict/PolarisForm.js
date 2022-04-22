@@ -22,25 +22,32 @@ function SelectSegmentation({
   options = ['none', 'tissue', 'cell culture'],
   onChange = () => {},
 }) {
-
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <FormGroup row>
       <FormControl>
         <Select
-          size="small"
-          labelId="input-resolution-select-label"
-          id="input-resolution-select"
+          size='small'
+          labelId='input-resolution-select-label'
+          id='input-resolution-select'
           value={value}
           open={isOpen}
           onClose={() => setIsOpen(false)}
           onOpen={() => setIsOpen(true)}
-          onChange={e => onChange(e.target.value)}
-          variant="standard"
+          onChange={(e) => onChange(e.target.value)}
+          variant='standard'
           sx={{ textTransform: 'capitalize' }}
         >
-          {options.map((opt => <MenuItem value={opt} key={opt} sx={{ textTransform: 'capitalize' }}>{opt}</MenuItem>))}
+          {options.map((opt) => (
+            <MenuItem
+              value={opt}
+              key={opt}
+              sx={{ textTransform: 'capitalize' }}
+            >
+              {opt}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </FormGroup>
@@ -80,11 +87,14 @@ export default function PolarisForm({ selectJobType, setJobForm }) {
   }, [segmentationType]);
 
   useEffect(() => {
-    setJobForm({ selectedChannels: selectedChannels.join(','), segmentationType });
+    setJobForm({
+      selectedChannels: selectedChannels.join(','),
+      segmentationType,
+    });
   }, [segmentationType, selectedChannels]);
 
   const updateSelectedChannels = (value, i) => {
-    setSelectedChannels((selectedChannels) => { 
+    setSelectedChannels((selectedChannels) => {
       selectedChannels[i] = value;
       return [...selectedChannels];
     });
@@ -118,7 +128,5 @@ export default function PolarisForm({ selectJobType, setJobForm }) {
         </Grid>
       </Paper>
     </Grid>
-
   );
 }
-
