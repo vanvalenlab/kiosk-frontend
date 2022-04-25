@@ -1,4 +1,18 @@
-const jobCards = {
+interface JobCard {
+  file: string;
+  name: string;
+  model: string;
+  inputs: string;
+  resolution: string;
+  thumbnail: string;
+  scaleEnabled: boolean;
+  channelEnabled: boolean;
+  requiredChannels: string[];
+  modelResolution: number;
+  visualizer?: string;
+}
+
+const jobCards: { [jobType: string]: JobCard } = {
   segmentation: {
     file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'Segmentation',
@@ -12,7 +26,6 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: [],
     modelResolution: 0.5,
-    canOpenInLabel: true,
   },
   caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
@@ -28,7 +41,6 @@ const jobCards = {
     channelEnabled: false, // Caliban form does not have a channel form so this value doesn't matter
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
-    canOpenInLabel: false,
   },
   mesmer: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',
@@ -42,7 +54,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: ['nuclei', 'cytoplasm'],
     modelResolution: 0.5,
-    canOpenInLabel: true,
+    visualizer: 'viewer.deepcell.org',
   },
   polaris: {
     file: 'tiff_stack_examples/MERFISH_example_RGB.png',
@@ -58,7 +70,7 @@ const jobCards = {
     channelEnabled: false,
     requiredChannels: ['spots'],
     modelResolution: 0.1,
-    canOpenInLabel: false,
+    visualizer: 'spots.deepcell.org',
   },
 };
 
