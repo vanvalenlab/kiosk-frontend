@@ -3,7 +3,12 @@ import * as winston from 'winston';
 winston.emitErrs = true;
 
 const logger = winston.createLogger({
-  format: winston.format.printf(info => `${new Date().toISOString()} [${info.level.toUpperCase()}] ${info.message}`),
+  format: winston.format.printf(
+    (info) =>
+      `${new Date().toISOString()} [${info.level.toUpperCase()}] ${
+        info.message
+      }`
+  ),
   transports: [
     new winston.transports.File({
       level: 'debug',
@@ -12,7 +17,7 @@ const logger = winston.createLogger({
       json: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
-      colorize: false
+      colorize: false,
     }),
     new winston.transports.File({
       level: 'error',
@@ -21,18 +26,18 @@ const logger = winston.createLogger({
       json: true,
       maxsize: 5242880, //5MB
       maxFiles: 5,
-      colorize: false
+      colorize: false,
     }),
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,
       json: false,
-      colorize: true
-    })
+      colorize: true,
+    }),
   ],
-  exitOnError: false
+  exitOnError: false,
 });
- 
+
 // eslint-disable-next-line no-unused-vars
 logger.stream.write = (message, encoding) => logger.info(message);
 

@@ -24,13 +24,13 @@ import CalibanForm from './CalibanForm';
 // to override them at runtime.
 const isProd = process.env.NODE_ENV === 'production';
 // if prod, read from window override. otherwise pull from environment
-const labelFrontend = isProd ?
-  window.REACT_APP_LABEL_FRONTEND :
-  (process.env.REACT_APP_LABEL_FRONTEND || 'localhost');
+const labelFrontend = isProd
+  ? window.REACT_APP_LABEL_FRONTEND
+  : process.env.REACT_APP_LABEL_FRONTEND || 'localhost';
 
-const labelBackend = isProd ?
-  window.REACT_APP_LABEL_BACKEND :
-  (process.env.REACT_APP_LABEL_BACKEND || 'localhost');
+const labelBackend = isProd
+  ? window.REACT_APP_LABEL_BACKEND
+  : process.env.REACT_APP_LABEL_BACKEND || 'localhost';
 
 const Div = styled('div')``;
 
@@ -44,7 +44,8 @@ const SubmitButton = ({ onClick, disabled }) => {
         size='large'
         fullWidth
         disabled={disabled}
-        color='primary'>
+        color='primary'
+      >
         Submit
       </Button>
     </Grid>
@@ -59,29 +60,27 @@ SubmitButton.propTypes = {
 const ProgressBar = ({ progress, status }) => {
   return (
     <Grid item lg sx={{ pt: 4 }}>
-      {progress === 0 || progress === null ?
+      {progress === 0 || progress === null ? (
         <LinearProgress
-          variant="buffer"
+          variant='buffer'
           value={0}
           valueBuffer={0}
           sx={{ m: 2 }}
         />
-        :
-        <LinearProgress
-          variant="determinate"
-          value={progress}
-          sx={{ m: 2 }}
-        />
-      }
+      ) : (
+        <LinearProgress variant='determinate' value={progress} sx={{ m: 2 }} />
+      )}
       {/* Display status updates to user */}
-      {status.length > 0 &&
+      {status.length > 0 && (
         <Typography
           sx={{ pt: 4, textTransform: 'capitalize' }}
           variant='body1'
           align='center'
-          color='primary'>
+          color='primary'
+        >
           Job Status: {status}
-        </Typography>}
+        </Typography>
+      )}
     </Grid>
   );
 };
@@ -91,15 +90,22 @@ ProgressBar.propTypes = {
   status: PropTypes.string.isRequired,
 };
 
-const JobCompleteButtons = ({ openInLabel, imageUrl, downloadUrl, dimensionOrder }) => {
+const JobCompleteButtons = ({
+  openInLabel,
+  imageUrl,
+  downloadUrl,
+  dimensionOrder,
+}) => {
   return (
     <div>
       <DownloadButton downloadUrl={downloadUrl} />
-      {openInLabel && imageUrl.split('.').pop() !== 'zip' &&
+      {openInLabel && imageUrl.split('.').pop() !== 'zip' && (
         <OpenInLabelButton
           imageUrl={imageUrl}
           downloadUrl={downloadUrl}
-          dimensionOrder={dimensionOrder} />}
+          dimensionOrder={dimensionOrder}
+        />
+      )}
       <SubmitNewButton />
     </div>
   );
@@ -120,7 +126,8 @@ const DownloadButton = ({ downloadUrl }) => {
         variant='contained'
         size='large'
         fullWidth
-        color='secondary'>
+        color='secondary'
+      >
         Download Results
       </Button>
     </Grid>
@@ -143,7 +150,7 @@ const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
       url: `${labelBackend}/api/project`,
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
-    }).then(res => {
+    }).then((res) => {
       const url = `${labelFrontend}/?projectId=${res.data.projectId}`;
       newTab.location.href = url;
     });
@@ -151,7 +158,12 @@ const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
 
   return (
     <Grid item lg sx={{ pt: 4 }}>
-      <Button variant='contained' size='large' fullWidth onClick={openResultsInLabel}>
+      <Button
+        variant='contained'
+        size='large'
+        fullWidth
+        onClick={openResultsInLabel}
+      >
         View Results
       </Button>
     </Grid>
@@ -172,7 +184,8 @@ const SubmitNewButton = () => {
         variant='contained'
         size='large'
         fullWidth
-        color='primary'>
+        color='primary'
+      >
         Submit New Image
       </Button>
     </Grid>
@@ -199,15 +212,17 @@ export default function Predict() {
       url: '/api/redis/expire',
       data: {
         hash: redisHash,
-        expireIn: expireIn
-      }
-    }).then((response) => {
-      if (parseInt(response.data.value) !== 1) {
-        setErrorText('Hash not expired');
-      }
-    }).catch(error => {
-      setErrorText(`Failed to expire redis hash due to error: ${error}`);
-    });
+        expireIn: expireIn,
+      },
+    })
+      .then((response) => {
+        if (parseInt(response.data.value) !== 1) {
+          setErrorText('Hash not expired');
+        }
+      })
+      .catch((error) => {
+        setErrorText(`Failed to expire redis hash due to error: ${error}`);
+      });
   };
 
   const checkJobStatus = (redisHash, interval) => {
@@ -216,47 +231,56 @@ export default function Predict() {
         method: 'post',
         url: '/api/redis',
         data: {
-          'hash': redisHash,
-          'key': ['status', 'progress', 'output_url', 'reason', 'failures', 'dim_order']
-        }
-      }).then((response) => {
-        setStatus(response.data.value[0].split('-').join(' '));
-        if (response.data.value[0] === 'failed') {
-          clearInterval(statusCheck);
-          // only show the full stack trace if NODE_NV is not production
-          let error = response.data.value[3];
-          if (process.env.NODE_ENV === 'production') {
-            const lines = error.split('\n');
-            error = lines[lines.length - 1];
-          }
-          setErrorText(`Job Failed: ${error}`);
-          expireRedisHash(redisHash, 3600);
-        } else if (response.data.value[0] === 'done') {
-          clearInterval(statusCheck);
-          setDownloadUrl(response.data.value[2]);
-          setDimensionOrder(response.data.value[5]);
-          expireRedisHash(redisHash, 3600);
-          // This is only used during zip uploads.
-          // Some jobs may fail while other jobs can succeed.
-          const failures = response.data.value[4];
-          if (failures != null && failures.length > 0) {
-            const parsed = queryString.parse(failures);
-            let errText = 'Not all jobs completed!\n\n';
-            for (const key in parsed) {
-              errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
+          hash: redisHash,
+          key: [
+            'status',
+            'progress',
+            'output_url',
+            'reason',
+            'failures',
+            'dim_order',
+          ],
+        },
+      })
+        .then((response) => {
+          setStatus(response.data.value[0].split('-').join(' '));
+          if (response.data.value[0] === 'failed') {
+            clearInterval(statusCheck);
+            // only show the full stack trace if NODE_NV is not production
+            let error = response.data.value[3];
+            if (process.env.NODE_ENV === 'production') {
+              const lines = error.split('\n');
+              error = lines[lines.length - 1];
             }
-            setErrorText(errText);
+            setErrorText(`Job Failed: ${error}`);
+            expireRedisHash(redisHash, 3600);
+          } else if (response.data.value[0] === 'done') {
+            clearInterval(statusCheck);
+            setDownloadUrl(response.data.value[2]);
+            setDimensionOrder(response.data.value[5]);
+            expireRedisHash(redisHash, 3600);
+            // This is only used during zip uploads.
+            // Some jobs may fail while other jobs can succeed.
+            const failures = response.data.value[4];
+            if (failures != null && failures.length > 0) {
+              const parsed = queryString.parse(failures);
+              let errText = 'Not all jobs completed!\n\n';
+              for (const key in parsed) {
+                errText += `Job Failed: ${key}: ${parsed[key]}\n\n`;
+              }
+              setErrorText(errText);
+            }
+          } else {
+            let maybeNum = parseInt(response.data.value[1], 10);
+            if (!isNaN(maybeNum)) {
+              setProgress(maybeNum);
+            }
           }
-        } else {
-          let maybeNum = parseInt(response.data.value[1], 10);
-          if (!isNaN(maybeNum)) {
-            setProgress(maybeNum);
-          }
-        }
-      }).catch(error => {
-        let errMsg = `Trouble communicating with Redis due to error: ${error}`;
-        setErrorText(errMsg);
-      });
+        })
+        .catch((error) => {
+          let errMsg = `Trouble communicating with Redis due to error: ${error}`;
+          setErrorText(errMsg);
+        });
     }, interval);
   };
 
@@ -271,13 +295,15 @@ export default function Predict() {
         imageUrl: imageUrl,
         jobType: jobType,
         jobForm: jobForm,
-      }
-    }).then((response) => {
-      checkJobStatus(response.data.hash, 3000);
-    }).catch(error => {
-      let errMsg = `Failed to create job due to error: ${error}.`;
-      setErrorText(errMsg);
-    });
+      },
+    })
+      .then((response) => {
+        checkJobStatus(response.data.hash, 3000);
+      })
+      .catch((error) => {
+        let errMsg = `Failed to create job due to error: ${error}.`;
+        setErrorText(errMsg);
+      });
   };
 
   const canSubmit = () => {
@@ -300,43 +326,66 @@ export default function Predict() {
   const getJobTypes = () => {
     axios({
       method: 'get',
-      url: '/api/jobtypes'
-    }).then((response) => {
-      setJobTypes(response.data.jobTypes);
-      setJobType(response.data.jobTypes[0]);
-    }).catch(error => {
-      setErrorText(`Failed to get job types due to error: ${error}`);
-    });
+      url: '/api/jobtypes',
+    })
+      .then((response) => {
+        setJobTypes(response.data.jobTypes);
+        setJobType(response.data.jobTypes[0]);
+      })
+      .catch((error) => {
+        setErrorText(`Failed to get job types due to error: ${error}`);
+      });
   };
 
   useEffect(() => getJobTypes(), []);
 
   // Make Prediction Type dropdown to use with any job form
-  const selectJobType = <Grid item>
-    <Typography>
-      Prediction Type
-    </Typography>
-    <ModelDropdown
-      options={jobTypes}
-      value={jobType}
-      onChange={setJobType}
-    />
-  </Grid>;
+  const selectJobType = (
+    <Grid item>
+      <Typography>Prediction Type</Typography>
+      <ModelDropdown options={jobTypes} value={jobType} onChange={setJobType} />
+    </Grid>
+  );
 
   return (
     <Div sx={{ flexGrow: 1 }}>
-      <Container maxWidth="md" sx={{ pt: 4 }}>
-        <form autoComplete="off">
-          <Grid container direction="row" justifyContent="center" spacing={6}>
+      <Container maxWidth='md' sx={{ pt: 4 }}>
+        <form autoComplete='off'>
+          <Grid container direction='row' justifyContent='center' spacing={6}>
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
               {/* Job Form section */}
-              {jobType === 'mesmer' && <MesmerForm selectJobType={selectJobType} setJobForm={setJobForm} />}
-              {jobType === 'polaris' && <PolarisForm selectJobType={selectJobType} setJobForm={setJobForm} />}
-              {jobType == 'segmentation' && <SegmentationForm selectJobType={selectJobType} setJobForm={setJobForm} />}
-              {jobType == 'caliban' && <CalibanForm selectJobType={selectJobType} setJobForm={setJobForm} />}
+              {jobType === 'mesmer' && (
+                <MesmerForm
+                  selectJobType={selectJobType}
+                  setJobForm={setJobForm}
+                />
+              )}
+              {jobType === 'polaris' && (
+                <PolarisForm
+                  selectJobType={selectJobType}
+                  setJobForm={setJobForm}
+                />
+              )}
+              {jobType == 'segmentation' && (
+                <SegmentationForm
+                  selectJobType={selectJobType}
+                  setJobForm={setJobForm}
+                />
+              )}
+              {jobType == 'caliban' && (
+                <CalibanForm
+                  selectJobType={selectJobType}
+                  setJobForm={setJobForm}
+                />
+              )}
               {/* File Upload section */}
-              <Grid container direction="row" justifyContent="center" sx={{ pt: 4 }}>
+              <Grid
+                container
+                direction='row'
+                justifyContent='center'
+                sx={{ pt: 4 }}
+              >
                 <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
                   <Grid item lg>
                     <FileUpload
@@ -345,50 +394,59 @@ export default function Predict() {
                         setUploadedFileName(uploadedName);
                         setFileName(fileName);
                         setImageUrl(url);
-                      }} />
+                      }}
+                    />
                   </Grid>
                 </Paper>
               </Grid>
             </Grid>
             {/* Job info display on left column */}
             <Grid item xs={12} sm={6}>
-              { jobType.length > 0 &&
-              <JobCard {...jobData[jobType]} />
-              }
+              {jobType.length > 0 && <JobCard {...jobData[jobType]} />}
             </Grid>
           </Grid>
           {/* Display error to user */}
-          { errorText.length > 0 &&
+          {errorText.length > 0 && (
             <div>
               <Typography
                 sx={{ pt: 4, whiteSpace: 'pre-line' }}
                 variant='body2'
                 align='center'
-                color='error'>
+                color='error'
+              >
                 {errorText}
               </Typography>
               <Typography
                 sx={{ pt: 4 }}
                 variant='subtitle2'
                 align='center'
-                color='error'>
-                See the <Link href='/faq' target='_blank' rel='noopener noreferrer'>FAQ</Link> for information on common errors.
+                color='error'
+              >
+                See the{' '}
+                <Link href='/faq' target='_blank' rel='noopener noreferrer'>
+                  FAQ
+                </Link>{' '}
+                for information on common errors.
               </Typography>
-            </div> }
+            </div>
+          )}
           {/* Submit button */}
-          {!submitted && <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} /> }
+          {!submitted && (
+            <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} />
+          )}
           {/* Progress bar for submitted jobs */}
-          { submitted && downloadUrl === null && errorText.length == 0 ?
+          {submitted && downloadUrl === null && errorText.length == 0 ? (
             <ProgressBar progress={progress} status={status} />
-            : null }
+          ) : null}
           {/* Download results, Open in Label, and Retry buttons */}
-          { downloadUrl !== null &&
+          {downloadUrl !== null && (
             <JobCompleteButtons
               openInLabel={jobData[submittedJobType].canOpenInLabel}
               imageUrl={imageUrl}
               downloadUrl={downloadUrl}
               dimensionOrder={dimensionOrder}
-            />}
+            />
+          )}
         </form>
       </Container>
     </Div>

@@ -32,10 +32,22 @@ const MobileMenu = (props) => {
       <Button color='inherit' href='/faq' sx={{ display: 'block' }}>
         FAQ
       </Button>
-      <Button color='inherit' href='https://datasets.deepcell.org' target='_blank' rel='noopener noreferrer' sx={{ display: 'block' }}>
+      <Button
+        color='inherit'
+        href='https://datasets.deepcell.org'
+        target='_blank'
+        rel='noopener noreferrer'
+        sx={{ display: 'block' }}
+      >
         Data
       </Button>
-      <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank' rel='noopener noreferrer' sx={{ display: 'block' }}>
+      <Button
+        color='inherit'
+        href='https://github.com/vanvalenlab'
+        target='_blank'
+        rel='noopener noreferrer'
+        sx={{ display: 'block' }}
+      >
         <FaGithub size={28} />
       </Button>
     </Menu>
@@ -55,7 +67,7 @@ export default function NavBar() {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='subtitle1' color='inherit' sx={{ flexGrow: 1 }}>
-            <IconButton color='inherit' href='/' size="large">
+            <IconButton color='inherit' href='/' size='large'>
               DeepCell
             </IconButton>
           </Typography>
@@ -70,10 +82,20 @@ export default function NavBar() {
             <Button color='inherit' href='/faq'>
               FAQ
             </Button>
-            <Button color='inherit' href='https://datasets.deepcell.org' target='_blank' rel='noopener noreferrer'>
+            <Button
+              color='inherit'
+              href='https://datasets.deepcell.org'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Data
             </Button>
-            <Button color='inherit' href='https://github.com/vanvalenlab' target='_blank' rel='noopener noreferrer'>
+            <Button
+              color='inherit'
+              href='https://github.com/vanvalenlab'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               <FaGithub size={28} />
             </Button>
           </Div>
@@ -81,8 +103,9 @@ export default function NavBar() {
             <IconButton
               aria-haspopup='true'
               color='inherit'
-              onClick={e => setMobileMoreAnchorEl(e.currentTarget) }
-              size="large">
+              onClick={(e) => setMobileMoreAnchorEl(e.currentTarget)}
+              size='large'
+            >
               <MoreIcon />
             </IconButton>
           </Div>

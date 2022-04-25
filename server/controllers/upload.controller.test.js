@@ -9,7 +9,7 @@ import config from '../config/config';
 jest.mock('../config/config', () => ({
   gcp: {},
   aws: {},
-  uploadDirectory: '/test/'
+  uploadDirectory: '/test/',
 }));
 
 const mockStream = new PassThrough();
@@ -25,7 +25,7 @@ jest.mock('../config/multer', () => {
         };
         return next();
       };
-    })
+    }),
   };
 });
 
@@ -38,25 +38,24 @@ jest.mock('@google-cloud/storage', () => {
             file: jest.fn(() => {
               return {
                 createWriteStream: jest.fn(() => mockStream),
-                makePublic: jest.fn(() => Promise.resolve(true))
+                makePublic: jest.fn(() => Promise.resolve(true)),
               };
             }),
           };
-        })
+        }),
       };
-    })
+    }),
   };
 });
 
 describe('Upload Controller Tests', () => {
-
   describe('POST /api/upload', () => {
-
     it('should upload file using multer S3', async () => {
       config.cloud = 'aws';
-      const tmpobj = tmp.fileSync({postfix: '.png'});
+      const tmpobj = tmp.fileSync({ postfix: '.png' });
       const request = supertest(app);
-      const response = await request.post('/api/upload')
+      const response = await request
+        .post('/api/upload')
         .attach('file', tmpobj.name);
 
       expect(response.status).toBe(200);
@@ -66,10 +65,11 @@ describe('Upload Controller Tests', () => {
     it('should upload file using multer', async () => {
       config.cloud = 'gcp';
 
-      const tmpobj = tmp.fileSync({postfix: '.png'});
+      const tmpobj = tmp.fileSync({ postfix: '.png' });
       const request = supertest(app);
 
-      const response = await request.post('/api/upload')
+      const response = await request
+        .post('/api/upload')
         .attach('file', tmpobj.name);
 
       setTimeout(() => {
@@ -80,7 +80,5 @@ describe('Upload Controller Tests', () => {
       expect(resolved.status).toBe(200);
       expect(resolved.body).toHaveProperty('imageURL');
     });
-
   });
-
 });

@@ -7,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-
 export default function JobCard({
   file = 'dummyfile.png',
   name = 'Model',
@@ -15,41 +14,38 @@ export default function JobCard({
   inputs = 'An image file.',
   thumbnail = 'https://bit.ly/2ZxBrQ1',
 }) {
-
   const baseUrl = 'https://s3-us-west-1.amazonaws.com/deepcell-data';
-  const moreInfoUrl = 'https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models';
+  const moreInfoUrl =
+    'https://github.com/vanvalenlab/intro-to-deepcell/tree/master/pretrained_models';
 
   return (
-    <Card sx={{height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardMedia
         sx={{ paddingTop: '56.25%' }} // 16:9
         image={`${baseUrl}/${thumbnail}`}
         title={`${name}`}
       />
       <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h5">
-          { name }
+        <Typography gutterBottom variant='h5'>
+          {name}
         </Typography>
-        <Typography gutterBottom variant="subtitle1">
-          <strong>Model:</strong> { model }
+        <Typography gutterBottom variant='subtitle1'>
+          <strong>Model:</strong> {model}
         </Typography>
-        <Typography variant="subtitle1">
-          <strong>Inputs:</strong> { inputs }
+        <Typography variant='subtitle1'>
+          <strong>Inputs:</strong> {inputs}
         </Typography>
       </CardContent>
       <CardActions>
         <Button
-          size="small"
-          color="primary"
-          target="_blank"
-          href={`${baseUrl}/${file}`}>
+          size='small'
+          color='primary'
+          target='_blank'
+          href={`${baseUrl}/${file}`}
+        >
           Download Image
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          target="_blank"
-          href={moreInfoUrl}>
+        <Button size='small' color='primary' target='_blank' href={moreInfoUrl}>
           Learn More
         </Button>
       </CardActions>

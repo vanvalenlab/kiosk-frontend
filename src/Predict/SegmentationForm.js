@@ -17,11 +17,13 @@ export default function SegmentationForm({ selectJobType, setJobForm }) {
   const modelResolution = jobData.segmentation.modelResolution;
   const channels = ['nuclei', 'cytoplasm'];
   const [requiredChannels] = useState(Array(channels.length).fill(false));
-  const [selectedChannels, setSelectedChannels] = useState([...Array(channels.length).keys()]);
+  const [selectedChannels, setSelectedChannels] = useState([
+    ...Array(channels.length).keys(),
+  ]);
   const [scale, setScale] = useState(1);
 
   const updateSelectedChannels = (value, i) => {
-    setSelectedChannels((selectedChannels) => { 
+    setSelectedChannels((selectedChannels) => {
       selectedChannels[i] = value;
       return [...selectedChannels];
     });

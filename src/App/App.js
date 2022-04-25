@@ -2,7 +2,11 @@ import React, { lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
+import {
+  ThemeProvider,
+  StyledEngineProvider,
+  createTheme,
+} from '@mui/material/styles';
 import { styled } from '@mui/system';
 import useGoogleAnalytics from '../analytics';
 
@@ -37,10 +41,10 @@ function KioskFrontend() {
         <NavBar />
         <Main sx={{ flexGrow: 1 }}>
           <Switch>
-            <Route exact path='/' component={Landing}/>
-            <Route path='/about' component={About}/>
-            <Route path='/faq' component={Faq}/>
-            <Route path='/predict' component={Predict}/>
+            <Route exact path='/' component={Landing} />
+            <Route path='/about' component={About} />
+            <Route path='/faq' component={Faq} />
+            <Route path='/predict' component={Predict} />
             <Route path='/docs' component={Swagger} />
             <Route component={NotFound} />
           </Switch>
@@ -54,7 +58,9 @@ function KioskFrontend() {
 function App() {
   return (
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}><KioskFrontend /></ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <KioskFrontend />
+      </ThemeProvider>
     </StyledEngineProvider>
   );
 }

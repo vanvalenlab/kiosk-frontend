@@ -5,7 +5,6 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 export default function ModelDropdown(props) {
-
   const { value, onChange, options } = props;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -17,13 +16,17 @@ export default function ModelDropdown(props) {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
-        onChange={e => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         value={value}
         sx={{ textTransform: 'capitalize' }}
-        variant="standard"
+        variant='standard'
       >
         {options.map((jobType, i) => (
-          <MenuItem value={jobType} sx={{ textTransform: 'capitalize' }} key={i}>
+          <MenuItem
+            value={jobType}
+            sx={{ textTransform: 'capitalize' }}
+            key={i}
+          >
             {jobType}
           </MenuItem>
         ))}

@@ -15,23 +15,26 @@ const allCards = [
   {
     file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'Fluorescent Nuclei',
-    description: 'Static images of fluorescent nuclei from HeLa S3 cells. Imaged with a Nikon Ti2 microscope.',
+    description:
+      'Static images of fluorescent nuclei from HeLa S3 cells. Imaged with a Nikon Ti2 microscope.',
     thumbnail: 'thumbnails/HeLa_nuclear.png',
-    datatype: 'prediction'
+    datatype: 'prediction',
   },
   {
     file: 'tiff_stack_examples/multiplex_mibi.tif',
     name: 'Esophagus',
-    description: 'Nuclear and membrane stain of esophageal tissue. Imaged with MIBI.',
+    description:
+      'Nuclear and membrane stain of esophageal tissue. Imaged with MIBI.',
     thumbnail: 'thumbnails/multiplex_mibi.png',
-    datatype: 'prediction'
+    datatype: 'prediction',
   },
   {
     file: 'tiff_stack_examples/multiplex_vectra.tif',
-    name: 'Hodgkin\'s Lymphoma',
-    description: 'Nuclear and membrane stain of Hodgkin\'s lymphoma. Imaged with Vectra.',
+    name: "Hodgkin's Lymphoma",
+    description:
+      "Nuclear and membrane stain of Hodgkin's lymphoma. Imaged with Vectra.",
     thumbnail: 'thumbnails/multiplex_vectra.png',
-    datatype: 'prediction'
+    datatype: 'prediction',
   },
   // {
   //   file: 'nuclei/examples/mousebrain.tif',
@@ -50,9 +53,10 @@ const allCards = [
   {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
     name: 'Fluorescent Nuclei',
-    description: 'Dynamic movie of fluorescent nuclei from 3T3 cells. Imaged with a Nikon Ti2 microscope.',
+    description:
+      'Dynamic movie of fluorescent nuclei from 3T3 cells. Imaged with a Nikon Ti2 microscope.',
     thumbnail: 'thumbnails/3T3_nuc_example_256.png',
-    datatype: 'prediction'
+    datatype: 'prediction',
   },
   // {
   //   file: 'tiff_stack_examples/3T3_cyto_example_256.tif',
@@ -73,29 +77,29 @@ const allCards = [
     name: 'Tracked Training Data - HeLa S3 Nuclei',
     description: 'Tracked training data for the HeLa S3 nuclei',
     thumbnail: 'thumbnails/HeLa_nuclear.png',
-    datatype: 'training'
+    datatype: 'training',
   },
   {
     file: 'tracked/3T3_NIH.zip',
     name: 'Tracked Training Data - NIH 3T3 Nuclei',
     description: 'Tracked training data for the NIH 3T3 nuclei',
     thumbnail: 'thumbnails/3T3_nuc_example_256.png',
-    datatype: 'training'
+    datatype: 'training',
   },
   {
     file: 'tracked/HEK293.zip',
     name: 'Tracked Training Data - HEK 293 Nuclei',
     description: 'Tracked training data for the HEK 293 nuclei',
     thumbnail: 'thumbnails/HEK293.png',
-    datatype: 'training'
+    datatype: 'training',
   },
   {
     file: 'tracked/RAW264.7.zip',
     name: 'Tracked Training Data - RAW 264.7 Nuclei',
     description: 'Tracked training data for the RAW 264.7 nuclei',
     thumbnail: 'thumbnails/RAW264.7.png',
-    datatype: 'training'
-  }
+    datatype: 'training',
+  },
 ];
 
 export default function DataCard(props) {
@@ -115,11 +119,10 @@ export default function DataCard(props) {
     //iterating through each entry in the cards array.
     for (let i = 0; i < cards.length; ++i) {
       // iterating through each object in each cards entry.
-      for (let key in cards[i] ) {
-        if (key === 'datatype' && cards[i][key] === trainingData ) {
+      for (let key in cards[i]) {
+        if (key === 'datatype' && cards[i][key] === trainingData) {
           trainingCards.push(cards[i]);
-        }
-        else if (key === 'datatype' && cards[i][key] === predictionData ) {
+        } else if (key === 'datatype' && cards[i][key] === predictionData) {
           predictionCards.push(cards[i]);
         }
       }
@@ -137,38 +140,41 @@ export default function DataCard(props) {
   }, [baseUrl]);
 
   return (
-    <Div sx={(theme) => ({
-      p: `${theme.spacing(8)} 0`,
-      width: 'auto',
-      mx: theme.spacing(3),
-      [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
-        width: 1100,
-        mx: 'auto',
-      },
-    })}>
+    <Div
+      sx={(theme) => ({
+        p: `${theme.spacing(8)} 0`,
+        width: 'auto',
+        mx: theme.spacing(3),
+        [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
+          width: 1100,
+          mx: 'auto',
+        },
+      })}
+    >
       <Grid container spacing={4}>
-        {cardsInUse.map(card => (
+        {cardsInUse.map((card) => (
           <Grid item key={allCards.indexOf(card)} xs={12} sm={6} md={3}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card
+              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+            >
               <CardMedia
                 sx={{ pt: '56.25%' }} // 16:9
                 image={`${baseUrl}/${card.thumbnail}`}
                 title={`${card.name}`}
               />
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography gutterBottom variant="h5">
-                  { card.name }
+                <Typography gutterBottom variant='h5'>
+                  {card.name}
                 </Typography>
-                <Typography variant="subtitle1">
-                  { card.description }
-                </Typography>
+                <Typography variant='subtitle1'>{card.description}</Typography>
               </CardContent>
               <CardActions>
                 <Button
-                  size="small"
-                  color="primary"
-                  target="_blank"
-                  href={`${baseUrl}/${card.file}`}>
+                  size='small'
+                  color='primary'
+                  target='_blank'
+                  href={`${baseUrl}/${card.file}`}
+                >
                   Download
                 </Button>
               </CardActions>

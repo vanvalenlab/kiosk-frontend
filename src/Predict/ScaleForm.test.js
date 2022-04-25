@@ -4,7 +4,6 @@ import '@testing-library/jest-dom';
 import ScaleForm from './ScaleForm';
 
 describe('<ScaleForm/> component tests', () => {
-
   it('<ScaleForm/> renders with default values.', () => {
     const { getByLabelText } = render(<ScaleForm checked={true} />);
     const checkbox = getByLabelText(/Rescale Automatically/i);
@@ -22,5 +21,4 @@ describe('<ScaleForm/> component tests', () => {
     const scaleInput = getByLabelText(/Rescaling Value/i);
     expect(scaleInput).toBeEnabled();
   });
-
 });

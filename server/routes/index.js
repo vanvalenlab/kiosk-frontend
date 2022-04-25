@@ -18,10 +18,9 @@ const router = express.Router();
  *       200:
  *         description: healthy
  */
-router.route('/health-check')
-  .get((req, res) => {
-    res.status(httpStatus.OK).send({ message: 'OK' });
-  });
+router.route('/health-check').get((req, res) => {
+  res.status(httpStatus.OK).send({ message: 'OK' });
+});
 
 /**
  * @swagger
@@ -41,7 +40,8 @@ router.route('/health-check')
  *       200:
  *         description: healthy
  */
-router.route('/upload')
+router
+  .route('/upload')
   .post(multer.single('file'), controllers.uploadController.upload);
 
 /**
@@ -102,8 +102,7 @@ router.route('/upload')
  *       200:
  *         description: healthy
  */
-router.route('/predict')
-  .post(controllers.predictController.predict);
+router.route('/predict').post(controllers.predictController.predict);
 
 /**
  * @swagger
@@ -117,8 +116,7 @@ router.route('/predict')
  *       200:
  *         description: list of available models.
  */
-router.route('/models')
-  .get(controllers.modelController.getModels);
+router.route('/models').get(controllers.modelController.getModels);
 
 /**
  * @swagger
@@ -143,8 +141,7 @@ router.route('/models')
  *       200:
  *         description: The job status
  */
-router.route('/redis')
-  .post(controllers.predictController.getKey);
+router.route('/redis').post(controllers.predictController.getKey);
 
 /**
  * @swagger
@@ -164,8 +161,7 @@ router.route('/redis')
  *       200:
  *         description: The job status
  */
-router.route('/status')
-  .post(controllers.predictController.getJobStatus);
+router.route('/status').post(controllers.predictController.getJobStatus);
 
 /**
  * @swagger
@@ -190,8 +186,7 @@ router.route('/status')
  *       200:
  *         description: Successful job expiry.
  */
-router.route('/redis/expire')
-  .post(controllers.predictController.expireHash);
+router.route('/redis/expire').post(controllers.predictController.expireHash);
 
 /**
  * @swagger
@@ -205,17 +200,16 @@ router.route('/redis/expire')
  *       200:
  *         description: list of valid job types.
  */
-router.route('/jobtypes')
-  .get(controllers.predictController.getJobTypes);
+router.route('/jobtypes').get(controllers.predictController.getJobTypes);
 
 // swagger docs!
-router.route('/swagger.json')
-  .get((req, res) => {
-    res.status(httpStatus.OK).send(swaggerSpec);
-  });
+router.route('/swagger.json').get((req, res) => {
+  res.status(httpStatus.OK).send(swaggerSpec);
+});
 
 // 404 for all other routes
-router.route('/*')
+router
+  .route('/*')
   .get((req, res) => {
     res.status(httpStatus.NOT_FOUND).send({});
   })

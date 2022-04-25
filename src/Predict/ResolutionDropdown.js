@@ -10,10 +10,9 @@ export default function ResolutionDropdown({
   scale = 1,
   onChange = () => {},
 }) {
-
   const [isOpen, setIsOpen] = useState(false);
 
-  // values determined from 
+  // values determined from
   // https://openwetware.org/wiki/Methods_to_determine_the_size_of_an_object_in_microns
   // using 0.5 ~= 20x as the starting point
   const zoomToMpp = {
@@ -28,15 +27,15 @@ export default function ResolutionDropdown({
     <FormGroup row>
       <FormControl>
         <Select
-          size="small"
-          labelId="input-resolution-select-label"
-          id="input-resolution-select"
+          size='small'
+          labelId='input-resolution-select-label'
+          id='input-resolution-select'
           value={scale}
           open={isOpen}
           onClose={() => setIsOpen(false)}
           onOpen={() => setIsOpen(true)}
-          onChange={e => onChange(e.target.value)}
-          variant="standard"
+          onChange={(e) => onChange(e.target.value)}
+          variant='standard'
         >
           {Object.entries(zoomToMpp).map(([zoom, mpp], i) => {
             return (

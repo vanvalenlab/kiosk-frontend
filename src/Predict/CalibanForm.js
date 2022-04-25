@@ -4,11 +4,10 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
 CalibanForm.propTypes = {
-  selectJobType: PropTypes.element.isRequired
+  selectJobType: PropTypes.element.isRequired,
 };
 
 export default function CalibanForm({ selectJobType }) {
-
   return (
     <Grid container>
       <Paper sx={{ p: 4, height: '100%', width: '100%' }}>

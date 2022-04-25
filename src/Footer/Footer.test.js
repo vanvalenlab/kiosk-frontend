@@ -5,7 +5,7 @@ import Footer from './Footer';
 
 describe('<Footer/> component tests', () => {
   it('<Footer/> renders with copyright info', () => {
-    const { getByText } = render(<Footer/>);
+    const { getByText } = render(<Footer />);
     const element = getByText(/©/i);
     expect(element).toBeInTheDocument();
   });

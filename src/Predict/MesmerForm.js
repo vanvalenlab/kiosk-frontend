@@ -17,11 +17,13 @@ export default function MesmerForm({ selectJobType, setJobForm }) {
   const modelResolution = jobData.mesmer.modelResolution;
   const channels = jobData.mesmer.requiredChannels;
   const [requiredChannels] = useState(Array(channels.length).fill(true));
-  const [selectedChannels, setSelectedChannels] = useState([...Array(channels.length).keys()]);
+  const [selectedChannels, setSelectedChannels] = useState([
+    ...Array(channels.length).keys(),
+  ]);
   const [scale, setScale] = useState(1);
 
   const updateSelectedChannels = (value, i) => {
-    setSelectedChannels((selectedChannels) => { 
+    setSelectedChannels((selectedChannels) => {
       selectedChannels[i] = value;
       return [...selectedChannels];
     });
@@ -61,4 +63,3 @@ export default function MesmerForm({ selectJobType, setJobForm }) {
     </Grid>
   );
 }
-

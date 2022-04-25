@@ -12,7 +12,7 @@ describe('<App/> component tests', () => {
   });
 
   it('should render with a <main> tag', () => {
-    const { container } = render(<App/>, { wrapper: MemoryRouter });
+    const { container } = render(<App />, { wrapper: MemoryRouter });
     const element = container.querySelector('main');
     expect(element).toBeInTheDocument();
   });

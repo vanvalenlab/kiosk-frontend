@@ -14,7 +14,11 @@ function ChannelDropdown(props) {
 
   return (
     <FormControl variant='standard' fullWidth>
-      <InputLabel shrink margin='dense' htmlFor={`${label}-input`}>{`${label} channel`}</InputLabel>
+      <InputLabel
+        shrink
+        margin='dense'
+        htmlFor={`${label}-input`}
+      >{`${label} channel`}</InputLabel>
       <Select
         size='small'
         labelId={`${label}-input`}
@@ -28,9 +32,9 @@ function ChannelDropdown(props) {
         sx={{ textTransform: 'capitalize' }}
       >
         {!required && <MenuItem value={null}>None</MenuItem>}
-        {channels.map((c , i) => (
+        {channels.map((c, i) => (
           <MenuItem value={i} key={c} sx={{ textTransform: 'capitalize' }}>
-            Channel {i+1} ({c})
+            Channel {i + 1} ({c})
           </MenuItem>
         ))}
       </Select>
@@ -43,27 +47,26 @@ ChannelDropdown.propTypes = {
   value: PropTypes.number,
   channels: PropTypes.array,
   onChange: PropTypes.func,
-  required: PropTypes.bool, 
+  required: PropTypes.bool,
 };
 
-
 export default function ChannelForm(props) {
-
   const { channels, selectedChannels, requiredChannels, onChange } = props;
   return (
     <FormGroup>
       <Grid container spacing={1} xs={12} direction='column'>
-        {selectedChannels && selectedChannels.map((channel, i) => (
-          <Grid item key={channels[i]}>
-            <ChannelDropdown
-              label={`${channels[i]}`}
-              value={channel}
-              index={i}
-              onChange={e => onChange(e.target.value, i)}
-              required={requiredChannels[i]}
-            />
-          </Grid>
-        ))}
+        {selectedChannels &&
+          selectedChannels.map((channel, i) => (
+            <Grid item key={channels[i]}>
+              <ChannelDropdown
+                label={`${channels[i]}`}
+                value={channel}
+                index={i}
+                onChange={(e) => onChange(e.target.value, i)}
+                required={requiredChannels[i]}
+              />
+            </Grid>
+          ))}
       </Grid>
     </FormGroup>
   );

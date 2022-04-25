@@ -1,15 +1,20 @@
 import React from 'react';
-import { act, render, fireEvent, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  render,
+  fireEvent,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FileUpload from './FileUpload';
 
 describe('<FileUpload/> component tests', () => {
-
   function mockData(files) {
     return {
       dataTransfer: {
         files,
-        items: files.map(file => ({
+        items: files.map((file) => ({
           kind: 'file',
           type: file.type,
           getAsFile: () => file,
@@ -31,7 +36,7 @@ describe('<FileUpload/> component tests', () => {
   it('<FileUpload /> only supports single file upload', async () => {
     const files = [
       new Blob(['file contents'], { type: 'image/png' }),
-      new Blob(['another file contents'], { type: 'image/jpeg' })
+      new Blob(['another file contents'], { type: 'image/jpeg' }),
     ];
 
     const { container } = render(<FileUpload />);
@@ -42,7 +47,9 @@ describe('<FileUpload/> component tests', () => {
       fireEvent.drop(inputEl, event);
     });
     await waitFor(() => {
-      expect(screen.getByText(/Only single file uploads are supported/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Only single file uploads are supported/i)
+      ).toBeInTheDocument();
     });
   });
 });
