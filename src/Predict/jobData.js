@@ -1,18 +1,4 @@
-interface JobCard {
-  file: string;
-  name: string;
-  model: string;
-  inputs: string;
-  resolution: string;
-  thumbnail: string;
-  scaleEnabled: boolean;
-  channelEnabled: boolean;
-  requiredChannels: string[];
-  modelResolution: number;
-  visualizer?: string;
-}
-
-const jobCards: { [jobType: string]: JobCard } = {
+const jobCards = {
   segmentation: {
     file: 'nuclei/examples/HeLa_nuclear.png',
     name: 'Segmentation',
@@ -75,7 +61,7 @@ const jobCards: { [jobType: string]: JobCard } = {
 };
 
 // TODO: this is a stop gap to support both multiplex and mesmer names
-jobCards.multilplex = jobCards.mesmer;
+jobCards.multiplex = jobCards.mesmer;
 // TODO: this is a stop gap to support both tracking and caliban names
 jobCards.tracking = jobCards.caliban;
 
