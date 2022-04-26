@@ -54,7 +54,7 @@ export default function ChannelForm(props) {
   const { channels, selectedChannels, requiredChannels, onChange } = props;
   return (
     <FormGroup>
-      <Grid container spacing={1} xs={12} direction='column'>
+      <Grid container spacing={1} direction='column'>
         {selectedChannels &&
           selectedChannels.map((channel, i) => (
             <Grid item key={channels[i]}>
