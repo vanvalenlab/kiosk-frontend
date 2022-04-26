@@ -13,7 +13,7 @@ import Select from '@mui/material/Select';
 
 function DimensionOrderDropdown(props) {
   const { value, onChange } = props;
-  const orders = ['BXY', 'CXY', 'BXYC', 'CXYB'];
+  const orders = ['XY', 'BXY', 'CXY', 'BXYC', 'CXYB'];
 
   return (
     <FormControl variant='standard' fullWidth>
