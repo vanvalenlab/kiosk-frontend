@@ -25,12 +25,9 @@ describe('<FileUpload/> component tests', () => {
   }
 
   it('<FileUpload/> renders with Dropzone component', () => {
-    const infoText = 'expected text';
-    const { getByText } = render(<FileUpload infoText={infoText} />);
+    const { getByText } = render(<FileUpload />);
     const element = getByText(/Drag and drop/i);
     expect(element).toBeInTheDocument();
-    const infoTextElement = getByText(infoText);
-    expect(infoTextElement).toBeInTheDocument();
   });
 
   it('<FileUpload /> only supports single file upload', async () => {

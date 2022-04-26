@@ -86,8 +86,6 @@ app.get('*', (req, res) => {
   res.render(path.join(DIST_DIR, 'index.html'), {
     // TODO: generalize for all REACT_APP variables
     // to prevent enumerating them here and in public/index.html
-    REACT_APP_LABEL_FRONTEND: config.label.frontend,
-    REACT_APP_LABEL_BACKEND: config.label.backend,
     REACT_APP_GA_TRACKING_ID: config.googleAnaltyics.trackingId,
   });
 });
