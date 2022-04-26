@@ -23,7 +23,11 @@ function JobForm({ jobTypes, jobType, setJobType, setJobForm }) {
     case 'caliban':
       return <CalibanForm jobDropdown={jobDropdown} setJobForm={setJobForm} />;
     default:
-      return <div>Invalid job type</div>;
+      return (
+        <div>
+          Invalid job type {jobType} not in {jobTypes}
+        </div>
+      );
   }
 }
 

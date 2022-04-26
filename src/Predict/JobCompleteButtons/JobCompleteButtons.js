@@ -4,15 +4,15 @@ import VisualizeButton from './VisualizeButton';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const JobCompleteButtons = ({ jobData, imageUrl, downloadUrl }) => {
+const JobCompleteButtons = ({ jobData, imageUrl, labelsUrl }) => {
   return (
     <div>
       <DownloadButton downloadUrl={downloadUrl} />
-      {jobData.visualizer && imageUrl.split('.').pop() !== 'zip' && (
+      {jobData.visualizer && labelsUrl.split('.').pop() !== 'zip' && (
         <VisualizeButton
           visualizer={jobData.visualizer}
           imageUrl={imageUrl}
-          downloadUrl={downloadUrl}
+          labelsUrl={labelsUrl}
         />
       )}
       <SubmitNewButton />
@@ -23,7 +23,7 @@ const JobCompleteButtons = ({ jobData, imageUrl, downloadUrl }) => {
 JobCompleteButtons.propTypes = {
   jobData: PropTypes.object.isRequired,
   imageUrl: PropTypes.string.isRequired,
-  downloadUrl: PropTypes.string.isRequired,
+  labelsUrl: PropTypes.string.isRequired,
 };
 
 export default JobCompleteButtons;

@@ -18,7 +18,7 @@ const Div = styled('div')``;
 export default function Predict() {
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState(null);
+  const [labelsUrl, setLabelsUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -71,7 +71,7 @@ export default function Predict() {
             expireRedisHash(redisHash, 3600);
           } else if (response.data.value[0] === 'done') {
             clearInterval(statusCheck);
-            setDownloadUrl(response.data.value[2]);
+            setLabelsUrl(response.data.value[2]);
             expireRedisHash(redisHash, 3600);
             // This is only used during zip uploads.
             // Some jobs may fail while other jobs can succeed.
@@ -180,22 +180,19 @@ export default function Predict() {
             </Grid>
           </Grid>
           {/* Job submission and results on bottom row */}
-          {/* Display error to user */}
           {errorText.length > 0 && <ErrorText errorText={errorText} />}
-          {/* Submit button */}
           {!submitted && (
             <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} />
           )}
-          {/* Progress bar for submitted jobs */}
-          {submitted && downloadUrl === null && errorText.length == 0 ? (
+          {submitted && labelsUrl === null && errorText.length == 0 ? (
             <ProgressBar progress={progress} status={status} />
           ) : null}
-          {/* Download results, Open in Label, and Retry buttons */}
-          {downloadUrl !== null && (
+          {/* Download results, Visualize, and Retry buttons */}
+          {labelsUrl !== null && (
             <JobCompleteButtons
               jobData={jobData[submittedJobType]}
-              imagesUrl={imageUrl}
-              labelsUrl={downloadUrl}
+              imageUrl={imageUrl}
+              labelsUrl={labelsUrl}
             />
           )}
         </form>
