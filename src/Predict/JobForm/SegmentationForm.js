@@ -23,7 +23,9 @@ function DimensionOrderDropdown(props) {
         value={value}
       >
         {orders.map((o, i) => (
-          <MenuItem value={o} key={i}>{o}</MenuItem>
+          <MenuItem value={o} key={i}>
+            {o}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
@@ -32,7 +34,7 @@ function DimensionOrderDropdown(props) {
 
 DimensionOrderDropdown.propTypes = {
   value: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 SegmentationForm.propTypes = {
@@ -58,7 +60,11 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
   };
 
   useEffect(() => {
-    setJobForm({ scale, selectedChannels: selectedChannels.join(','), dimensionOrder });
+    setJobForm({
+      scale,
+      selectedChannels: selectedChannels.join(','),
+      dimensionOrder,
+    });
   }, [selectedChannels, scale, dimensionOrder]);
 
   return (
