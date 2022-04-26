@@ -8,7 +8,8 @@ const JobCompleteButtons = ({ jobData, imageUrl, labelsUrl }) => {
   return (
     <div>
       <DownloadButton labelsUrl={labelsUrl} />
-      {jobData.visualizer && labelsUrl.split('.').pop() !== 'zip' && (
+      {/* loading images from zips is not supported */}
+      {jobData.visualizer && imageUrl.split('.').pop() !== 'zip' && (
         <VisualizeButton
           url={jobData.visualizer}
           imageUrl={imageUrl}
