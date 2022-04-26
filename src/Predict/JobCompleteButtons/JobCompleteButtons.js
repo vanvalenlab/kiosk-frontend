@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 const JobCompleteButtons = ({ jobData, imageUrl, labelsUrl }) => {
   return (
     <div>
-      <DownloadButton downloadUrl={downloadUrl} />
+      <DownloadButton labelsUrl={labelsUrl} />
       {jobData.visualizer && labelsUrl.split('.').pop() !== 'zip' && (
         <VisualizeButton
           visualizer={jobData.visualizer}
