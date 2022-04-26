@@ -7,35 +7,7 @@ import Typography from '@mui/material/Typography';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from '../jobData';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-
-function DimensionOrderDropdown(props) {
-  const { value, onChange } = props;
-  const orders = ['XY', 'BXY', 'CXY', 'BXYC', 'CXYB'];
-
-  return (
-    <FormControl variant='standard' fullWidth>
-      <Select
-        size='small'
-        onChange={(e) => onChange(e.target.value)}
-        value={value}
-      >
-        {orders.map((o, i) => (
-          <MenuItem value={o} key={i}>
-            {o}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-}
-
-DimensionOrderDropdown.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
+import DimensionOrderDropdown from './DimensionOrderDropdown';
 
 SegmentationForm.propTypes = {
   jobDropdown: PropTypes.element.isRequired,
@@ -87,7 +59,6 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
           <Grid item md={6}>
             <Grid container direction={'column'} spacing={1}>
               <Grid item lg>
-                <Typography>Dimension Order</Typography>
                 <DimensionOrderDropdown
                   value={dimensionOrder}
                   onChange={setDimensionOrder}
