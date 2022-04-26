@@ -30,8 +30,8 @@ function JobForm({ jobTypes, jobType, setJobType, setJobForm }) {
 JobForm.propTypes = {
   jobTypes: PropTypes.array.isRequired,
   jobType: PropTypes.string.isRequired,
-  setJobType: PropTypes.function.isRequired,
-  setJobForm: PropTypes.function.isRequired,
+  setJobType: PropTypes.func.isRequired,
+  setJobForm: PropTypes.func.isRequired,
 };
 
 export default JobForm;
