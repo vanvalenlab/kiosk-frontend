@@ -9,7 +9,7 @@ import { HelpOutline } from '@mui/icons-material';
 
 function DimensionOrderDropdown(props) {
   const { value, onChange } = props;
-  const orders = ['XY', 'BXY', 'CXY', 'BXYC', 'CXYB'];
+  const orders = ['XY', 'BXY', 'CXY', 'XYB', 'XYC', 'BXYC', 'CXYB'];
 
   return (
     <FormControl variant='standard' fullWidth>
