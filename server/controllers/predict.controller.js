@@ -130,6 +130,8 @@ async function predict(req, res) {
       now,
       'identity_upload',
       config.hostname,
+      'dimension_order',
+      data.jobForm?.dimensionOrder || '',
       'channels',
       data.jobForm?.selectedChannels || '',
       'scale',

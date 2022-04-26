@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
 import jobData from '../jobData';
+import DimensionOrderDropdown from './DimensionOrderDropdown';
 
 SegmentationForm.propTypes = {
   jobDropdown: PropTypes.element.isRequired,
@@ -20,6 +21,7 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
   const [selectedChannels, setSelectedChannels] = useState([
     ...Array(channels.length).keys(),
   ]);
+  const [dimensionOrder, setDimensionOrder] = useState('BXY');
   const [scale, setScale] = useState(1);
 
   const updateSelectedChannels = (value, i) => {
@@ -30,8 +32,12 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
   };
 
   useEffect(() => {
-    setJobForm({ scale, selectedChannels: selectedChannels.join(',') });
-  }, [selectedChannels, scale]);
+    setJobForm({
+      scale,
+      selectedChannels: selectedChannels.join(','),
+      dimensionOrder,
+    });
+  }, [selectedChannels, scale, dimensionOrder]);
 
   return (
     <Grid container>
@@ -51,12 +57,22 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
             </Grid>
           </Grid>
           <Grid item md={6}>
-            <ChannelForm
-              channels={channels}
-              requiredChannels={requiredChannels}
-              selectedChannels={selectedChannels}
-              onChange={updateSelectedChannels}
-            />
+            <Grid container direction={'column'} spacing={1}>
+              <Grid item lg>
+                <DimensionOrderDropdown
+                  value={dimensionOrder}
+                  onChange={setDimensionOrder}
+                />
+              </Grid>
+              <Grid item lg>
+                <ChannelForm
+                  channels={channels}
+                  requiredChannels={requiredChannels}
+                  selectedChannels={selectedChannels}
+                  onChange={updateSelectedChannels}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
