@@ -135,7 +135,7 @@ export default function Predict() {
     predict();
   };
 
-s  const [jobTypes, setJobTypes] = useState([]);
+  const [jobTypes, setJobTypes] = useState([]);
 
   const getJobTypes = () => {
     axios({
