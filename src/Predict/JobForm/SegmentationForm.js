@@ -13,7 +13,7 @@ import Select from '@mui/material/Select';
 
 function DimensionOrderDropdown(props) {
   const { value, onChange } = props;
-  const orders = ['bxy', 'cxy', 'bxyc', 'cxyb'];
+  const orders = ['BXY', 'CXY', 'BXYC', 'CXYB'];
 
   return (
     <FormControl variant='standard' fullWidth>
@@ -49,7 +49,7 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
   const [selectedChannels, setSelectedChannels] = useState([
     ...Array(channels.length).keys(),
   ]);
-  const [dimensionOrder, setDimensionOrder] = useState('bxy');
+  const [dimensionOrder, setDimensionOrder] = useState('BXY');
   const [scale, setScale] = useState(1);
 
   const updateSelectedChannels = (value, i) => {
