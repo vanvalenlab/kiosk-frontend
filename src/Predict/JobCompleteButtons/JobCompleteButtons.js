@@ -1,6 +1,8 @@
 import DownloadButton from './DownloadButton';
 import SubmitNewButton from './SubmitNewImageButton';
 import VisualizeButton from './VisualizeButton';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const JobCompleteButtons = ({
   jobData,
@@ -25,7 +27,7 @@ const JobCompleteButtons = ({
 };
 
 JobCompleteButtons.propTypes = {
-  visualizer: PropTypes.bool.isRequired,
+  jobData: PropTypes.object.isRequired,
   imageUrl: PropTypes.string.isRequired,
   downloadUrl: PropTypes.string.isRequired,
   dimensionOrder: PropTypes.string.isRequired,

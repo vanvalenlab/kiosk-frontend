@@ -11,6 +11,7 @@ import JobForm from './JobForm';
 import ProgressBar from './ProgressBar';
 import SubmitButton from './SubmitButtons';
 import JobCompleteButtons from './JobCompleteButtons';
+import ErrorText from './ErrorText';
 
 const Div = styled('div')``;
 
@@ -53,14 +54,7 @@ export default function Predict() {
         url: '/api/redis',
         data: {
           hash: redisHash,
-          key: [
-            'status',
-            'progress',
-            'output_url',
-            'reason',
-            'failures',
-            'dim_order',
-          ],
+          key: ['status', 'progress', 'output_url', 'reason', 'failures'],
         },
       })
         .then((response) => {
@@ -78,7 +72,6 @@ export default function Predict() {
           } else if (response.data.value[0] === 'done') {
             clearInterval(statusCheck);
             setDownloadUrl(response.data.value[2]);
-            setDimensionOrder(response.data.value[5]);
             expireRedisHash(redisHash, 3600);
             // This is only used during zip uploads.
             // Some jobs may fail while other jobs can succeed.
@@ -187,7 +180,7 @@ export default function Predict() {
           </Grid>
           {/* Job submission and results on bottom row */}
           {/* Display error to user */}
-          {errorText.length > 0 && <Error errorText={errorText} />}
+          {errorText.length > 0 && <ErrorText errorText={errorText} />}
           {/* Submit button */}
           {!submitted && (
             <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} />

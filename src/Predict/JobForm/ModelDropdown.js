@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 export default function ModelDropdown(props) {
   const { value, onChange, options } = props;

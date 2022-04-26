@@ -1,6 +1,8 @@
 import { Link, Typography } from '@mui/material';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Error({ errorText }) {
+function ErrorText({ errorText }) {
   return (
     <div>
       <Typography
@@ -27,4 +29,8 @@ function Error({ errorText }) {
   );
 }
 
-export default Error;
+ErrorText.propTypes = {
+  errorText: PropTypes.string.isRequired,
+};
+
+export default ErrorText;

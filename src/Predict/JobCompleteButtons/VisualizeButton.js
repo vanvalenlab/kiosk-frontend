@@ -1,5 +1,7 @@
 import { Button, Grid } from '@mui/material';
 import axios from 'axios';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 function VisualizeButton({ url, imagesUrl, labelsUrl }) {
   const openVisualizer = () => {
@@ -33,7 +35,7 @@ function VisualizeButton({ url, imagesUrl, labelsUrl }) {
 }
 
 VisualizeButton.propTypes = {
-  visualizer: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   imagesUrl: PropTypes.string.isRequired,
   labelsUrl: PropTypes.string.isRequired,
 };

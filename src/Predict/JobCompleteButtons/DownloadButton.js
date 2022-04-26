@@ -1,5 +1,6 @@
 import { Button, Grid } from '@mui/material';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 function DownloadButton({ downloadUrl }) {
   return (
     <Grid item lg sx={{ pt: 4 }}>

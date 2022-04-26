@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 // import axios from 'axios';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
-import jobData from './jobData';
+import jobData from '../jobData';
 
 SegmentationForm.propTypes = {
   jobDropdown: PropTypes.element.isRequired,
