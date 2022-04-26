@@ -135,7 +135,7 @@ export default function Predict() {
     predict();
   };
 
-  const [jobTypes, setJobTypes] = useState([]);
+s  const [jobTypes, setJobTypes] = useState([]);
 
   const getJobTypes = () => {
     axios({
@@ -163,6 +163,7 @@ export default function Predict() {
               <JobForm
                 jobTypes={jobTypes}
                 jobType={jobType}
+                setJobType={setJobType}
                 setJobForm={setJobForm}
               />
               <FileUpload
