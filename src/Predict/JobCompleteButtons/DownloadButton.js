@@ -1,11 +1,11 @@
 import { Button, Grid } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
-function DownloadButton({ downloadUrl }) {
+function DownloadButton({ labelsUrl }) {
   return (
     <Grid item lg sx={{ pt: 4 }}>
       <Button
-        href={downloadUrl}
+        href={labelsUrl}
         variant='contained'
         size='large'
         fullWidth
@@ -18,7 +18,7 @@ function DownloadButton({ downloadUrl }) {
 }
 
 DownloadButton.propTypes = {
-  downloadUrl: PropTypes.string.isRequired,
+  labelsUrl: PropTypes.string.isRequired,
 };
 
 export default DownloadButton;
