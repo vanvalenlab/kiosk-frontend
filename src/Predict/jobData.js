@@ -40,7 +40,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: ['nuclei', 'cytoplasm'],
     modelResolution: 0.5,
-    visualizer: 'viewer.deepcell.org',
+    visualizer: 'https://viewer.deepcell.org',
   },
   polaris: {
     file: 'tiff_stack_examples/MERFISH_example_RGB.png',
@@ -56,7 +56,7 @@ const jobCards = {
     channelEnabled: false,
     requiredChannels: ['spots'],
     modelResolution: 0.1,
-    visualizer: 'spots.deepcell.org',
+    visualizer: 'https://spots.deepcell.org',
   },
 };
 
