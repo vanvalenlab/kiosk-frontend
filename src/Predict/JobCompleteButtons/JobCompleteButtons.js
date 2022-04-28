@@ -12,7 +12,7 @@ const JobCompleteButtons = ({ jobData, imageUrl, labelsUrl }) => {
       {jobData.visualizer && imageUrl.split('.').pop() !== 'zip' && (
         <VisualizeButton
           url={jobData.visualizer}
-          imageUrl={imageUrl}
+          imagesUrl={imageUrl}
           labelsUrl={labelsUrl}
         />
       )}
