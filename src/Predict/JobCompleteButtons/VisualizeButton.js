@@ -15,8 +15,8 @@ function VisualizeButton({ url, imagesUrl, labelsUrl }) {
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then((res) => {
-      const url = `${url}/?projectId=${res.data.projectId}`;
-      newTab.location.href = url;
+      const projectUrl = `${url}/?projectId=${res.data.projectId}`;
+      newTab.location.href = projectUrl;
     });
   };
 
