@@ -7,12 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-function downloadFile(filePath) {
-  const link = document.createElement('a');
-  link.href = filePath;
-  link.download = filePath.substr(filePath.lastIndexOf('/') + 1);
-  link.click();
-}
 export default function JobCard({
   file = 'dummyfile.png',
   name = 'Model',
@@ -46,7 +40,8 @@ export default function JobCard({
         <Button
           size='small'
           color='primary'
-          onClick={() => downloadFile(`${baseUrl}/${file}`)}
+          target='_blank'
+          href={`${baseUrl}/${file}`}
         >
           Download Image
         </Button>
