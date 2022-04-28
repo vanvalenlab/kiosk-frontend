@@ -18,6 +18,7 @@ const Div = styled('div')``;
 export default function Predict() {
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [dimensionOrder, setDimensionOrder] = useState('');
   const [labelsUrl, setLabelsUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -54,7 +55,14 @@ export default function Predict() {
         url: '/api/redis',
         data: {
           hash: redisHash,
-          key: ['status', 'progress', 'output_url', 'reason', 'failures'],
+          key: [
+            'status',
+            'progress',
+            'output_url',
+            'reason',
+            'failures',
+            'dim_order',
+          ],
         },
       })
         .then((response) => {
@@ -72,6 +80,7 @@ export default function Predict() {
           } else if (response.data.value[0] === 'done') {
             clearInterval(statusCheck);
             setLabelsUrl(response.data.value[2]);
+            setDimensionOrder(response.data.value[5]);
             expireRedisHash(redisHash, 3600);
             // This is only used during zip uploads.
             // Some jobs may fail while other jobs can succeed.
@@ -192,6 +201,7 @@ export default function Predict() {
             <JobCompleteButtons
               jobData={jobData[submittedJobType]}
               imageUrl={imageUrl}
+              dimensionOrder={dimensionOrder}
               labelsUrl={labelsUrl}
             />
           )}
