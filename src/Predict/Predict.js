@@ -1,202 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import LinearProgress from '@mui/material/LinearProgress';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
 import axios from 'axios';
 import queryString from 'query-string';
 import FileUpload from './FileUpload';
 import JobCard from './JobCard';
-import ModelDropdown from './ModelDropdown';
 import jobData from './jobData';
-import MesmerForm from './MesmerForm';
-import PolarisForm from './PolarisForm';
-import SegmentationForm from './SegmentationForm';
-import CalibanForm from './CalibanForm';
-
-// get DeepCell Label viewer addresses from the environment.
-// these are defined in public/index.html to allow the server
-// to override them at runtime.
-const isProd = process.env.NODE_ENV === 'production';
-// if prod, read from window override. otherwise pull from environment
-const labelFrontend = isProd
-  ? window.REACT_APP_LABEL_FRONTEND
-  : process.env.REACT_APP_LABEL_FRONTEND || 'localhost';
-
-const labelBackend = isProd
-  ? window.REACT_APP_LABEL_BACKEND
-  : process.env.REACT_APP_LABEL_BACKEND || 'localhost';
+import JobForm from './JobForm';
+import ProgressBar from './ProgressBar';
+import SubmitButton from './SubmitButtons';
+import JobCompleteButtons from './JobCompleteButtons';
+import ErrorText from './ErrorText';
 
 const Div = styled('div')``;
-
-const SubmitButton = ({ onClick, disabled }) => {
-  return (
-    <Grid id='submitButtonWrapper' item lg sx={{ pt: 4 }}>
-      <Button
-        id='submitButton'
-        variant='contained'
-        onClick={onClick}
-        size='large'
-        fullWidth
-        disabled={disabled}
-        color='primary'
-      >
-        Submit
-      </Button>
-    </Grid>
-  );
-};
-
-SubmitButton.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
-};
-
-const ProgressBar = ({ progress, status }) => {
-  return (
-    <Grid item lg sx={{ pt: 4 }}>
-      {progress === 0 || progress === null ? (
-        <LinearProgress
-          variant='buffer'
-          value={0}
-          valueBuffer={0}
-          sx={{ m: 2 }}
-        />
-      ) : (
-        <LinearProgress variant='determinate' value={progress} sx={{ m: 2 }} />
-      )}
-      {/* Display status updates to user */}
-      {status.length > 0 && (
-        <Typography
-          sx={{ pt: 4, textTransform: 'capitalize' }}
-          variant='body1'
-          align='center'
-          color='primary'
-        >
-          Job Status: {status}
-        </Typography>
-      )}
-    </Grid>
-  );
-};
-
-ProgressBar.propTypes = {
-  progress: PropTypes.number.isRequired,
-  status: PropTypes.string.isRequired,
-};
-
-const JobCompleteButtons = ({
-  openInLabel,
-  imageUrl,
-  downloadUrl,
-  dimensionOrder,
-}) => {
-  return (
-    <div>
-      <DownloadButton downloadUrl={downloadUrl} />
-      {openInLabel && imageUrl.split('.').pop() !== 'zip' && (
-        <OpenInLabelButton
-          imageUrl={imageUrl}
-          downloadUrl={downloadUrl}
-          dimensionOrder={dimensionOrder}
-        />
-      )}
-      <SubmitNewButton />
-    </div>
-  );
-};
-
-JobCompleteButtons.propTypes = {
-  openInLabel: PropTypes.bool.isRequired,
-  imageUrl: PropTypes.string.isRequired,
-  downloadUrl: PropTypes.string.isRequired,
-  dimensionOrder: PropTypes.string.isRequired,
-};
-
-const DownloadButton = ({ downloadUrl }) => {
-  return (
-    <Grid item lg sx={{ pt: 4 }}>
-      <Button
-        href={downloadUrl}
-        variant='contained'
-        size='large'
-        fullWidth
-        color='secondary'
-      >
-        Download Results
-      </Button>
-    </Grid>
-  );
-};
-
-DownloadButton.propTypes = {
-  downloadUrl: PropTypes.string.isRequired,
-};
-
-const OpenInLabelButton = ({ imageUrl, downloadUrl, dimensionOrder }) => {
-  const openResultsInLabel = () => {
-    var formData = new FormData();
-    formData.append('url', imageUrl);
-    formData.append('labeled_url', downloadUrl);
-    formData.append('axes', dimensionOrder);
-    const newTab = window.open(labelFrontend, '_blank');
-    axios({
-      method: 'post',
-      url: `${labelBackend}/api/project`,
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }).then((res) => {
-      const url = `${labelFrontend}/?projectId=${res.data.projectId}`;
-      newTab.location.href = url;
-    });
-  };
-
-  return (
-    <Grid item lg sx={{ pt: 4 }}>
-      <Button
-        variant='contained'
-        size='large'
-        fullWidth
-        onClick={openResultsInLabel}
-      >
-        View Results
-      </Button>
-    </Grid>
-  );
-};
-
-OpenInLabelButton.propTypes = {
-  imageUrl: PropTypes.string.isRequired,
-  downloadUrl: PropTypes.string.isRequired,
-  dimensionOrder: PropTypes.string.isRequired,
-};
-
-const SubmitNewButton = () => {
-  return (
-    <Grid item lg sx={{ pt: 4 }}>
-      <Button
-        href='/predict'
-        variant='contained'
-        size='large'
-        fullWidth
-        color='primary'
-      >
-        Submit New Image
-      </Button>
-    </Grid>
-  );
-};
 
 export default function Predict() {
   const [fileName, setFileName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [dimensionOrder, setDimensionOrder] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState(null);
+  const [labelsUrl, setLabelsUrl] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -246,7 +69,7 @@ export default function Predict() {
           setStatus(response.data.value[0].split('-').join(' '));
           if (response.data.value[0] === 'failed') {
             clearInterval(statusCheck);
-            // only show the full stack trace if NODE_NV is not production
+            // only show the full stack trace if NODE_ENV is not production
             let error = response.data.value[3];
             if (process.env.NODE_ENV === 'production') {
               const lines = error.split('\n');
@@ -256,7 +79,7 @@ export default function Predict() {
             expireRedisHash(redisHash, 3600);
           } else if (response.data.value[0] === 'done') {
             clearInterval(statusCheck);
-            setDownloadUrl(response.data.value[2]);
+            setLabelsUrl(response.data.value[2]);
             setDimensionOrder(response.data.value[5]);
             expireRedisHash(redisHash, 3600);
             // This is only used during zip uploads.
@@ -339,14 +162,6 @@ export default function Predict() {
 
   useEffect(() => getJobTypes(), []);
 
-  // Make Prediction Type dropdown to use with any job form
-  const selectJobType = (
-    <Grid item>
-      <Typography>Prediction Type</Typography>
-      <ModelDropdown options={jobTypes} value={jobType} onChange={setJobType} />
-    </Grid>
-  );
-
   return (
     <Div sx={{ flexGrow: 1 }}>
       <Container maxWidth='md' sx={{ pt: 4 }}>
@@ -354,97 +169,40 @@ export default function Predict() {
           <Grid container direction='row' justifyContent='center' spacing={6}>
             {/* Job configuration for user on right column */}
             <Grid item xs={12} sm={6}>
-              {/* Job Form section */}
-              {jobType === 'mesmer' && (
-                <MesmerForm
-                  selectJobType={selectJobType}
-                  setJobForm={setJobForm}
-                />
-              )}
-              {jobType === 'polaris' && (
-                <PolarisForm
-                  selectJobType={selectJobType}
-                  setJobForm={setJobForm}
-                />
-              )}
-              {jobType == 'segmentation' && (
-                <SegmentationForm
-                  selectJobType={selectJobType}
-                  setJobForm={setJobForm}
-                />
-              )}
-              {jobType == 'caliban' && (
-                <CalibanForm
-                  selectJobType={selectJobType}
-                  setJobForm={setJobForm}
-                />
-              )}
-              {/* File Upload section */}
-              <Grid
-                container
-                direction='row'
-                justifyContent='center'
-                sx={{ pt: 4 }}
-              >
-                <Paper sx={{ p: 4, height: '100%', width: '100%' }}>
-                  <Grid item lg>
-                    <FileUpload
-                      infoText='Upload Here to Begin Image Prediction'
-                      onDroppedFile={(uploadedName, fileName, url) => {
-                        setUploadedFileName(uploadedName);
-                        setFileName(fileName);
-                        setImageUrl(url);
-                      }}
-                    />
-                  </Grid>
-                </Paper>
-              </Grid>
+              <JobForm
+                jobTypes={jobTypes}
+                jobType={jobType}
+                setJobType={setJobType}
+                setJobForm={setJobForm}
+              />
+              <FileUpload
+                onDroppedFile={(uploadedName, fileName, url) => {
+                  setUploadedFileName(uploadedName);
+                  setFileName(fileName);
+                  setImageUrl(url);
+                }}
+              />
             </Grid>
             {/* Job info display on left column */}
             <Grid item xs={12} sm={6}>
               {jobType.length > 0 && <JobCard {...jobData[jobType]} />}
             </Grid>
           </Grid>
-          {/* Display error to user */}
-          {errorText.length > 0 && (
-            <div>
-              <Typography
-                sx={{ pt: 4, whiteSpace: 'pre-line' }}
-                variant='body2'
-                align='center'
-                color='error'
-              >
-                {errorText}
-              </Typography>
-              <Typography
-                sx={{ pt: 4 }}
-                variant='subtitle2'
-                align='center'
-                color='error'
-              >
-                See the{' '}
-                <Link href='/faq' target='_blank' rel='noopener noreferrer'>
-                  FAQ
-                </Link>{' '}
-                for information on common errors.
-              </Typography>
-            </div>
-          )}
-          {/* Submit button */}
+          {/* Job submission and results on bottom row */}
+          {errorText.length > 0 && <ErrorText errorText={errorText} />}
           {!submitted && (
             <SubmitButton onClick={handleSubmit} disabled={!canSubmit()} />
           )}
-          {/* Progress bar for submitted jobs */}
-          {submitted && downloadUrl === null && errorText.length == 0 ? (
+          {submitted && labelsUrl === null && errorText.length == 0 ? (
             <ProgressBar progress={progress} status={status} />
           ) : null}
-          {/* Download results, Open in Label, and Retry buttons */}
-          {downloadUrl !== null && (
+          {/* Download results, Visualize, and Retry buttons */}
+          {labelsUrl !== null && (
             <JobCompleteButtons
-              openInLabel={jobData[submittedJobType].canOpenInLabel}
+              jobData={jobData[submittedJobType]}
               imageUrl={imageUrl}
-              downloadUrl={downloadUrl}
               dimensionOrder={dimensionOrder}
+              labelsUrl={labelsUrl}
             />
           )}
         </form>

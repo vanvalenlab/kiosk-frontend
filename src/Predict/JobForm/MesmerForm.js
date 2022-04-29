@@ -6,17 +6,17 @@ import Typography from '@mui/material/Typography';
 // import axios from 'axios';
 import ResolutionDropdown from './ResolutionDropdown';
 import ChannelForm from './ChannelForm';
-import jobData from './jobData';
+import jobData from '../jobData';
 
-SegmentationForm.propTypes = {
-  selectJobType: PropTypes.element.isRequired,
+MesmerForm.propTypes = {
+  jobDropdown: PropTypes.element.isRequired,
   setJobForm: PropTypes.func.isRequired,
 };
 
-export default function SegmentationForm({ selectJobType, setJobForm }) {
-  const modelResolution = jobData.segmentation.modelResolution;
-  const channels = ['nuclei', 'cytoplasm'];
-  const [requiredChannels] = useState(Array(channels.length).fill(false));
+export default function MesmerForm({ jobDropdown, setJobForm }) {
+  const modelResolution = jobData.mesmer.modelResolution;
+  const channels = jobData.mesmer.requiredChannels;
+  const [requiredChannels] = useState(Array(channels.length).fill(true));
   const [selectedChannels, setSelectedChannels] = useState([
     ...Array(channels.length).keys(),
   ]);
@@ -39,7 +39,7 @@ export default function SegmentationForm({ selectJobType, setJobForm }) {
         <Grid container spacing={1}>
           <Grid item md={6}>
             <Grid container direction={'column'} spacing={1}>
-              {selectJobType}
+              {jobDropdown}
               <Grid item lg>
                 <Typography>Image Resolution</Typography>
                 <ResolutionDropdown

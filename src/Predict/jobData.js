@@ -12,7 +12,6 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: [],
     modelResolution: 0.5,
-    canOpenInLabel: true,
   },
   caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
@@ -28,7 +27,6 @@ const jobCards = {
     channelEnabled: false, // Caliban form does not have a channel form so this value doesn't matter
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
-    canOpenInLabel: false,
   },
   mesmer: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',
@@ -42,7 +40,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: ['nuclei', 'cytoplasm'],
     modelResolution: 0.5,
-    canOpenInLabel: true,
+    visualizer: 'https://viewer.deepcell.org',
   },
   polaris: {
     file: 'tiff_stack_examples/MERFISH_example_RGB.png',
@@ -58,12 +56,12 @@ const jobCards = {
     channelEnabled: false,
     requiredChannels: ['spots'],
     modelResolution: 0.1,
-    canOpenInLabel: false,
+    visualizer: 'https://spots.deepcell.org',
   },
 };
 
 // TODO: this is a stop gap to support both multiplex and mesmer names
-jobCards.multilplex = jobCards.mesmer;
+jobCards.multiplex = jobCards.mesmer;
 // TODO: this is a stop gap to support both tracking and caliban names
 jobCards.tracking = jobCards.caliban;
 

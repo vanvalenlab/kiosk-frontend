@@ -55,11 +55,11 @@ function SelectSegmentation({
 }
 
 PolarisForm.propTypes = {
-  selectJobType: PropTypes.element.isRequired,
+  jobDropdown: PropTypes.element.isRequired,
   setJobForm: PropTypes.func.isRequired,
 };
 
-export default function PolarisForm({ selectJobType, setJobForm }) {
+export default function PolarisForm({ jobDropdown, setJobForm }) {
   const [channels, setChannels] = useState([]);
   const [requiredChannels, setRequiredChannels] = useState([]);
   const [selectedChannels, setSelectedChannels] = useState([]);
@@ -106,7 +106,7 @@ export default function PolarisForm({ selectJobType, setJobForm }) {
         <Grid container spacing={1}>
           <Grid item md={6}>
             <Grid container direction={'column'} spacing={1}>
-              {selectJobType}
+              {jobDropdown}
               <Grid item lg>
                 <Typography>Segmentation Type</Typography>
                 <SelectSegmentation
