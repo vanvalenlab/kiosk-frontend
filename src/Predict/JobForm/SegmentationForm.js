@@ -18,7 +18,7 @@ export default function SegmentationForm({ jobDropdown, setJobForm }) {
   const modelResolution = jobData.segmentation.modelResolution;
   const channels = ['nuclei', 'cytoplasm'];
   const [requiredChannels] = useState(Array(channels.length).fill(false));
-  const [selectedChannels, setSelectedChannels] = useState([0,null]);
+  const [selectedChannels, setSelectedChannels] = useState([0, null]);
   const [dimensionOrder, setDimensionOrder] = useState('XYB');
   const [scale, setScale] = useState(1);
 
