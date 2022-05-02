@@ -63,7 +63,7 @@ export default function PolarisForm({ jobDropdown, setJobForm }) {
   const [channels, setChannels] = useState([]);
   const [requiredChannels, setRequiredChannels] = useState([]);
   const [selectedChannels, setSelectedChannels] = useState([]);
-  const [segmentationType, setSegmentationType] = useState('none');
+  const [segmentationType, setSegmentationType] = useState('cell culture');
   const segmentationOptions = ['none', 'tissue', 'cell culture'];
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function PolarisForm({ jobDropdown, setJobForm }) {
     } else if (segmentationType === 'cell culture') {
       setChannels(['spots', 'nuclei', 'cytoplasm']);
       setRequiredChannels([true, false, false]);
-      setSelectedChannels([0, null, null]);
+      setSelectedChannels([0, 2, 1]);
     } else {
       setChannels([]);
       setRequiredChannels([]);
