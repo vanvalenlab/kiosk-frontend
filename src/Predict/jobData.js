@@ -27,6 +27,7 @@ const jobCards = {
     channelEnabled: false, // Caliban form does not have a channel form so this value doesn't matter
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
+    visualizer: 'https://tracks.deepcell.org',
   },
   mesmer: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',

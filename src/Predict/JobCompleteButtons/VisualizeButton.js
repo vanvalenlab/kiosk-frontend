@@ -11,9 +11,9 @@ function VisualizeButton({ url, imagesUrl, dimensionOrder, labelsUrl }) {
     formData.append('axes', dimensionOrder);
 
     // TODO: make mesmer and spots visualizers behave consistently
-    // spots: need to add /project
-    // mesmer: must be only base URL
-    const viewerUrl = url.includes('spots') ? `${url}/project` : url;
+    // mesmer (viewer.deepcell.org): must be only base URL
+    // spots, tracks, label, anolytics: need to add /project
+    const viewerUrl = url.includes('viewer') ? url : `${url}/project`;
     const newTab = window.open(viewerUrl, '_blank');
     axios({
       method: 'post',
