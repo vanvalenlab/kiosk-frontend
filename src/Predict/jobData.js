@@ -44,7 +44,7 @@ const jobCards = {
     visualizer: 'https://viewer.deepcell.org',
   },
   polaris: {
-    file: 'tiff_stack_examples/MERFISH_example_RGB.png',
+    file: 'tiff_stack_examples/20220601-MERFISH_example_RGB.png',
     name: 'Polaris',
     model:
       'Polaris performs fluorescent spot detection and can assign spots to segmented cells.',
