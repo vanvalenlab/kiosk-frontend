@@ -78,7 +78,7 @@ export default function PolarisForm({ jobDropdown, setJobForm }) {
     } else if (segmentationType === 'cell culture') {
       setChannels(['spots', 'nuclei', 'cytoplasm']);
       setRequiredChannels([true, false, false]);
-      setSelectedChannels([0, 2, 1]);
+      setSelectedChannels([0, 1, 2]);
     } else {
       setChannels([]);
       setRequiredChannels([]);
