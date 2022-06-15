@@ -29,6 +29,12 @@ export default function Predict() {
   const [status, setStatus] = useState('');
   const [jobForm, setJobForm] = useState({});
 
+  useEffect(() => {
+    if (!submitted) {
+      setDimensionOrder(jobForm.dimensionOrder);
+    }
+  }, [submitted, jobForm]);
+
   const expireRedisHash = (redisHash, expireIn) => {
     axios({
       method: 'post',
@@ -80,7 +86,9 @@ export default function Predict() {
           } else if (response.data.value[0] === 'done') {
             clearInterval(statusCheck);
             setLabelsUrl(response.data.value[2]);
-            setDimensionOrder(response.data.value[5]);
+            if (response.data.value[5]) {
+              setDimensionOrder(response.data.value[5]);
+            }
             expireRedisHash(redisHash, 3600);
             // This is only used during zip uploads.
             // Some jobs may fail while other jobs can succeed.

@@ -12,6 +12,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: [],
     modelResolution: 0.5,
+    visualizer: 'https://label-dev.deepcell.org',
   },
   caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
