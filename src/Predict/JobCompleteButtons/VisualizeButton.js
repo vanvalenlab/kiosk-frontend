@@ -18,7 +18,7 @@ function VisualizeButton({ url, imagesUrl, dimensionOrder, labelsUrl }) {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
       .then((res) => {
-        newTab.location.href = `${url}/project?projectId=${res.data}`;
+        newTab.location.href = `${url}/project?projectId=${res.data}&download=true`;
       })
       .catch((err) => {
         console.log(err);
