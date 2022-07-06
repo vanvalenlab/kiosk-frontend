@@ -10,24 +10,20 @@ function VisualizeButton({ url, imagesUrl, dimensionOrder, labelsUrl }) {
     formData.append('labels', labelsUrl);
     formData.append('axes', dimensionOrder);
 
-    // TODO: make mesmer and spots visualizers behave consistently
-    // mesmer (viewer.deepcell.org): must be only base URL
-    // spots, tracks, label, anolytics: need to add /project
-    const viewerUrl = url.includes('viewer') ? url : `${url}/project`;
-    const newTab = window.open(viewerUrl, '_blank');
+    const newTab = window.open(`${url}/loading`, '_blank');
     axios({
       method: 'post',
       url: `${url}/api/project`,
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
-    }).then((res) => {
-      // TODO: make mesmer and spots API return the same response
-      // memser: { projectId: "EXAMPLEID" }
-      // spots: "EXAMPLEID"
-      const projectId = res.data.projectId ?? res.data;
-      const projectUrl = `${viewerUrl}?projectId=${projectId}`;
-      newTab.location.href = projectUrl;
-    });
+    })
+      .then((res) => {
+        newTab.location.href = `${url}/project?projectId=${res.data}&download=true`;
+      })
+      .catch((err) => {
+        console.log(err);
+        newTab.location.href = `${url}/loading?error=${err.message}`;
+      });
   };
 
   return (
