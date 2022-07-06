@@ -12,7 +12,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: [],
     modelResolution: 0.5,
-    visualizer: 'https://label-dev.deepcell.org',
+    visualizer: 'https://label.deepcell.org',
   },
   caliban: {
     file: 'tiff_stack_examples/3T3_nuc_example_256.tif',
@@ -28,7 +28,7 @@ const jobCards = {
     channelEnabled: false, // Caliban form does not have a channel form so this value doesn't matter
     requiredChannels: ['nuclei'],
     modelResolution: 0.5,
-    visualizer: 'https://label-dev.deepcell.org',
+    visualizer: 'https://label.deepcell.org',
   },
   mesmer: {
     file: 'tiff_stack_examples/vectra_breast_cancer.tif',
@@ -42,7 +42,7 @@ const jobCards = {
     channelEnabled: true,
     requiredChannels: ['nuclei', 'cytoplasm'],
     modelResolution: 0.5,
-    visualizer: 'https://label-dev.deepcell.org',
+    visualizer: 'https://label.deepcell.org',
   },
   polaris: {
     file: 'tiff_stack_examples/20220601-MERFISH_example_RGB.png',
@@ -58,7 +58,7 @@ const jobCards = {
     channelEnabled: false,
     requiredChannels: ['spots'],
     modelResolution: 0.1,
-    visualizer: 'https://label-dev.deepcell.org',
+    visualizer: 'https://label.deepcell.org',
   },
 };
 
